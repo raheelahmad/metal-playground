@@ -8,13 +8,18 @@
 
 import MetalKit
 
-enum Scene {
-    case starField
-    case smiley
+enum Scene: String, CaseIterable {
+    case starField = "Star Field"
+    case smiley = "Smiley"
+    case basicShadertoy = "Basic Shadertoy"
+    case bookOfShaders05 = "Book of Shaders 05 - Algorithmic"
+    case bookOfShaders06 = "Book of Shaders 05 - Colors"
 
     var vertexFuncName: String {
         switch self {
-        case .starField, .smiley: return "shape_vertex"
+        case .starField, .smiley, .basicShadertoy: return "shape_vertex"
+        case .bookOfShaders05: return "smoothing_vertex"
+        case .bookOfShaders06: return "color_vertex"
         }
     }
 
@@ -22,13 +27,16 @@ enum Scene {
         switch self {
         case .starField: return "shaderToyStarfield"
         case .smiley: return "shaderToySmiley"
+        case .basicShadertoy: return "shadertoy01"
+        case .bookOfShaders05: return "smoothing_fragment"
+        case .bookOfShaders06: return "color_fragment"
         }
     }
 
     var uniforms: Any? {
         switch self {
         case .starField: return FragmentUniforms(time: 0.2, screen_width: 21, screen_height: 20, screen_scale: 1, mouseLocation: .one)
-        case .smiley: return nil
+        case .smiley, .basicShadertoy, .bookOfShaders05, .bookOfShaders06: return nil
         }
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -706,9 +706,65 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="MetalPlayground" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="427" height="270"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="37X-ix-YsZ">
+                                <rect key="frame" x="0.0" y="0.0" width="270" height="270"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="37X-ix-YsZ" secondAttribute="height" multiplier="1:1" id="v7H-jF-LhI"/>
+                                </constraints>
+                            </customView>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Zk8-70-qPG">
+                                <rect key="frame" x="271" y="0.0" width="156" height="270"/>
+                                <subviews>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="a1F-2i-REI">
+                                        <rect key="frame" x="10" y="234" width="42" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" title="Scene" id="gcF-Ea-qa7">
+                                            <font key="font" usesAppearanceFont="YES"/>
+                                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DZ5-Cg-x2u">
+                                        <rect key="frame" x="10" y="202" width="137" height="25"/>
+                                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="RAX-LB-hiU" id="E6l-ht-KId">
+                                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                            <menu key="menu" id="4gN-BJ-vR9">
+                                                <items>
+                                                    <menuItem title="Item 1" state="on" id="RAX-LB-hiU"/>
+                                                    <menuItem title="Item 2" id="CK9-ye-4bG"/>
+                                                    <menuItem title="Item 3" id="dpu-cy-Wg8"/>
+                                                </items>
+                                            </menu>
+                                        </popUpButtonCell>
+                                    </popUpButton>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="a1F-2i-REI" secondAttribute="trailing" constant="20" symbolic="YES" id="MgH-op-Los"/>
+                                    <constraint firstItem="DZ5-Cg-x2u" firstAttribute="top" secondItem="a1F-2i-REI" secondAttribute="bottom" constant="8" id="OaP-br-Voq"/>
+                                    <constraint firstItem="DZ5-Cg-x2u" firstAttribute="leading" secondItem="a1F-2i-REI" secondAttribute="leading" id="YJl-ew-muY"/>
+                                    <constraint firstItem="a1F-2i-REI" firstAttribute="leading" secondItem="Zk8-70-qPG" secondAttribute="leading" constant="12" id="hpV-qB-uum"/>
+                                    <constraint firstAttribute="trailing" secondItem="DZ5-Cg-x2u" secondAttribute="trailing" constant="12" id="rKI-E0-iNb"/>
+                                    <constraint firstItem="a1F-2i-REI" firstAttribute="top" secondItem="Zk8-70-qPG" secondAttribute="top" constant="20" id="zXb-f1-sJA"/>
+                                </constraints>
+                            </customView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="37X-ix-YsZ" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="6xZ-Jw-wQf"/>
+                            <constraint firstItem="Zk8-70-qPG" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="ECA-fa-2TG"/>
+                            <constraint firstAttribute="bottom" secondItem="37X-ix-YsZ" secondAttribute="bottom" id="UnU-eo-hiY"/>
+                            <constraint firstItem="Zk8-70-qPG" firstAttribute="leading" secondItem="37X-ix-YsZ" secondAttribute="trailing" constant="1" id="cYa-BI-Fux"/>
+                            <constraint firstItem="37X-ix-YsZ" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="hF4-n3-MGn"/>
+                            <constraint firstAttribute="bottom" secondItem="Zk8-70-qPG" secondAttribute="bottom" id="jYo-Pe-tQH"/>
+                            <constraint firstAttribute="trailing" secondItem="Zk8-70-qPG" secondAttribute="trailing" id="sKQ-nH-X5I"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="metalContainerView" destination="37X-ix-YsZ" id="KfO-bf-0wO"/>
+                        <outlet property="scenesChoiceControl" destination="DZ5-Cg-x2u" id="WkO-dk-FvX"/>
+                    </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

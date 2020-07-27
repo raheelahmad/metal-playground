@@ -29,6 +29,8 @@ final class Renderer: NSObject, MTKViewDelegate {
     }
     let device: MTLDevice
     let queue: MTLCommandQueue
+    let pixelFormat: MTLPixelFormat = .bgra8Unorm
+
     var piplelineState: MTLRenderPipelineState!
     private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0, mouseLocation: .init(0,0))
 
@@ -39,19 +41,28 @@ final class Renderer: NSObject, MTKViewDelegate {
         super.init()
     }
 
+
     func setup(_ view: MTKView) {
         view.device = device
-        view.colorPixelFormat = .bgra8Unorm
+        view.colorPixelFormat = pixelFormat
         view.delegate = self
-        piplelineState = scene.buildPipeline(device: device, pixelFormat: view.colorPixelFormat)
         uniforms.screen_scale = 2
+        setupPipeline()
     }
 
     var lastRenderTime: CFTimeInterval? = nil
     var currentTime: Double = 0
     let gpuLock = DispatchSemaphore(value: 1)
 
-    var scene: Scene = .smiley
+    var scene: Scene = Scene.allCases.first! {
+        didSet {
+            setupPipeline()
+        }
+    }
+
+    private func setupPipeline() {
+        self.piplelineState = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
+    }
 
     func draw(in view: MTKView) {
         guard let commandBuffer = queue.makeCommandBuffer() else { return }

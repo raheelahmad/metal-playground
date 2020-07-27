@@ -47,8 +47,8 @@ vertex VertexOut smoothing_vertex(const device VertexIn *vertexArray [[buffer(0)
 fragment float4 smoothing_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
     float x = st.x;
-//    float3 color = plotColor(st, (4 + sin(x * 40 + uniforms.time * 10))/8);
-    float3 color = plotColor(st, floor(x + uniforms.time) + sin(x + uniforms.time));
+    float3 color = plotColor(st, (4 + sin(x * 40 + uniforms.time * 10))/8);
+//    float3 color = plotColor(st, floor(x + uniforms.time) + sin(x + uniforms.time));
 
     return vector_float4(color, 1.0);
 }
