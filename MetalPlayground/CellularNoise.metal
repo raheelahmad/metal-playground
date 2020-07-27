@@ -42,7 +42,34 @@ vector_float2 random2(vector_float2 p ) {
     return fract(sin(vector_float2(dot(p,vector_float2(127.1,311.7)),dot(p,vector_float2(269.5,183.3))))*43758.5453);
 }
 
-fragment float4 tileFragmentShader(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+fragment float4 tileFragmentShader(VertexOut pixel [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+    float2 st = {pixel.pos.x / uniforms.screen_width, 1 - pixel.pos.y / uniforms.screen_height};
+    st *= 5;
+    float2 ist = floor(st);
+    float2 fst = fract(st);
+
+    float min_dist = 1;
+
+    for(int i=-1; i<=1; i++) {
+        for(int j=-1; j<=1; j++) {
+            float2 neighbor_origin = {float(i), float(j)};
+            float2 neighbor_point = random2(ist + neighbor_origin);
+            neighbor_point = 0.5 + 0.5*sin(uniforms.time + 6.2831*neighbor_point);
+            float neighbor_point_distance = length(neighbor_origin + neighbor_point - fst);
+            min_dist = min(min_dist, neighbor_point_distance * min_dist);
+        }
+    }
+
+    float3 color = float3(0) + step(0.06, min_dist);
+    if (length(color) != 0) {
+        color = float3(0.8, 0.7, 0.68);
+    }
+//    color[1] = min_dist;
+
+    return float4(color, 1);
+}
+
+fragment float4 tileFragmentShader2(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float x = interpolated.pos.x / uniforms.screen_width;
     float y = 1 - interpolated.pos.y / uniforms.screen_height;
     float2 st = {x,y};

@@ -18,13 +18,19 @@ struct FragmentUniforms {
     var screen_width: Float
     var screen_height: Float
     var screen_scale: Float
+    var mouseLocation: vector_float2
 }
 
 final class Renderer: NSObject, MTKViewDelegate {
+    var mouseLocation: vector_float2 = .init(repeating: 0) {
+        didSet {
+            uniforms.mouseLocation = vector_float2(mouseLocation.x / uniforms.screen_width, 1 - mouseLocation.y / uniforms.screen_height)
+        }
+    }
     let device: MTLDevice
     let queue: MTLCommandQueue
     var piplelineState: MTLRenderPipelineState!
-    private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0)
+    private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0, mouseLocation: .init(0,0))
 
     override init() {
         device = MTLCreateSystemDefaultDevice()!
@@ -37,13 +43,15 @@ final class Renderer: NSObject, MTKViewDelegate {
         view.device = device
         view.colorPixelFormat = .bgra8Unorm
         view.delegate = self
-        piplelineState = Self.buildPipeleiine(device: device, view: view)
+        piplelineState = scene.buildPipeline(device: device, pixelFormat: view.colorPixelFormat)
         uniforms.screen_scale = 2
     }
 
     var lastRenderTime: CFTimeInterval? = nil
     var currentTime: Double = 0
     let gpuLock = DispatchSemaphore(value: 1)
+
+    var scene: Scene = .smiley
 
     func draw(in view: MTKView) {
         guard let commandBuffer = queue.makeCommandBuffer() else { return }
@@ -70,6 +78,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
         let uniformsBuffer = device.makeBuffer(bytes: &uniforms, length: MemoryLayout<FragmentUniforms>.size, options: [])
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 0)
+        scene.setFragment(device: device, encoder: encoder)
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
 
         encoder.endEncoding()
@@ -80,16 +89,6 @@ final class Renderer: NSObject, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         uniforms.screen_width = Float(size.width)
         uniforms.screen_height = Float(size.height)
-
-    }
-
-    private static func buildPipeleiine(device: MTLDevice, view: MTKView) -> MTLRenderPipelineState {
-        let pipelineDesc = MTLRenderPipelineDescriptor()
-        let library = device.makeDefaultLibrary()
-        pipelineDesc.vertexFunction = library?.makeFunction(name: "cellularVertexShader")
-        pipelineDesc.fragmentFunction = library?.makeFunction(name: "tileFragmentShader")
-        pipelineDesc.colorAttachments[0].pixelFormat = view.colorPixelFormat
-        return (try? device.makeRenderPipelineState(descriptor: pipelineDesc))!
     }
 
     private var vertices: [Vertex] = [
@@ -101,13 +100,4 @@ final class Renderer: NSObject, MTKViewDelegate {
         Vertex(position: [1, 1]),
         Vertex(position: [1, -1]),
     ]
-
-//    Vertex(position: [-1, -1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//    Vertex(position: [-1, 1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//    Vertex(position: [1, 1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//
-//    Vertex(position: [-1, -1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//    Vertex(position: [1, 1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//    Vertex(position: [1, -1], color: [Float((0...1).randomElement()!), 0.2, 0.3, 1]),
-//    ]
 }

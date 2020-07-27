@@ -10,8 +10,7 @@ import Cocoa
 import MetalKit
 
 class ViewController: NSViewController {
-    let metalView = MTKView()
-    let renderer = Renderer()
+    let metalView = MetalView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,16 +24,5 @@ class ViewController: NSViewController {
             metalView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             ]
         )
-
-        renderer.setup(metalView)
     }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-
-
 }
-
