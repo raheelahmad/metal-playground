@@ -14,11 +14,13 @@ class ViewController: NSViewController {
     @IBOutlet weak var metalContainerView: NSView!
     @IBOutlet weak var scenesChoiceControl: NSPopUpButton!
 
+    let scenes: [Scene] = allScenes.map { $0.init() }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         scenesChoiceControl.removeAllItems()
-        scenesChoiceControl.addItems(withTitles: Scene.allCases.map { $0.rawValue })
+        scenesChoiceControl.addItems(withTitles: scenes.map { $0.name })
         scenesChoiceControl.target = self
         scenesChoiceControl.action = #selector(selectScene(button:))
 
@@ -37,7 +39,7 @@ class ViewController: NSViewController {
     func selectScene(button: NSPopUpButton) {
         guard
             let title = button.selectedItem?.title,
-            let scene = Scene(rawValue: title)
+            let scene = scenes.first(where: { $0.name == title })
             else { return }
         metalView.renderer.scene = scene
     }

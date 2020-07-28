@@ -10,6 +10,7 @@
 		591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226B624B3A24E00AF7663 /* Book-Uniforms.metal */; };
 		591226B924B3CDD600AF7663 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591226B824B3CDD600AF7663 /* MetalView.swift */; };
 		591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226BB24B40BF800AF7663 /* 05Algorithmic.metal */; };
+		5924C96424CFB709007DE9FD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924C96324CFB709007DE9FD /* MainView.swift */; };
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
 		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
 		595D7282246CFD4000FC8054 /* Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7281246CFD4000FC8054 /* Shapes.metal */; };
@@ -61,6 +62,7 @@
 		591226B624B3A24E00AF7663 /* Book-Uniforms.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = "Book-Uniforms.metal"; sourceTree = "<group>"; };
 		591226B824B3CDD600AF7663 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		591226BB24B40BF800AF7663 /* 05Algorithmic.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 05Algorithmic.metal; sourceTree = "<group>"; };
+		5924C96324CFB709007DE9FD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
 		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
 		595D7281246CFD4000FC8054 /* Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shapes.metal; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				5924C96324CFB709007DE9FD /* MainView.swift */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
@@ -307,6 +310,7 @@
 				595D7286246DE28600FC8054 /* Noise.metal in Sources */,
 				591226B924B3CDD600AF7663 /* MetalView.swift in Sources */,
 				595D7282246CFD4000FC8054 /* Shapes.metal in Sources */,
+				5924C96424CFB709007DE9FD /* MainView.swift in Sources */,
 				591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */,
 				59C2BD27246A709D00335E59 /* ViewController.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,

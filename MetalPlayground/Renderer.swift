@@ -54,7 +54,7 @@ final class Renderer: NSObject, MTKViewDelegate {
     var currentTime: Double = 0
     let gpuLock = DispatchSemaphore(value: 1)
 
-    var scene: Scene = Scene.allCases.first! {
+    var scene: Scene = StarField() {
         didSet {
             setupPipeline()
         }
