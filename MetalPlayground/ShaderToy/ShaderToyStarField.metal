@@ -27,6 +27,11 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
+struct StarfieldUniforms {
+    bool rotating;
+    float num_layers;
+};
+
 #define S(a, b, t) smoothstep(a, b, t)
 
 float map(float a, float b, float c, float d, float t) {
@@ -105,16 +110,18 @@ float3 starField(float2 st) {
 }
 
 fragment float4 shaderToyStarfield(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]],
-                                   constant FragmentUniforms &uniforms2 [[buffer(1)]]                                   ) {
+                                   constant StarfieldUniforms &uniforms2 [[buffer(1)]]                                   ) {
     float t = uniforms.time * 0.1;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
     st -= 0.5;
+
+    if (uniforms2.rotating) {
+        st *= Rot(t);
+    }
     
-    st *= Rot(t);
-    
-//    st *= 5; // divides the screen in to a grid (rather, repeats the
-    
-    float numLayers = 3;
+    float numLayers = uniforms2.num_layers;
+    st *= numLayers; // divides the screen in to a grid (rather, repeats the
+
 
     float3 color = 0;
     for (float i = 0; i < 1; i+=1/numLayers) {

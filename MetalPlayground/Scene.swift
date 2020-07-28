@@ -7,6 +7,7 @@
 //
 
 import MetalKit
+import SwiftUI
 
 protocol Scene {
     var name: String { get }
@@ -17,6 +18,7 @@ protocol Scene {
 
     var uniforms: Any? { get }
 
+    var view: NSView? { get }
 }
 
 extension Scene {
@@ -38,24 +40,57 @@ extension Scene {
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 1)
     }
 
+    var view: NSView? {
+        nil
+    }
 }
 
 var allScenes: [Scene.Type] {
     [StarField.self, Smiley.self, BasicShaderToy.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
+class StarFieldConfig: ObservableObject {
+    @Published var rotating: Bool = false
+    @Published var numDepthLayers = 1
+}
+
+let starfieldConfig = StarFieldConfig()
+
 struct StarField: Scene {
+
     struct Uniforms {
-        var numDepth: Int = 1
+        var rotating: Bool
+        var numDepthLayers: Float
     }
 
     var name: String { "Star Field" }
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToyStarfield" }
-    var starFieldUniforms: Uniforms = .init(numDepth: 1)
+    var starFieldUniforms: Uniforms {
+        Uniforms(rotating: starfieldConfig.rotating, numDepthLayers: Float(starfieldConfig.numDepthLayers))
+    }
 
     var uniforms: Any? {
         starFieldUniforms
+    }
+
+    struct ConfigView: View {
+
+        @EnvironmentObject var config: StarFieldConfig
+
+        var body: some View {
+            VStack {
+                Toggle("Rotating", isOn: $config.rotating)
+                Stepper("Depth Layers \(config.numDepthLayers)", value: $config.numDepthLayers, in: 0...5)
+                Spacer()
+            }
+        }
+    }
+
+    var view: NSView? {
+        NSHostingView(
+            rootView: ConfigView().environmentObject(starfieldConfig)
+        )
     }
 }
 

@@ -13,6 +13,7 @@ class ViewController: NSViewController {
     let metalView = MetalView()
     @IBOutlet weak var metalContainerView: NSView!
     @IBOutlet weak var scenesChoiceControl: NSPopUpButton!
+    @IBOutlet weak var sceneUniformsChoiceContainerView: NSView!
 
     let scenes: [Scene] = allScenes.map { $0.init() }
 
@@ -31,8 +32,10 @@ class ViewController: NSViewController {
             metalView.trailingAnchor.constraint(equalTo: metalContainerView.trailingAnchor),
             metalView.topAnchor.constraint(equalTo: metalContainerView.topAnchor),
             metalView.bottomAnchor.constraint(equalTo: metalContainerView.bottomAnchor),
-            ]
+        ]
         )
+
+        updateWithScene(scenes.first!)
     }
 
     @objc
@@ -40,7 +43,24 @@ class ViewController: NSViewController {
         guard
             let title = button.selectedItem?.title,
             let scene = scenes.first(where: { $0.name == title })
-            else { return }
+        else { return }
+        updateWithScene(scene)
+    }
+
+    private func updateWithScene(_ scene: Scene) {
         metalView.renderer.scene = scene
+
+        sceneUniformsChoiceContainerView.subviews.forEach { $0.removeFromSuperview() }
+
+        if let uniformsView = scene.view  {
+            uniformsView.translatesAutoresizingMaskIntoConstraints = false
+            sceneUniformsChoiceContainerView.addSubview(uniformsView)
+            NSLayoutConstraint.activate([
+                uniformsView.leadingAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.leadingAnchor),
+                uniformsView.topAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.topAnchor),
+                uniformsView.bottomAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.bottomAnchor),
+            ]
+            )
+        }
     }
 }
