@@ -51,23 +51,26 @@ var allScenes: [Scene.Type] {
 
 class StarFieldConfig: ObservableObject {
     @Published var rotating: Bool = false
+    @Published var flying: Bool = true
     @Published var numDepthLayers = 1
+    @Published var numDensityLayers = 1
 }
 
 let starfieldConfig = StarFieldConfig()
 
 struct StarField: Scene {
-
     struct Uniforms {
         var rotating: Bool
+        var flying: Bool
         var numDepthLayers: Float
+        var numDensityLayers: Float
     }
 
     var name: String { "Star Field" }
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToyStarfield" }
     var starFieldUniforms: Uniforms {
-        Uniforms(rotating: starfieldConfig.rotating, numDepthLayers: Float(starfieldConfig.numDepthLayers))
+        Uniforms(rotating: starfieldConfig.rotating, flying: starfieldConfig.flying, numDepthLayers: Float(starfieldConfig.numDepthLayers), numDensityLayers: Float(starfieldConfig.numDensityLayers))
     }
 
     var uniforms: Any? {
@@ -75,13 +78,14 @@ struct StarField: Scene {
     }
 
     struct ConfigView: View {
-
         @EnvironmentObject var config: StarFieldConfig
 
         var body: some View {
-            VStack {
+            VStack(alignment: .leading) {
                 Toggle("Rotating", isOn: $config.rotating)
-                Stepper("Depth Layers \(config.numDepthLayers)", value: $config.numDepthLayers, in: 0...5)
+                Toggle("Flying", isOn: $config.flying)
+                Stepper("Depth Layers \(config.numDepthLayers)", value: $config.numDepthLayers, in: 0...10)
+                Stepper("Density Layers \(config.numDensityLayers)", value: $config.numDensityLayers, in: 0...10)
                 Spacer()
             }
         }

@@ -35,7 +35,9 @@ class ViewController: NSViewController {
         ]
         )
 
-        updateWithScene(scenes.first!)
+        DispatchQueue.main.async {
+            self.updateWithScene(self.scenes.first!)
+        }
     }
 
     @objc

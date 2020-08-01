@@ -26,12 +26,12 @@ struct VertexOut {
     float4 color;
 };
 
-float3 plotColor(float2 st, float y) {
-    if (abs(st.y - y) <= 0.005) {
+float plotColor(float2 st, float y) {
+    if (abs(st.y - y) <= 0.01) {
         // it's a plot point
-        return {0.9, 0.3, 0.1};
+        return 1;
     } else {
-        return {1, 1, 1};
+        return 0;
     }
 
 }
@@ -43,12 +43,13 @@ vertex VertexOut smoothing_vertex(const device VertexIn *vertexArray [[buffer(0)
     return out;
 }
 
-
 fragment float4 smoothing_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
-    float x = st.x;
-    float3 color = plotColor(st, (4 + sin(x * 40 + uniforms.time * 10))/8);
-//    float3 color = plotColor(st, floor(x + uniforms.time) + sin(x + uniforms.time));
+    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_width};
+    float x = st.x * 2*M_PI_F;
+
+    float y = fract(4+sin(x))/8;
+
+    float3 color = plotColor(st, y);
 
     return vector_float4(color, 1.0);
 }
