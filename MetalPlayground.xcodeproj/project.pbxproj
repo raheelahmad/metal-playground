@@ -12,6 +12,7 @@
 		591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226BB24B40BF800AF7663 /* 05Algorithmic.metal */; };
 		5924C96424CFB709007DE9FD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5924C96324CFB709007DE9FD /* MainView.swift */; };
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
+		5941236C24D79E2A0027B0DC /* RepeatingCircles.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* RepeatingCircles.metal */; };
 		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
 		595D7282246CFD4000FC8054 /* Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7281246CFD4000FC8054 /* Shapes.metal */; };
 		595D7284246D23F500FC8054 /* Random.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7283246D23F500FC8054 /* Random.metal */; };
@@ -64,6 +65,7 @@
 		591226BB24B40BF800AF7663 /* 05Algorithmic.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 05Algorithmic.metal; sourceTree = "<group>"; };
 		5924C96324CFB709007DE9FD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
+		5941236B24D79E2A0027B0DC /* RepeatingCircles.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RepeatingCircles.metal; sourceTree = "<group>"; };
 		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
 		595D7281246CFD4000FC8054 /* Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shapes.metal; sourceTree = "<group>"; };
 		595D7283246D23F500FC8054 /* Random.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Random.metal; sourceTree = "<group>"; };
@@ -120,6 +122,14 @@
 			path = BookShaders;
 			sourceTree = "<group>";
 		};
+		5941236A24D79E1B0027B0DC /* Explorations */ = {
+			isa = PBXGroup;
+			children = (
+				5941236B24D79E2A0027B0DC /* RepeatingCircles.metal */,
+			);
+			path = Explorations;
+			sourceTree = "<group>";
+		};
 		59BCCB4424BD260300595132 /* ShaderToy */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +161,7 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				5941236A24D79E1B0027B0DC /* Explorations */,
 				5924C96324CFB709007DE9FD /* MainView.swift */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
@@ -302,6 +313,7 @@
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
 				59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */,
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
+				5941236C24D79E2A0027B0DC /* RepeatingCircles.metal in Sources */,
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
 				595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */,
