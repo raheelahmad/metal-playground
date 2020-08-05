@@ -29,6 +29,7 @@
 		59C2BD29246A709F00335E59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59C2BD28246A709F00335E59 /* Assets.xcassets */; };
 		59C2BD2C246A709F00335E59 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 59C2BD2A246A709F00335E59 /* Main.storyboard */; };
 		59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C2BD36246A7C2500335E59 /* Renderer.swift */; };
+		59CF2B0C24D7CE0C00606BB2 /* ShaderToyDistortions.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */; };
 		59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Scene.swift */; };
 		59EA0D63246E37F9008FD867 /* Glitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 59EA0D61246E37F9008FD867 /* Glitter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		59EA0D66246E37F9008FD867 /* Glitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EA0D5F246E37F9008FD867 /* Glitter.framework */; };
@@ -86,6 +87,7 @@
 		59C2BD2D246A709F00335E59 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		59C2BD2E246A709F00335E59 /* MetalPlayground.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalPlayground.entitlements; sourceTree = "<group>"; };
 		59C2BD36246A7C2500335E59 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyDistortions.metal; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		59EA0D5F246E37F9008FD867 /* Glitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Glitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59EA0D61246E37F9008FD867 /* Glitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glitter.h; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				59BCCB4524BD261300595132 /* ShaderToy01.metal */,
 				599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */,
 				592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */,
+				59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */,
 			);
 			path = ShaderToy;
 			sourceTree = "<group>";
@@ -161,9 +164,9 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
-				5941236A24D79E1B0027B0DC /* Explorations */,
 				5924C96324CFB709007DE9FD /* MainView.swift */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
+				5941236A24D79E1B0027B0DC /* Explorations */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
 				59C2BD24246A709D00335E59 /* AppDelegate.swift */,
@@ -322,6 +325,7 @@
 				595D7286246DE28600FC8054 /* Noise.metal in Sources */,
 				591226B924B3CDD600AF7663 /* MetalView.swift in Sources */,
 				595D7282246CFD4000FC8054 /* Shapes.metal in Sources */,
+				59CF2B0C24D7CE0C00606BB2 /* ShaderToyDistortions.metal in Sources */,
 				5924C96424CFB709007DE9FD /* MainView.swift in Sources */,
 				591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */,
 				59C2BD27246A709D00335E59 /* ViewController.swift in Sources */,

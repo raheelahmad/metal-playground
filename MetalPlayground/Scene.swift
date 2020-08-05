@@ -46,7 +46,7 @@ extension Scene {
 }
 
 var allScenes: [Scene.Type] {
-    [RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
+    [DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
 class StarFieldConfig: ObservableObject {
@@ -103,6 +103,14 @@ struct Smiley: Scene {
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
+    var uniforms: Any? { nil }
+}
+
+struct DomainDistortion: Scene {
+    var name: String { "Domain Distortion" }
+
+    var vertexFuncName: String { "domain_distortion_vertex" }
+    var fragmentFuncName: String { "domain_distortion_fragment" }
     var uniforms: Any? { nil }
 }
 

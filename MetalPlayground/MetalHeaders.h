@@ -32,3 +32,5 @@ float3 rect(float2 st, float time, float4 margins, float3 mainColor);
 float3 outlineRect(float2 st, float4 margins, float time);
 
 float circle(float2 st, float time, float rad, float2 center);
+
+float remap(float a, float b, float c, float d, float t);
