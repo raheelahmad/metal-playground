@@ -55,11 +55,6 @@ float remapper(float a, float b, float c, float d, float t) {
     return clamp(val, 0.0, 1.0);
 }
 
-float2 polar(float2 st) {
-    float2 polSt = float2(atan2(st.y, st.x), length(st));
-    return polSt;
-}
-
 
 fragment float4 domain_distortion_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float t = uniforms.time;

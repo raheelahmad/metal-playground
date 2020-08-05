@@ -19,6 +19,7 @@ protocol Scene {
     var uniforms: Any? { get }
 
     var view: NSView? { get }
+    func mesh(device: MTLDevice) -> MTKMesh?
 }
 
 extension Scene {
@@ -28,6 +29,9 @@ extension Scene {
         pipelineDesc.vertexFunction = library?.makeFunction(name: vertexFuncName)
         pipelineDesc.fragmentFunction = library?.makeFunction(name: fragmentFuncName)
         pipelineDesc.colorAttachments[0].pixelFormat = pixelFormat
+        if let mesh = self.mesh(device: device) {
+            pipelineDesc.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.vertexDescriptor)
+        }
         return (try? device.makeRenderPipelineState(descriptor: pipelineDesc))!
     }
 
@@ -43,10 +47,15 @@ extension Scene {
     var view: NSView? {
         nil
     }
+
+    func mesh(device: MTLDevice) -> MTKMesh? { nil }
 }
 
 var allScenes: [Scene.Type] {
-    [DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
+    [
+        MetalByTutorials01.self,
+        PolarScene.self,
+        DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
 class StarFieldConfig: ObservableObject {
@@ -103,6 +112,33 @@ struct Smiley: Scene {
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
+    var uniforms: Any? { nil }
+}
+
+struct MetalByTutorials01: Scene {
+    var name: String { "1 - Metal By Tutorials"}
+    var vertexFuncName: String { "metalByTutorials01_vertex" }
+    var fragmentFuncName: String { "metalByTutorials01_fragment" }
+    var uniforms: Any? { nil }
+
+    func mesh(device: MTLDevice) -> MTKMesh? {
+        let allocator = MTKMeshBufferAllocator(device: device)
+        let mdlMesh = MDLMesh(sphereWithExtent: [0.75, 0.75, 0.75], segments: [100, 100], inwardNormals: false, geometryType: .triangles, allocator: allocator)
+        do {
+            let mesh = try MTKMesh(mesh: mdlMesh, device: device)
+            return mesh
+        } catch {
+            assertionFailure(error.localizedDescription)
+            return nil
+        }
+    }
+}
+
+struct PolarScene: Scene {
+    var name: String { "Polar Experiments" }
+
+    var vertexFuncName: String { "polar_experiments_vertex" }
+    var fragmentFuncName: String { "polar_experiments_fragment" }
     var uniforms: Any? { nil }
 }
 

@@ -41,7 +41,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         super.init()
     }
 
-
     func setup(_ view: MTKView) {
         view.device = device
         view.colorPixelFormat = pixelFormat
@@ -54,14 +53,24 @@ final class Renderer: NSObject, MTKViewDelegate {
     var currentTime: Double = 0
     let gpuLock = DispatchSemaphore(value: 1)
 
-    var scene: Scene = StarField() {
+    var scene: Scene = allScenes[0].init() {
         didSet {
             setupPipeline()
         }
     }
 
+    var mesh: MTKMesh?
+    var vertexBuffer: MTLBuffer?
+
     private func setupPipeline() {
-        self.piplelineState = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
+        piplelineState = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
+
+        mesh = scene.mesh(device: device)
+        if let mesh = mesh {
+            vertexBuffer = mesh.vertexBuffers[0].buffer
+        } else {
+            vertexBuffer = device.makeBuffer(bytes: vertices, length: MemoryLayout<Vertex>.stride * vertices.count, options: [])
+        }
     }
 
     func draw(in view: MTKView) {
@@ -84,13 +93,23 @@ final class Renderer: NSObject, MTKViewDelegate {
         passDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.4, alpha: 1)
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor) else { return }
 
-        let vertexBuffer = device.makeBuffer(bytes: vertices, length: MemoryLayout<Vertex>.stride * vertices.count, options: [])
         encoder.setRenderPipelineState(piplelineState)
+
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
+
         let uniformsBuffer = device.makeBuffer(bytes: &uniforms, length: MemoryLayout<FragmentUniforms>.size, options: [])
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 0)
         scene.setFragment(device: device, encoder: encoder)
-        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
+
+        if let mesh = mesh {
+            if let submesh = mesh.submeshes.first {
+                encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: 0)
+            } else {
+                assertionFailure()
+            }
+        } else {
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
+        }
 
         encoder.endEncoding()
         commandBuffer.present(view.currentDrawable!)
