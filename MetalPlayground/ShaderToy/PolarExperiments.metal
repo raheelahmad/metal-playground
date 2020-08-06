@@ -48,11 +48,18 @@ float2 polar(float2 st) {
 
 fragment float4 polar_experiments_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
 //    float t = uniforms.time;
+    float3 col = {0.7, 0.5, 0.1};
+
     float2 st = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     st -= 0.5;
+
+    float x = st.x * 2.;
+    float m = min(fract(x), fract(1-x));
+    float c = smoothstep(0., .1, m - st.y);
+
     float2 polSt = polar(st);
     float mask = remaps(-M_PI_F, M_PI_F, 0, 1, polSt[0]);
-    float3 col = {0.7, 0.5, 0.1};
     col *= mask;
-    return float4(col, 1);
+
+    return float4(c);
 }

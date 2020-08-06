@@ -102,10 +102,9 @@ final class Renderer: NSObject, MTKViewDelegate {
         scene.setFragment(device: device, encoder: encoder)
 
         if let mesh = mesh {
-            if let submesh = mesh.submeshes.first {
-                encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: 0)
-            } else {
-                assertionFailure()
+            encoder.setTriangleFillMode(.lines)
+            for submesh in mesh.submeshes {
+                encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
             }
         } else {
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)

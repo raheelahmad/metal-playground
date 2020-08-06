@@ -53,8 +53,8 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
-        MetalByTutorials01.self,
         PolarScene.self,
+        MetalByTutorials01.self,
         DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
@@ -123,7 +123,22 @@ struct MetalByTutorials01: Scene {
 
     func mesh(device: MTLDevice) -> MTKMesh? {
         let allocator = MTKMeshBufferAllocator(device: device)
-        let mdlMesh = MDLMesh(sphereWithExtent: [0.75, 0.75, 0.75], segments: [100, 100], inwardNormals: false, geometryType: .triangles, allocator: allocator)
+        guard let assetURL = Bundle.main.url(forResource: "mushroom", withExtension: "obj") else {
+            assertionFailure()
+            return nil
+        }
+
+        let vertexDesc = MTLVertexDescriptor()
+        vertexDesc.attributes[0].format = .float3
+        vertexDesc.attributes[0].offset = 0
+        vertexDesc.attributes[0].bufferIndex = 0
+        vertexDesc.layouts[0].stride = MemoryLayout<SIMD3<Float>>.stride
+        let meshDescriptor = MTKModelIOVertexDescriptorFromMetal(vertexDesc)
+        (meshDescriptor.attributes[0] as! MDLVertexAttribute).name = MDLVertexAttributePosition
+        let asset = MDLAsset(url: assetURL, vertexDescriptor: meshDescriptor, bufferAllocator: allocator)
+        let mdlMesh = asset.childObjects(of: MDLMesh.self).first as! MDLMesh
+
+//        let mdlMesh = MDLMesh(sphereWithExtent: [0.75, 0.75, 0.75], segments: [100, 100], inwardNormals: false, geometryType: .triangles, allocator: allocator)
         do {
             let mesh = try MTKMesh(mesh: mdlMesh, device: device)
             return mesh

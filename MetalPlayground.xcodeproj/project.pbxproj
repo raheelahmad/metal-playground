@@ -32,6 +32,8 @@
 		59CF2B0C24D7CE0C00606BB2 /* ShaderToyDistortions.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */; };
 		59CF2B1824DA738D00606BB2 /* PolarExperiments.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */; };
 		59CF2B1B24DB46A300606BB2 /* MetalByTutorials01.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B1A24DB46A300606BB2 /* MetalByTutorials01.metal */; };
+		59CF2B1D24DB5E8500606BB2 /* train.obj in Resources */ = {isa = PBXBuildFile; fileRef = 59CF2B1C24DB5E8500606BB2 /* train.obj */; };
+		59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */ = {isa = PBXBuildFile; fileRef = 59CF2B1E24DB826A00606BB2 /* mushroom.obj */; };
 		59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Scene.swift */; };
 		59EA0D63246E37F9008FD867 /* Glitter.h in Headers */ = {isa = PBXBuildFile; fileRef = 59EA0D61246E37F9008FD867 /* Glitter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		59EA0D66246E37F9008FD867 /* Glitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59EA0D5F246E37F9008FD867 /* Glitter.framework */; };
@@ -92,6 +94,8 @@
 		59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyDistortions.metal; sourceTree = "<group>"; };
 		59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PolarExperiments.metal; sourceTree = "<group>"; };
 		59CF2B1A24DB46A300606BB2 /* MetalByTutorials01.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalByTutorials01.metal; sourceTree = "<group>"; };
+		59CF2B1C24DB5E8500606BB2 /* train.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = train.obj; sourceTree = "<group>"; };
+		59CF2B1E24DB826A00606BB2 /* mushroom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mushroom.obj; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		59EA0D5F246E37F9008FD867 /* Glitter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Glitter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59EA0D61246E37F9008FD867 /* Glitter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glitter.h; sourceTree = "<group>"; };
@@ -199,6 +203,8 @@
 			isa = PBXGroup;
 			children = (
 				59CF2B1A24DB46A300606BB2 /* MetalByTutorials01.metal */,
+				59CF2B1C24DB5E8500606BB2 /* train.obj */,
+				59CF2B1E24DB826A00606BB2 /* mushroom.obj */,
 			);
 			path = MetalByTutorials;
 			sourceTree = "<group>";
@@ -307,7 +313,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				59C2BD29246A709F00335E59 /* Assets.xcassets in Resources */,
+				59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */,
 				59C2BD2C246A709F00335E59 /* Main.storyboard in Resources */,
+				59CF2B1D24DB5E8500606BB2 /* train.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
