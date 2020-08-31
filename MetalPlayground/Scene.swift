@@ -20,6 +20,7 @@ protocol Scene {
 
     var view: NSView? { get }
     func mesh(device: MTLDevice) -> MTKMesh?
+    var vertices: [simd_float3]? { get }
 }
 
 extension Scene {
@@ -49,10 +50,14 @@ extension Scene {
     }
 
     func mesh(device: MTLDevice) -> MTKMesh? { nil }
+
+    var vertices: [simd_float3]? { nil }
 }
 
 var allScenes: [Scene.Type] {
     [
+        MetalByTutorials04.self,
+        MetalByTutorials03.self,
         PolarScene.self,
         MetalByTutorials01.self,
         DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
@@ -113,6 +118,44 @@ struct Smiley: Scene {
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
     var uniforms: Any? { nil }
+}
+
+struct MetalByTutorials03: Scene {
+    var name: String { "3 - Metal By Tutorials"}
+    var vertexFuncName: String { "metalByTutorials01_vertex" }
+    var fragmentFuncName: String { "metalByTutorials01_fragment" }
+    var uniforms: Any? { nil }
+
+    func mesh(device: MTLDevice) -> MTKMesh? {
+        let allocator = MTKMeshBufferAllocator(device: device)
+        let size: Float = 1
+        let mdlMesh = MDLMesh(
+            boxWithExtent: [size, size, size],
+            segments: [1,1,1],
+            inwardNormals: false,
+            geometryType: .triangles,
+            allocator: allocator
+        )
+
+        do {
+            let mesh = try MTKMesh(mesh: mdlMesh, device: device)
+            return mesh
+        } catch {
+            assertionFailure(error.localizedDescription)
+            return nil
+        }
+    }
+}
+
+struct MetalByTutorials04: Scene {
+    var name: String { "3 - Metal By Tutorials"}
+    var vertexFuncName: String { "metalByTutorials04_vertex" }
+    var fragmentFuncName: String { "metalByTutorials04_fragment" }
+    var uniforms: Any? { nil }
+
+    var vertices: [simd_float3]? {
+        [[0,0,0.5]]
+    }
 }
 
 struct MetalByTutorials01: Scene {

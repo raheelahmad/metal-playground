@@ -66,8 +66,11 @@ final class Renderer: NSObject, MTKViewDelegate {
         piplelineState = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
 
         mesh = scene.mesh(device: device)
+
         if let mesh = mesh {
             vertexBuffer = mesh.vertexBuffers[0].buffer
+        } else if var vertices = scene.vertices {
+            vertexBuffer = device.makeBuffer(bytes: &vertices, length: MemoryLayout<simd_float3>.stride * vertices.count, options: [])
         } else {
             vertexBuffer = device.makeBuffer(bytes: vertices, length: MemoryLayout<Vertex>.stride * vertices.count, options: [])
         }
@@ -102,10 +105,12 @@ final class Renderer: NSObject, MTKViewDelegate {
         scene.setFragment(device: device, encoder: encoder)
 
         if let mesh = mesh {
-            encoder.setTriangleFillMode(.lines)
             for submesh in mesh.submeshes {
+                encoder.setTriangleFillMode(.lines)
                 encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
             }
+        } else if let vertices = scene.vertices {
+            encoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
         } else {
             encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
         }
