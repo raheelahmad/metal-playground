@@ -56,11 +56,13 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
+//        Torus.self,
+        RepeatingCircles.self,
         MetalByTutorials04.self,
         MetalByTutorials03.self,
         PolarScene.self,
         MetalByTutorials01.self,
-        DomainDistortion.self, RepeatingCircles.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
+        DomainDistortion.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
 class StarFieldConfig: ObservableObject {
@@ -71,6 +73,15 @@ class StarFieldConfig: ObservableObject {
 }
 
 let starfieldConfig = StarFieldConfig()
+
+struct Torus: Scene {
+    var name: String { "Torus" }
+    var vertexFuncName: String { "torus_vertex" }
+    var fragmentFuncName: String { "torus_fragment" }
+    var uniforms: Any? {
+        nil
+    }
+}
 
 struct StarField: Scene {
     struct Uniforms {

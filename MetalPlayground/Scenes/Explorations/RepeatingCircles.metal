@@ -87,36 +87,38 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     st -= .5;
 
     float3 baseColor = float3(0.5, 0.3, 0.7);
+    int index = int(uniforms.time);
 
     float mask = 0.;
     float r = 0.15;
-    float2 leftPos = {-r/2,0};
-    float2 rightPos = {r/2,0};
-    float left = CircleBand(st, leftPos, r, .004, .001);
+    float2 centerPos = {0,0};
+    float2 rightPos = {r,0};
+    float center = CircleBand(st, centerPos, r, .004, .001);
     float right = CircleBand(st, rightPos, r, .004, .001);
 
-    float2 topPos = circleIntersction(r, true, leftPos, rightPos);
-    float top = CircleBand(st, topPos, r, 0.004, .001);
+    float2 topRightPos = circleIntersction(r, true, centerPos, rightPos);
+    float topRight = CircleBand(st, topRightPos, r, 0.004, .001);
 
-    float2 topLeftPos = circleIntersction(r, true, leftPos, topPos);
+    float2 topLeftPos = circleIntersction(r, true, centerPos, topRightPos);
     float topLeft = CircleBand(st, topLeftPos, r, 0.004, .001);
 
-    float2 centerLeftPos = circleIntersction(r, false, topLeftPos, leftPos);
-    float centerLeft = CircleBand(st, centerLeftPos, r, 0.004, .001);
+    float2 leftPos = circleIntersction(r, false, topLeftPos, centerPos);
+    float left = CircleBand(st, leftPos, r, 0.004, .001);
 
-    float2 bottomPos = circleIntersction(r, false, leftPos, rightPos);
-    float bottom = CircleBand(st, bottomPos, r, 0.004, .001);
+    float2 bottomRightPos = circleIntersction(r, false, centerPos, rightPos);
+    float bottomRight = CircleBand(st, bottomRightPos, r, 0.004, .001);
 
-    float2 bottomLeftPos = circleIntersction(r, false, centerLeftPos, bottomPos);
+    float2 bottomLeftPos = circleIntersction(r, false, leftPos, bottomRightPos);
     float bottomLeft = CircleBand(st, bottomLeftPos, r, 0.004, .001);
 
-    mask = left;
-    mask += right;
-    mask += top;
-    mask += bottom;
-    mask += topLeft;
-    mask += centerLeft;
-    mask += bottomLeft;
+    index = index % 8;
+    mask = center;
+    mask += index >= 1 ? right : 0;
+    mask += index >= 2 ? topRight : 0;
+    mask += index >= 3 ? topLeft : 0;
+    mask += index >= 4 ? left : 0;
+    mask += index >= 5 ? bottomLeft : 0;
+    mask += index >= 6 ? bottomRight : 0;
 
     mask = clamp(mask, 0., 1.);
 

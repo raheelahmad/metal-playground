@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		590BE6142500A12800E9B573 /* Torus.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6132500A12800E9B573 /* Torus.metal */; };
 		591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226B624B3A24E00AF7663 /* Book-Uniforms.metal */; };
 		591226B924B3CDD600AF7663 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591226B824B3CDD600AF7663 /* MetalView.swift */; };
 		591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226BB24B40BF800AF7663 /* 05Algorithmic.metal */; };
@@ -66,6 +67,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		590BE6132500A12800E9B573 /* Torus.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Torus.metal; sourceTree = "<group>"; };
 		591226B624B3A24E00AF7663 /* Book-Uniforms.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = "Book-Uniforms.metal"; sourceTree = "<group>"; };
 		591226B824B3CDD600AF7663 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		591226BB24B40BF800AF7663 /* 05Algorithmic.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 05Algorithmic.metal; sourceTree = "<group>"; };
@@ -123,6 +125,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		590BE6152500C4C200E9B573 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
+				595FBBE124708BEE00222613 /* CellularNoise.metal */,
+				5981BA96246B22EB00E39E86 /* Shaders.metal */,
+				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
+				595D7281246CFD4000FC8054 /* Shapes.metal */,
+				595D7283246D23F500FC8054 /* Random.metal */,
+				595D7285246DE28600FC8054 /* Noise.metal */,
+				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
+				5941236A24D79E1B0027B0DC /* Explorations */,
+				59BCCB4424BD260300595132 /* ShaderToy */,
+				591226BA24B40BDA00AF7663 /* BookShaders */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
 		591226BA24B40BDA00AF7663 /* BookShaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +170,7 @@
 				592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */,
 				59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */,
 				59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */,
+				590BE6132500A12800E9B573 /* Torus.metal */,
 			);
 			path = ShaderToy;
 			sourceTree = "<group>";
@@ -175,28 +196,18 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
-				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
-				5924C96324CFB709007DE9FD /* MainView.swift */,
-				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
-				5941236A24D79E1B0027B0DC /* Explorations */,
-				59BCCB4424BD260300595132 /* ShaderToy */,
-				591226BA24B40BDA00AF7663 /* BookShaders */,
+				590BE6152500C4C200E9B573 /* Scenes */,
 				59C2BD24246A709D00335E59 /* AppDelegate.swift */,
 				59C2BD26246A709D00335E59 /* ViewController.swift */,
-				595FBBE124708BEE00222613 /* CellularNoise.metal */,
 				59C2BD36246A7C2500335E59 /* Renderer.swift */,
-				5981BA96246B22EB00E39E86 /* Shaders.metal */,
-				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
-				595D7281246CFD4000FC8054 /* Shapes.metal */,
-				595D7283246D23F500FC8054 /* Random.metal */,
-				595D7285246DE28600FC8054 /* Noise.metal */,
+				5924C96324CFB709007DE9FD /* MainView.swift */,
 				595D7287246DFF9300FC8054 /* MoreNoise.metal */,
 				59C2BD28246A709F00335E59 /* Assets.xcassets */,
 				59C2BD2A246A709F00335E59 /* Main.storyboard */,
 				59C2BD2D246A709F00335E59 /* Info.plist */,
+				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59C2BD2E246A709F00335E59 /* MetalPlayground.entitlements */,
 				591226B824B3CDD600AF7663 /* MetalView.swift */,
-				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
 			);
 			path = MetalPlayground;
 			sourceTree = "<group>";
@@ -341,6 +352,7 @@
 				59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */,
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
 				59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */,
+				590BE6142500A12800E9B573 /* Torus.metal in Sources */,
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* RepeatingCircles.metal in Sources */,
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
