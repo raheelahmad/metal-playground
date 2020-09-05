@@ -16,11 +16,10 @@ protocol Scene {
 
     init()
 
-    var uniforms: Any? { get }
-
     var view: NSView? { get }
     func mesh(device: MTLDevice) -> MTKMesh?
     var vertices: [simd_float3]? { get }
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
 }
 
 extension Scene {
@@ -36,14 +35,8 @@ extension Scene {
         return (try? device.makeRenderPipelineState(descriptor: pipelineDesc))!
     }
 
-    func setFragment(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
-        guard var uniform = self.uniforms else {
-            return
-        }
-        let length = MemoryLayout.size(ofValue: uniform)
-        let uniformsBuffer = device.makeBuffer(bytes: &uniform, length: length, options: [])
-        encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 1)
-    }
+
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) { }
 
     var view: NSView? {
         nil
@@ -56,6 +49,7 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
+        Rays.self,
 //        Torus.self,
         RepeatingCircles.self,
         MetalByTutorials04.self,
@@ -78,9 +72,6 @@ struct Torus: Scene {
     var name: String { "Torus" }
     var vertexFuncName: String { "torus_vertex" }
     var fragmentFuncName: String { "torus_fragment" }
-    var uniforms: Any? {
-        nil
-    }
 }
 
 struct StarField: Scene {
@@ -98,10 +89,9 @@ struct StarField: Scene {
         Uniforms(rotating: starfieldConfig.rotating, flying: starfieldConfig.flying, numDepthLayers: Float(starfieldConfig.numDepthLayers), numDensityLayers: Float(starfieldConfig.numDensityLayers))
     }
 
-    var uniforms: Any? {
+    var fragmentUniforms: Any? {
         starFieldUniforms
     }
-
     struct ConfigView: View {
         @EnvironmentObject var config: StarFieldConfig
 
@@ -116,6 +106,13 @@ struct StarField: Scene {
         }
     }
 
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
+        var uniform = self.starFieldUniforms
+        let length = MemoryLayout.size(ofValue: uniform)
+        encoder.setFragmentBytes(&uniform, length: length, index: 1)
+    }
+
+
     var view: NSView? {
         NSHostingView(
             rootView: ConfigView().environmentObject(starfieldConfig)
@@ -128,14 +125,12 @@ struct Smiley: Scene {
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
-    var uniforms: Any? { nil }
 }
 
 struct MetalByTutorials03: Scene {
     var name: String { "3 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials01_vertex" }
     var fragmentFuncName: String { "metalByTutorials01_fragment" }
-    var uniforms: Any? { nil }
 
     func mesh(device: MTLDevice) -> MTKMesh? {
         let allocator = MTKMeshBufferAllocator(device: device)
@@ -162,7 +157,6 @@ struct MetalByTutorials04: Scene {
     var name: String { "3 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials04_vertex" }
     var fragmentFuncName: String { "metalByTutorials04_fragment" }
-    var uniforms: Any? { nil }
 
     var vertices: [simd_float3]? {
         [[0,0,0.5]]
@@ -173,7 +167,6 @@ struct MetalByTutorials01: Scene {
     var name: String { "1 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials01_vertex" }
     var fragmentFuncName: String { "metalByTutorials01_fragment" }
-    var uniforms: Any? { nil }
 
     func mesh(device: MTLDevice) -> MTKMesh? {
         let allocator = MTKMeshBufferAllocator(device: device)
@@ -208,7 +201,6 @@ struct PolarScene: Scene {
 
     var vertexFuncName: String { "polar_experiments_vertex" }
     var fragmentFuncName: String { "polar_experiments_fragment" }
-    var uniforms: Any? { nil }
 }
 
 struct DomainDistortion: Scene {
@@ -216,7 +208,6 @@ struct DomainDistortion: Scene {
 
     var vertexFuncName: String { "domain_distortion_vertex" }
     var fragmentFuncName: String { "domain_distortion_fragment" }
-    var uniforms: Any? { nil }
 }
 
 struct RepeatingCircles: Scene {
@@ -224,7 +215,6 @@ struct RepeatingCircles: Scene {
 
     var vertexFuncName: String { "repeating_cirlces_vertex" }
     var fragmentFuncName: String { "repeating_circles_fragment" }
-    var uniforms: Any? { nil }
 }
 
 struct BasicShaderToy: Scene {
@@ -232,7 +222,6 @@ struct BasicShaderToy: Scene {
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shadertoy01" }
-    var uniforms: Any? { nil }
 }
 
 struct BookOfShaders05: Scene {
@@ -240,7 +229,6 @@ struct BookOfShaders05: Scene {
 
     var vertexFuncName: String { "smoothing_vertex" }
     var fragmentFuncName: String { "smoothing_fragment" }
-    var uniforms: Any? { nil }
 }
 
 struct BookOfShaders06: Scene {
@@ -248,5 +236,4 @@ struct BookOfShaders06: Scene {
 
     var vertexFuncName: String { "color_vertex" }
     var fragmentFuncName: String { "color_fragment" }
-    var uniforms: Any? { nil }
 }

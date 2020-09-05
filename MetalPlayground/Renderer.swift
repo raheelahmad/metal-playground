@@ -31,6 +31,8 @@ final class Renderer: NSObject, MTKViewDelegate {
     let queue: MTLCommandQueue
     let pixelFormat: MTLPixelFormat = .bgra8Unorm
 
+    static var aspectRatio: Float = 1.0
+
     var piplelineState: MTLRenderPipelineState!
     private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0, mouseLocation: .init(0,0))
 
@@ -102,7 +104,7 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         let uniformsBuffer = device.makeBuffer(bytes: &uniforms, length: MemoryLayout<FragmentUniforms>.size, options: [])
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 0)
-        scene.setFragment(device: device, encoder: encoder)
+        scene.setUniforms(device: device, encoder: encoder)
 
         if let mesh = mesh {
             for submesh in mesh.submeshes {
@@ -123,6 +125,7 @@ final class Renderer: NSObject, MTKViewDelegate {
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
         uniforms.screen_width = Float(size.width)
         uniforms.screen_height = Float(size.height)
+        Self.aspectRatio = Float(uniforms.screen_width/uniforms.screen_height)
     }
 
     private var vertices: [Vertex] = [

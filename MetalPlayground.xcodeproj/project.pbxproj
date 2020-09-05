@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		590BE6142500A12800E9B573 /* Torus.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6132500A12800E9B573 /* Torus.metal */; };
+		590BE6182500C55C00E9B573 /* Rays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6172500C55C00E9B573 /* Rays.swift */; };
+		590BE61A2500C66D00E9B573 /* Rays.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6192500C66D00E9B573 /* Rays.metal */; };
+		590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590BE61B2500C6A500E9B573 /* MathUtils.swift */; };
 		591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226B624B3A24E00AF7663 /* Book-Uniforms.metal */; };
 		591226B924B3CDD600AF7663 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591226B824B3CDD600AF7663 /* MetalView.swift */; };
 		591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226BB24B40BF800AF7663 /* 05Algorithmic.metal */; };
@@ -68,6 +71,9 @@
 
 /* Begin PBXFileReference section */
 		590BE6132500A12800E9B573 /* Torus.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Torus.metal; sourceTree = "<group>"; };
+		590BE6172500C55C00E9B573 /* Rays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rays.swift; sourceTree = "<group>"; };
+		590BE6192500C66D00E9B573 /* Rays.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Rays.metal; sourceTree = "<group>"; };
+		590BE61B2500C6A500E9B573 /* MathUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MathUtils.swift; sourceTree = "<group>"; };
 		591226B624B3A24E00AF7663 /* Book-Uniforms.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = "Book-Uniforms.metal"; sourceTree = "<group>"; };
 		591226B824B3CDD600AF7663 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		591226BB24B40BF800AF7663 /* 05Algorithmic.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 05Algorithmic.metal; sourceTree = "<group>"; };
@@ -129,18 +135,26 @@
 			isa = PBXGroup;
 			children = (
 				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
-				595FBBE124708BEE00222613 /* CellularNoise.metal */,
-				5981BA96246B22EB00E39E86 /* Shaders.metal */,
-				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
-				595D7281246CFD4000FC8054 /* Shapes.metal */,
-				595D7283246D23F500FC8054 /* Random.metal */,
-				595D7285246DE28600FC8054 /* Noise.metal */,
+				590BE6162500C53E00E9B573 /* Other Shaders */,
 				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
 				5941236A24D79E1B0027B0DC /* Explorations */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
 			);
 			path = Scenes;
+			sourceTree = "<group>";
+		};
+		590BE6162500C53E00E9B573 /* Other Shaders */ = {
+			isa = PBXGroup;
+			children = (
+				595FBBE124708BEE00222613 /* CellularNoise.metal */,
+				5981BA96246B22EB00E39E86 /* Shaders.metal */,
+				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
+				595D7281246CFD4000FC8054 /* Shapes.metal */,
+				595D7283246D23F500FC8054 /* Random.metal */,
+				595D7285246DE28600FC8054 /* Noise.metal */,
+			);
+			path = "Other Shaders";
 			sourceTree = "<group>";
 		};
 		591226BA24B40BDA00AF7663 /* BookShaders */ = {
@@ -158,6 +172,8 @@
 			isa = PBXGroup;
 			children = (
 				5941236B24D79E2A0027B0DC /* RepeatingCircles.metal */,
+				590BE6172500C55C00E9B573 /* Rays.swift */,
+				590BE6192500C66D00E9B573 /* Rays.metal */,
 			);
 			path = Explorations;
 			sourceTree = "<group>";
@@ -208,6 +224,7 @@
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59C2BD2E246A709F00335E59 /* MetalPlayground.entitlements */,
 				591226B824B3CDD600AF7663 /* MetalView.swift */,
+				590BE61B2500C6A500E9B573 /* MathUtils.swift */,
 			);
 			path = MetalPlayground;
 			sourceTree = "<group>";
@@ -368,11 +385,14 @@
 				59CF2B1824DA738D00606BB2 /* PolarExperiments.metal in Sources */,
 				5924C96424CFB709007DE9FD /* MainView.swift in Sources */,
 				591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */,
+				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
 				59C2BD27246A709D00335E59 /* ViewController.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
 				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
 				59C2BD25246A709D00335E59 /* AppDelegate.swift in Sources */,
+				590BE61A2500C66D00E9B573 /* Rays.metal in Sources */,
+				590BE6182500C55C00E9B573 /* Rays.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
