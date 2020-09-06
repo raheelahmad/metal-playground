@@ -142,8 +142,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "modelMatrix"
             landmarkType = "24">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "267"
-            endingLineNumber = "267"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "mesh(device:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -190,8 +190,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "vertexUniforms"
             landmarkType = "24">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "255"
-            endingLineNumber = "255"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "viewMatrix"
             landmarkType = "24">
          </BreakpointContent>
