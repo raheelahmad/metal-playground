@@ -142,8 +142,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "50"
-            endingLineNumber = "50"
+            startingLineNumber = "239"
+            endingLineNumber = "239"
             landmarkName = "modelMatrix"
             landmarkType = "24">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
             landmarkName = "mesh(device:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -184,14 +184,14 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "61BD2899-513C-4A0C-A608-04BD565402B6"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
             landmarkName = "vertexUniforms"
             landmarkType = "24">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "MetalPlayground/Scenes/Explorations/Rays.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "viewMatrix"
             landmarkType = "24">
          </BreakpointContent>
