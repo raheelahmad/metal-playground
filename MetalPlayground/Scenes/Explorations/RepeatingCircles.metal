@@ -112,9 +112,15 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     float2 bottomLeftPos = circleIntersction(r, false, leftPos, bottomRightPos);
     float bottomLeft = CircleBand(st, bottomLeftPos, r, 0.004, .001);
 
-    float3 circle = (topRight + topLeft + bottomRight + bottomLeft + center) * basePerimeterColor;
-    float intersects = distance(<#metal::float2 x#>, <#metal::float2 y#>)
-    float3 intersection = smoothstep(distance(topRightPos, st), 0.02, 0.02) * baseIntersectionColor;
+    float3 intersection;
+    float3 circle = (topRight + topLeft + bottomRight + bottomLeft + center ) * basePerimeterColor;
+    bool intersects = distance(topRightPos, st) < 0.02;
+    if (intersects) {
+        float val = smoothstep(distance(topRightPos, st), 0.02, 0.01);
+        intersection = val * baseIntersectionColor;
+//        return float4(val * baseIntersectionColor, 1);
+    }
+//    float3 intersection = smoothstep(distance(topRightPos, st), 0.02, 0.02) * baseIntersectionColor;
 //    if (length(intersection) > 0.01) {
 //        circle = 0;
 //    }
