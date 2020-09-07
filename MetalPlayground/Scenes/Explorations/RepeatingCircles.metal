@@ -86,7 +86,8 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
     st -= .5;
 
-    float3 baseColor = float3(0.5, 0.3, 0.7);
+    float3 baseIntersectionColor = float3(0.5, 0.3, 0.7);
+    float3 basePerimeterColor = float3(0.9, 0.0, 0.5);
     int index = int(uniforms.time);
 
     float mask = 0.;
@@ -111,18 +112,25 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     float2 bottomLeftPos = circleIntersction(r, false, leftPos, bottomRightPos);
     float bottomLeft = CircleBand(st, bottomLeftPos, r, 0.004, .001);
 
-    index = index % 8;
-    mask = center;
-    mask += index >= 1 ? right : 0;
-    mask += index >= 2 ? topRight : 0;
-    mask += index >= 3 ? topLeft : 0;
-    mask += index >= 4 ? left : 0;
-    mask += index >= 5 ? bottomLeft : 0;
-    mask += index >= 6 ? bottomRight : 0;
+    float3 circle = (topRight + topLeft + bottomRight + bottomLeft + center) * basePerimeterColor;
+    float intersects = distance(<#metal::float2 x#>, <#metal::float2 y#>)
+    float3 intersection = smoothstep(distance(topRightPos, st), 0.02, 0.02) * baseIntersectionColor;
+//    if (length(intersection) > 0.01) {
+//        circle = 0;
+//    }
+
+//    index = index % 8;
+//    mask = center;
+//    mask += index >= 1 ? right : 0;
+//    mask += index >= 2 ? topRight : 0;
+//    mask += index >= 3 ? topLeft : 0;
+//    mask += index >= 4 ? left : 0;
+//    mask += index >= 5 ? bottomLeft : 0;
+//    mask += index >= 6 ? bottomRight : 0;
 
     mask = clamp(mask, 0., 1.);
 
-    float3 color = mask * baseColor;
+    float3 color = circle + intersection;
 
     return vector_float4(color, 1.0);
 }

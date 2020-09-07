@@ -51,9 +51,9 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
+        RepeatingCircles.self,
         Rays.self,
 //        Torus.self,
-        RepeatingCircles.self,
         MetalByTutorials04.self,
         MetalByTutorials03.self,
         PolarScene.self,
