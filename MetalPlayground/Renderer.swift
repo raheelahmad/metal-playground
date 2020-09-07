@@ -97,6 +97,7 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         passDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.4, alpha: 1)
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor) else { return }
+        scene.tick(time: Float(currentTime))
 
         encoder.setRenderPipelineState(piplelineState)
 
@@ -108,7 +109,7 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         if let mesh = mesh {
             for submesh in mesh.submeshes {
-                encoder.setTriangleFillMode(.lines)
+//                encoder.setTriangleFillMode(.lines)
                 encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
             }
         } else if let vertices = scene.vertices {

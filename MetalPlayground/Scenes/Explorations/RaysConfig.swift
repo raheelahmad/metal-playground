@@ -12,7 +12,7 @@ import simd
 class RaysConfig: ObservableObject {
     @Published var cameraPosX: Float = 0
     @Published var cameraPosY: Float = 0
-    @Published var cameraPosZ: Float = -3
+    @Published var cameraPosZ: Float = -30
     @Published var cameraRotX: Float = 0
     @Published var cameraRotY: Float = 0
     @Published var cameraRotZ: Float = 0
@@ -30,7 +30,7 @@ class RaysConfig: ObservableObject {
     func resetModelPos() {
         modelPosX = 0
         modelPosY = 0
-        modelPosZ = -3
+        modelPosZ = 0
     }
 
     func resetModelRot() {
@@ -46,7 +46,7 @@ class RaysConfig: ObservableObject {
     func resetCameraPos() {
         cameraPosX = 0
         cameraPosY = 0
-        cameraPosZ = -3
+        cameraPosZ = -30
     }
 
     func resetCameraRot() {
@@ -72,19 +72,9 @@ struct RaysConfigView: View {
                 }, label: { Text("Reset") })
             }
             VStack(spacing: 0) {
-                HStack {
-                    Text("x")
-                    Slider(value: $config.modelPosX, in: Float(-20.0)...Float(20.0))
-                        .frame(minWidth: 120)
-                }
-                HStack {
-                    Text("y")
-                    Slider(value: $config.modelPosY, in: Float(-20.0)...Float(20.0))
-                }
-                HStack {
-                    Text("z")
-                    Slider(value: $config.modelPosZ, in: Float(-20.0)...Float(20.0))
-                }
+                numSlider($config.modelPosX, "x", extent: 40)
+                numSlider($config.modelPosY, "y", extent: 40)
+                numSlider($config.modelPosZ, "z", extent: 40)
             }
         }
     }
@@ -98,19 +88,9 @@ struct RaysConfigView: View {
                 }, label: { Text("Reset") })
             }
             VStack(spacing: 0) {
-                HStack {
-                    Text("x")
-                    Slider(value: $config.modelRotX, in: Float(-3.0)...Float(3.0))
-                        .frame(minWidth: 120)
-                }
-                HStack {
-                    Text("y")
-                    Slider(value: $config.modelRotY, in: Float(-3.0)...Float(3.0))
-                }
-                HStack {
-                    Text("z")
-                    Slider(value: $config.modelRotZ, in: Float(-3.0)...Float(3.0))
-                }
+                numSlider($config.modelRotX, "x", extent: 3)
+                numSlider($config.modelRotY, "y", extent: 3)
+                numSlider($config.modelRotZ, "z", extent: 3)
             }
         }
     }
@@ -123,10 +103,7 @@ struct RaysConfigView: View {
                     raysConfig.resetModelScale()
                 }, label: { Text("Reset") })
             }
-            VStack(spacing: 0) {
-                Slider(value: $config.modelScale, in: Float(0.0)...Float(1.0))
-                    .frame(minWidth: 120)
-            }
+            numSlider($config.modelScale, "", extent: 1.0, minExtent: 0)
         }
     }
 
@@ -135,6 +112,18 @@ struct RaysConfigView: View {
             modelPos
             modelRot
             modelScale
+        }
+    }
+
+    func numSlider(_ binding: Binding<Float>, _ label: String, extent: Float, minExtent: Float? = nil) -> some View {
+        HStack {
+            Text(label)
+            Slider(value: binding, in: (minExtent ?? -extent)...extent)
+                .frame(width: 120)
+            HStack {
+                Spacer()
+                Text(String(format: "%.2f", binding.wrappedValue))
+            }
         }
     }
 
@@ -149,19 +138,9 @@ struct RaysConfigView: View {
                 }, label: { Text("Reset") })
             }
             VStack(spacing: 0) {
-                HStack {
-                    Text("x")
-                    Slider(value: $config.cameraPosX, in: Float(-20.0)...Float(20.0))
-                        .frame(minWidth: 120)
-                }
-                HStack {
-                    Text("y")
-                    Slider(value: $config.cameraPosY, in: Float(-20.0)...Float(20.0))
-                }
-                HStack {
-                    Text("z")
-                    Slider(value: $config.cameraPosZ, in: Float(-20.0)...Float(20.0))
-                }
+                numSlider($config.cameraPosX, "x", extent: 40)
+                numSlider($config.cameraPosY, "y", extent: 40)
+                numSlider($config.cameraPosZ, "z", extent: 40)
             }
             Spacer().frame(height: 10)
             HStack {
@@ -171,19 +150,9 @@ struct RaysConfigView: View {
                 }, label: { Text("Reset") })
             }
             VStack(spacing: 0) {
-                HStack {
-                    Text("x")
-                    Slider(value: $config.cameraRotX, in: Float(-3.0)...Float(3.0))
-                        .frame(minWidth: 120)
-                }
-                HStack {
-                    Text("y")
-                    Slider(value: $config.cameraRotY, in: Float(-3.0)...Float(3.0))
-                }
-                HStack {
-                    Text("z")
-                    Slider(value: $config.cameraRotZ, in: Float(-3.0)...Float(3.0))
-                }
+                numSlider($config.cameraRotX, "x", extent: 3.14)
+                numSlider($config.cameraRotY, "y", extent: 3.14)
+                numSlider($config.cameraRotZ, "z", extent: 3.14)
             }
         }
     }

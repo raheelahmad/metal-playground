@@ -38,11 +38,54 @@ struct Rays: Scene {
         return (u, MemoryLayout<RaysUniforms>.stride)
     }
 
+
+    let cylinderSize: Float = 1
+
+    var modelSize: float3 {
+        [0.1,cylinderSize*30,0.1]
+    }
+
     var modelMatrix: float4x4 {
-        let t = float4x4(translation: [raysConfig.modelPosX, raysConfig.modelPosY, raysConfig.modelPosZ])
-        let r = float4x4(rotation: [raysConfig.modelRotX, raysConfig.modelRotY, raysConfig.modelRotZ])
-        let s = float4x4(scaling: [raysConfig.modelScale, raysConfig.modelScale, raysConfig.modelScale])
-        return t * r * s
+        struct Ray {
+            var position: float3
+            var direction: float3
+
+            var rotation: float3 {
+                let thetaX: Float = -atan2(direction.z, direction.y)
+                var thetaZ: Float = atan2(direction.x, direction.y)
+                if direction.y < 0 {
+                    thetaZ += .pi
+                }
+                return [thetaX, 0, thetaZ]
+            }
+
+            func translation(modelHeight: Float) -> float3 {
+                [0, modelHeight/2, 0] // assuming that it's placed at center (0,0,0)
+            }
+
+        }
+
+        let ray = Ray(
+            position: float3(0, 0, 0),
+            direction: float3(raysConfig.modelPosX,raysConfig.modelPosY,raysConfig.modelPosZ)
+        )
+
+        let t = float4x4(translation: ray.translation(modelHeight: modelSize.y))
+        let r = float4x4(rotation: ray.rotation)
+        let s = float4x4(scaling: [
+            raysConfig.modelScale, raysConfig.modelScale, raysConfig.modelScale
+        ])
+        return r * t * s // First translate up and then rotate
+    }
+
+    private var decreasingWithTime = false
+
+    mutating func tick(time: Float) {
+        let delta: Float = 0.3
+        raysConfig.modelPosX += decreasingWithTime ? -delta : delta
+        if abs(raysConfig.modelPosX) > 40 {
+            decreasingWithTime.toggle()
+        }
     }
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
@@ -63,9 +106,8 @@ struct Rays: Scene {
 
     func mesh(device: MTLDevice) -> MTKMesh? {
         let allocator = MTKMeshBufferAllocator(device: device)
-        let size: Float = 1
         let mdlMesh = MDLMesh(
-            cylinderWithExtent: [size,size*10,size], segments: vector_uint2(80,80), inwardNormals: false,
+            cylinderWithExtent: modelSize, segments: vector_uint2(80,80), inwardNormals: false,
             topCap: false, bottomCap: false, geometryType: .triangles,
             allocator: allocator
         )

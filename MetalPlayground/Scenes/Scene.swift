@@ -19,10 +19,12 @@ protocol Scene {
     var view: NSView? { get }
     func mesh(device: MTLDevice) -> MTKMesh?
     var vertices: [simd_float3]? { get }
+    mutating func tick(time: Float)
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
 }
 
 extension Scene {
+    mutating func tick(time: Float) { }
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineState {
         let pipelineDesc = MTLRenderPipelineDescriptor()
         let library = device.makeDefaultLibrary()
