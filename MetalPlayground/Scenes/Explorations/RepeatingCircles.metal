@@ -42,13 +42,6 @@ float Band(float p, float start, float end, float blur) {
     return mask;
 }
 
-float Rect(float2 st, float left, float right, float top, float bottom, float blur) {
-    float mask = 0.;
-    mask  = Band(st.x, left, right, blur);
-    mask *= Band(st.y, bottom, top, blur);
-    return mask;
-}
-
 // ---
 
 float CircleBand(float2 st, float2 pos, float r, float thickness, float blur) {
@@ -83,60 +76,33 @@ float2 circleIntersction(float r, bool top, float2 center0, float2 center1) {
 
 fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     //    float t = uniforms.time;
+    //    int index = int(uniforms.time);
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
     st -= .5;
 
-    float3 baseIntersectionColor = float3(0.5, 0.3, 0.7);
-    float3 basePerimeterColor = float3(0.9, 0.0, 0.5);
-    int index = int(uniforms.time);
+    float3 basePerimeterColor = float3(0.9, 0.8, 0.1);
 
-    float mask = 0.;
     float r = 0.15;
     float2 centerPos = {0,0};
-    float2 rightPos = {r,0};
-    float center = CircleBand(st, centerPos, r, .004, .001);
-    float right = CircleBand(st, rightPos, r, .004, .001);
 
-    float2 topRightPos = circleIntersction(r, true, centerPos, rightPos);
-    float topRight = CircleBand(st, topRightPos, r, 0.004, .001);
+    float totalCircles = 6;
+    float thickness = 0.004;
+    float blur = 0.001;
+    float colorT = CircleBand(st, centerPos, r, thickness, blur);
+    float2 last_intersection;
+    for (uint idx = 0; idx < totalCircles; idx++) {
+        float2 circle2Pos = (idx == 0) ?
+            circle2Pos = {centerPos.x + r, 0} // to the right
+            :
+            last_intersection;
 
-    float2 topLeftPos = circleIntersction(r, true, centerPos, topRightPos);
-    float topLeft = CircleBand(st, topLeftPos, r, 0.004, .001);
-
-    float2 leftPos = circleIntersction(r, false, topLeftPos, centerPos);
-    float left = CircleBand(st, leftPos, r, 0.004, .001);
-
-    float2 bottomRightPos = circleIntersction(r, false, centerPos, rightPos);
-    float bottomRight = CircleBand(st, bottomRightPos, r, 0.004, .001);
-
-    float2 bottomLeftPos = circleIntersction(r, false, leftPos, bottomRightPos);
-    float bottomLeft = CircleBand(st, bottomLeftPos, r, 0.004, .001);
-
-    float3 intersection;
-    float3 circle = (topRight + topLeft + bottomRight + bottomLeft + center ) * basePerimeterColor;
-    bool intersects = distance(topRightPos, st) < 0.02;
-    if (intersects) {
-        float val = smoothstep(distance(topRightPos, st), 0.02, 0.01);
-        intersection = val * baseIntersectionColor;
-//        return float4(val * baseIntersectionColor, 1);
+        last_intersection = circleIntersction(r, true, centerPos, circle2Pos);
+        colorT += CircleBand(st, last_intersection, r, thickness, 0.001);
     }
-//    float3 intersection = smoothstep(distance(topRightPos, st), 0.02, 0.02) * baseIntersectionColor;
-//    if (length(intersection) > 0.01) {
-//        circle = 0;
-//    }
 
-//    index = index % 8;
-//    mask = center;
-//    mask += index >= 1 ? right : 0;
-//    mask += index >= 2 ? topRight : 0;
-//    mask += index >= 3 ? topLeft : 0;
-//    mask += index >= 4 ? left : 0;
-//    mask += index >= 5 ? bottomLeft : 0;
-//    mask += index >= 6 ? bottomRight : 0;
+    colorT = min(colorT, 1.0);
 
-    mask = clamp(mask, 0., 1.);
-
-    float3 color = circle + intersection;
+    float3 color = colorT * basePerimeterColor;
 
     return vector_float4(color, 1.0);
 }
