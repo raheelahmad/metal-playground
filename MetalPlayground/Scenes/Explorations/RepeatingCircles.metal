@@ -52,28 +52,25 @@ float CircleBand(float2 st, float2 pos, float r, float thickness, float blur) {
 
 // ---
 
+float lineDistance(float2 p, float2 v, float2 w) {
+    const float l2 = length_squared(w - v);  // i.e. |w-v|^2 -  avoid a sqrt
+    if (l2 == 0.0) return distance(p, v);   // v == w case
 
-/// Whether st lies on the line joining point0 and point1
-float onLine(float2 st, float2 point1, float2 point2) {
-    float distance_offset = (distance(st, point1) + distance(st, point2)) - distance(point1, point2);
-    // measure 1 of distance (easy but has a curve to it)
-    float d1 = 1.0 - step(0.0004, distance_offset);
-
-    float x0 = st.x;
-    float y0 = st.y;
-    float x1 = point1.x;
-    float y1 = point1.y;
-    float x2 = point2.x;
-    float y2 = point2.y;
-    float num = (y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1;
-    float denom = sqrt(pow(y2-y1, 2) + pow(x2-x1, 2));
-    float distance_to_line = abs(num) / denom;
-
-    // measure 2 of distance (solid lines, but go acrosss
-    float d2 = 1.0 - step(0.001, distance_to_line);
-
-    return d1 * d2;
+    // Consider the line extending the segment, parameterized as v + t (w - v).
+    // We find projection of point p onto the line.
+    // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+    // We clamp t from [0,1] to handle points outside the segment vw.
+    const float t = max(0.0, min(1.0, dot(p - v, w - v) / l2));
+    const float2 projection = v + t * (w - v);  // Projection falls on the segment
+    return distance(p, projection);
 }
+
+float onLine(float2 p, float2 v, float2 w) {
+    float dist = lineDistance(p, v, w);
+//    return smoothstep(0.004, 0.001, dist);
+    return 1 - step(0.001, dist);
+}
+
 
 /// Intersection point between two circles of same radius r,
 /// and positioned at center0 and center1. top: whether we want the top or bottom intersection.
@@ -106,8 +103,8 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
     st -= .5;
 
-    float3 basePerimeterColor = float3(0.9, 0.8, 0.1);
-    float3 baseLineColor = float3(0.1, 0.4, 0.8);
+    float3 basePerimeterColor = float3(0.1, 0.2, 0.3);
+    float3 baseLineColor = float3(0.9, 0.8, 0.1);
 
     float r = 0.15;
     float2 centerPos = {0,0};
@@ -138,7 +135,7 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
 
         float2 line_point1 = circle2Pos;
         float2 line_point2 = intersection;
-        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
+//        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
 
         midpoints[idx] = float2((line_point1.x+line_point2.x)/2, (line_point1.y+line_point2.y)/2);
 
@@ -155,7 +152,7 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
 
     onAnyCircleMask = min(onAnyCircleMask, 1.0);
 
-    float3 color = onAnyCircleMask * basePerimeterColor + onAnyLineMask * baseLineColor;
+    float3 color = (1 - onAnyLineMask) * onAnyCircleMask * basePerimeterColor + onAnyLineMask * baseLineColor;
     color = min(color, 1.0);
 
     return vector_float4(color, 1.0);
