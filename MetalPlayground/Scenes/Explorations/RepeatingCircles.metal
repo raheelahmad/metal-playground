@@ -52,6 +52,18 @@ float CircleBand(float2 st, float2 pos, float r, float thickness, float blur) {
 
 // ---
 
+float2x2 rotate2d(float2 st, float angle) {
+    return {
+        cos(angle), -sin(angle),
+        sin(angle), cos(angle)
+    };
+}
+
+float2x2 Rotate(float a) {
+    float s = sin(a), c = cos(a);
+    return float2x2(c, -s, s, c);
+}
+
 float lineDistance(float2 p, float2 v, float2 w) {
     const float l2 = length_squared(w - v);  // i.e. |w-v|^2 -  avoid a sqrt
     if (l2 == 0.0) return distance(p, v);   // v == w case
@@ -68,7 +80,7 @@ float lineDistance(float2 p, float2 v, float2 w) {
 float onLine(float2 p, float2 v, float2 w) {
     float dist = lineDistance(p, v, w);
 //    return smoothstep(0.004, 0.001, dist);
-    return 1 - step(0.001, dist);
+    return 1 - step(0.02, dist);
 }
 
 float2 lineIntersection(float2 p1, float2 p2, float2 p3, float2 p4) {
@@ -106,16 +118,13 @@ float2 circlesIntersctionPoint(float r, bool at_top, float2 center0, float2 cent
     return float2(x3, y3);
 }
 
-fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    //    float t = uniforms.time;
-    //    int index = int(uniforms.time);
-    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
-    st -= .5;
-
-    float3 basePerimeterColor = float3(0.1, 0.2, 0.3);
+float3 repeating_circles(float2 st, float r, float time) {
+    st = fract(st);
+    st -= 0.5;
+    st *= Rotate(sin(time) * M_PI_F);
+    float3 basePerimeterColor = float3(0.1, 0.2, 0.12);
     float3 baseLineColor = float3(0.9, 0.8, 0.1);
 
-    float r = 0.15;
     float2 centerPos = {0,0};
 
     int totalCircles = 6;
@@ -135,16 +144,16 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
     // Build circles and intersections, and collect midpoints
     for (int idx = 0; idx < totalCircles; idx++) {
         float2 circle2Pos = (idx == 0) ?
-            circle2Pos = {centerPos.x + r, 0} // to the right first
-            :
-            intersections[idx - 1]; // or the last circle
+        circle2Pos = {centerPos.x + r, 0} // to the right first
+        :
+        intersections[idx - 1]; // or the last circle
 
         float2 intersection = circlesIntersctionPoint(r, true, centerPos, circle2Pos);
         onAnyCircleMask += CircleBand(st, intersection, r, thickness, blur);
 
         float2 line_point1 = circle2Pos;
         float2 line_point2 = intersection;
-//        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
+        //        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
 
         midpoints[idx] = float2((line_point1.x+line_point2.x)/2, (line_point1.y+line_point2.y)/2);
 
@@ -177,6 +186,18 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
 
     float3 color = (1 - onAnyLineMask) * onAnyCircleMask * basePerimeterColor + onAnyLineMask * baseLineColor;
     color = min(color, 1.0);
+    return color;
+}
+
+fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+    //    float t = uniforms.time;
+    //    int index = int(uniforms.time);
+    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
+    st -= .5;
+    st *= 4;
+
+    float r = 0.5;
+    float3 color = repeating_circles(st, r, uniforms.time);
 
     return vector_float4(color, 1.0);
 }
