@@ -71,6 +71,15 @@ float onLine(float2 p, float2 v, float2 w) {
     return 1 - step(0.001, dist);
 }
 
+float2 lineIntersection(float2 p1, float2 p2, float2 p3, float2 p4) {
+    float pxNum = (p1.x*p2.y - p1.y*p2.x)*(p3.x - p4.x) - (p1.x - p2.x)*(p3.x*p4.y - p3.y*p4.x);
+    float pyNum = (p1.x*p2.y - p1.y*p2.x)*(p3.y - p4.y) - (p1.y - p2.y)*(p3.x*p4.y - p3.y*p4.x);
+
+    float den = (p1.x - p2.x)*(p3.y - p4.y) - (p1.y - p2.y)*(p3.x - p4.x);
+    float px = pxNum / den;
+    float py = pyNum / den;
+    return {px, py};
+}
 
 /// Intersection point between two circles of same radius r,
 /// and positioned at center0 and center1. top: whether we want the top or bottom intersection.
@@ -142,12 +151,26 @@ fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], 
         intersections[idx] = intersection;
     }
 
-    // Build midpoints
+    // Lines between midpoints of the inner hexagon
     for (int idx = 0; idx < totalCircles; idx++) {
-        float2 line_point1 = midpoints[idx];
-        int second_point_index = idx >= (totalCircles - 2) ? abs(totalCircles - idx - 2) : idx + 2;
-        float2 line_point2 = midpoints[second_point_index];
-        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
+        int n = totalCircles;
+        float2 p1 = lineIntersection(
+                                     midpoints[idx], midpoints[(idx + 2)%n],
+                                     midpoints[(idx + 1)%n],
+                                     midpoints[(idx + (n - 1))%n]
+                                     );
+        float2 p2 = midpoints[idx];
+        float fallsOnLine1 = onLine(st, p1, p2);
+        onAnyLineMask = max(onAnyLineMask, fallsOnLine1);
+
+        float2 p3 = lineIntersection(
+                                     midpoints[idx], midpoints[(idx + n - 2)%n],
+                                     midpoints[(idx + n - 1)%n],
+                                     midpoints[(idx + 1)%n]
+                                     );
+        float2 p4 = midpoints[idx];
+        float fallsOnLine2 = onLine(st, p3, p4);
+        onAnyLineMask = max(onAnyLineMask, fallsOnLine2);
     }
 
     onAnyCircleMask = min(onAnyCircleMask, 1.0);
