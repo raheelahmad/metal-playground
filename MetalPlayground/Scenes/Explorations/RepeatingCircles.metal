@@ -80,7 +80,7 @@ float lineDistance(float2 p, float2 v, float2 w) {
 float onLine(float2 p, float2 v, float2 w) {
     float dist = lineDistance(p, v, w);
 //    return smoothstep(0.004, 0.001, dist);
-    return 1 - step(0.02, dist);
+    return 1 - step(0.005, dist);
 }
 
 float2 lineIntersection(float2 p1, float2 p2, float2 p3, float2 p4) {
@@ -118,13 +118,14 @@ float2 circlesIntersctionPoint(float r, bool at_top, float2 center0, float2 cent
     return float2(x3, y3);
 }
 
-float3 repeating_circles(float2 st, float r, float time) {
-    st = fract(st);
-    st -= 0.5;
-    st *= Rotate(sin(time) * M_PI_F);
-    float3 basePerimeterColor = float3(0.1, 0.2, 0.12);
-    float3 baseLineColor = float3(0.9, 0.8, 0.1);
+struct Mask {
+    float circleMask;
+    float lineMask;
+    float2 topRight;
+};
 
+Mask repeating_circles_mask(float2 st, float r, float time) {
+    st *= Rotate(sin(time/4) * M_PI_F);
     float2 centerPos = {0,0};
 
     int totalCircles = 6;
@@ -183,21 +184,35 @@ float3 repeating_circles(float2 st, float r, float time) {
     }
 
     onAnyCircleMask = min(onAnyCircleMask, 1.0);
+    return Mask { onAnyCircleMask, onAnyLineMask, intersections[4] };
+}
 
-    float3 color = (1 - onAnyLineMask) * onAnyCircleMask * basePerimeterColor + onAnyLineMask * baseLineColor;
+float3 colorForMask(Mask mask) {
+    float3 basePerimeterColor = float3(0.4, 0.2, 0.42);
+    float3 baseLineColor = float3(0.9, 0.8, 0.1);
+    float3 color = (1 - mask.lineMask) * mask.circleMask * basePerimeterColor + mask.lineMask * baseLineColor;
     color = min(color, 1.0);
     return color;
 }
 
-fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    //    float t = uniforms.time;
-    //    int index = int(uniforms.time);
-    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
-    st -= .5;
-    st *= 4;
 
+float3 repeating_circles_singular(float2 st, int count, float time) {
     float r = 0.5;
-    float3 color = repeating_circles(st, r, uniforms.time);
+
+    st *= count;
+    st = fract(st);
+
+    st -= 0.5;
+    Mask mask = repeating_circles_mask(st, r, time);
+    return colorForMask(mask);
+}
+
+fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+        float t = uniforms.time;
+    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
+
+    int count = 10;
+    float3 color = repeating_circles_singular(st, count, t);
 
     return vector_float4(color, 1.0);
 }
