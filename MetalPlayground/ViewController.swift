@@ -59,6 +59,7 @@ class ViewController: NSViewController {
             sceneUniformsChoiceContainerView.addSubview(uniformsView)
             NSLayoutConstraint.activate([
                 uniformsView.leadingAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.leadingAnchor),
+                uniformsView.trailingAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.trailingAnchor),
                 uniformsView.topAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.topAnchor),
                 uniformsView.bottomAnchor.constraint(equalTo: sceneUniformsChoiceContainerView.bottomAnchor),
             ]

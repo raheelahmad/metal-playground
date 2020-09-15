@@ -31,6 +31,7 @@ struct RepatingCirclesUniforms {
     bool rotating;
     float num_rows;
     float num_polygons;
+    float scale;
 };
 
 vertex VertexOut repeating_cirlces_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
@@ -127,13 +128,13 @@ struct Mask {
     float2 topRight;
 };
 
-Mask repeating_circles_mask(float2 st, float r, float rotating, float time) {
+Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
     if (rotating) {
         st *= Rotate(sin(time/4) * M_PI_F);
     }
 
     // scale down a bit so we are away from the boundary
-    st = scale(1.6 + sin(time)) * st;
+    st = scale(1/scaleFactor) * st;
 
     float2 centerPos = {0,0};
 
@@ -205,7 +206,7 @@ float3 colorForMask(Mask mask) {
 }
 
 
-float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count, bool rotating, float time) {
+float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count, bool rotating, float scale, float time) {
     float r = 0.5;
 
     st *= rows_count;
@@ -219,7 +220,7 @@ float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count,
     float3 color = 0;
     for (int i=0; i<polygons_count;i++) {
         st = Rotate(rotationAngle) * st;
-        Mask rotatedMask = repeating_circles_mask(st, r, rotating, time);
+        Mask rotatedMask = repeating_circles_mask(st, r, rotating, scale, time);
         color += colorForMask(rotatedMask);
     }
     return color;
@@ -233,7 +234,7 @@ fragment float4 repeating_circles_fragment(
     float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
 
-    float3 color = repeating_circles_singular(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, t);
+    float3 color = repeating_circles_singular(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, repeating_uniforms.scale, t);
 
     return vector_float4(color, 1.0);
 }

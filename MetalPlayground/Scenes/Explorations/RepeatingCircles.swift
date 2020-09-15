@@ -14,6 +14,19 @@ private class Config: ObservableObject {
     @Published var rotating: Bool = false
     @Published var numRows: Float = 1
     @Published var numPolygons: Float = 1
+    @Published var scale: Float = 1
+}
+
+let nf: NumberFormatter = {
+    let f = NumberFormatter()
+    f.maximumFractionDigits = 2
+    f.minimumFractionDigits = 2
+    return f
+}()
+extension Float {
+    var str: String {
+        nf.string(from: NSNumber(value: self))!
+    }
 }
 
 private var config = Config()
@@ -23,12 +36,13 @@ class RepeatingCircles: Scene {
         var rotating: Bool
         var numRows: Float
         var numPolygons: Float
+        var scale: Float
     }
 
     var name: String { "Repeating Circles" }
 
     var fragmentUniforms: Any? {
-        Uniforms(rotating: config.rotating, numRows: config.numRows, numPolygons: config.numPolygons)
+        Uniforms(rotating: config.rotating, numRows: config.numRows, numPolygons: config.numPolygons, scale: config.scale)
     }
 
     struct ConfigView: View {
@@ -47,7 +61,15 @@ class RepeatingCircles: Scene {
                     Text("Polygons")
                     Spacer()
                     Text("\(Int(config.numPolygons))")
-                    Stepper("", value: $config.numRows, in: 0...10)
+                    Stepper("", value: $config.numPolygons, in: 0...10)
+                }
+                HStack {
+                    Text("Scale")
+                    Spacer()
+                    Text(config.scale.str)
+                    Spacer().frame(width: 20)
+                    Slider(value: $config.scale, in: 0.1...4.0)
+                        .frame(width: 80)
                 }
                 Spacer()
             }
