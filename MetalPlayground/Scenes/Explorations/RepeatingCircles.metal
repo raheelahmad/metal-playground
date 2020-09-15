@@ -27,6 +27,12 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
+struct RepatingCirclesUniforms {
+    bool rotating;
+    float num_rows;
+    float num_polygons;
+};
+
 vertex VertexOut repeating_cirlces_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
     VertexIn in = vertexArray[vid];
     VertexOut out;
@@ -52,11 +58,8 @@ float CircleBand(float2 st, float2 pos, float r, float thickness, float blur) {
 
 // ---
 
-float2x2 rotate2d(float2 st, float angle) {
-    return {
-        cos(angle), -sin(angle),
-        sin(angle), cos(angle)
-    };
+float2x2 scale(float2 _scale){
+    return float2x2(_scale.x,0.0, 0.0,_scale.y);
 }
 
 float2x2 Rotate(float a) {
@@ -124,8 +127,14 @@ struct Mask {
     float2 topRight;
 };
 
-Mask repeating_circles_mask(float2 st, float r, float time) {
-    st *= Rotate(sin(time/4) * M_PI_F);
+Mask repeating_circles_mask(float2 st, float r, float rotating, float time) {
+    if (rotating) {
+        st *= Rotate(sin(time/4) * M_PI_F);
+    }
+
+    // scale down a bit so we are away from the boundary
+    st = scale(1.6 + sin(time)) * st;
+
     float2 centerPos = {0,0};
 
     int totalCircles = 6;
@@ -196,23 +205,35 @@ float3 colorForMask(Mask mask) {
 }
 
 
-float3 repeating_circles_singular(float2 st, int count, float time) {
+float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count, bool rotating, float time) {
     float r = 0.5;
 
-    st *= count;
+    st *= rows_count;
     st = fract(st);
 
     st -= 0.5;
-    Mask mask = repeating_circles_mask(st, r, time);
-    return colorForMask(mask);
+
+    float angleBetweenPoints = M_PI_F / 3.0; // 6 in 2_PI
+    float rotationAngle = angleBetweenPoints / polygons_count;
+
+    float3 color = 0;
+    for (int i=0; i<polygons_count;i++) {
+        st = Rotate(rotationAngle) * st;
+        Mask rotatedMask = repeating_circles_mask(st, r, rotating, time);
+        color += colorForMask(rotatedMask);
+    }
+    return color;
 }
 
-fragment float4 repeating_circles_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-        float t = uniforms.time;
+fragment float4 repeating_circles_fragment(
+                           VertexOut interpolated [[stage_in]],
+                           constant FragmentUniforms &uniforms [[buffer(0)]],
+                           constant RepatingCirclesUniforms &repeating_uniforms [[buffer(1)]]
+                                           ) {
+    float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
 
-    int count = 10;
-    float3 color = repeating_circles_singular(st, count, t);
+    float3 color = repeating_circles_singular(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, t);
 
     return vector_float4(color, 1.0);
 }

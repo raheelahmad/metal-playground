@@ -212,13 +212,6 @@ struct DomainDistortion: Scene {
     var fragmentFuncName: String { "domain_distortion_fragment" }
 }
 
-struct RepeatingCircles: Scene {
-    var name: String { "Repeating Circles" }
-
-    var vertexFuncName: String { "repeating_cirlces_vertex" }
-    var fragmentFuncName: String { "repeating_circles_fragment" }
-}
-
 struct BasicShaderToy: Scene {
     var name: String { "Basic ShaderToy" }
 
