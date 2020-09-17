@@ -51,6 +51,7 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
+        RayMarching.self,
         QuizlesHappyJumping.self,
         RepeatingCircles.self,
         Rays.self,
@@ -77,6 +78,11 @@ struct Torus: Scene {
     var fragmentFuncName: String { "torus_fragment" }
 }
 
+struct RayMarching: Scene {
+    var name: String { "Ray Marching" }
+    var vertexFuncName: String { "raymarching_vertex" }
+    var fragmentFuncName: String { "raymarching_fragment" }
+}
 
 struct QuizlesHappyJumping: Scene {
     var name: String { "Torus" }

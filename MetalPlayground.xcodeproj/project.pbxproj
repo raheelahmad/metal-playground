@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		590090462511D27200187ADB /* Raymarching.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590090452511D27200187ADB /* Raymarching.metal */; };
 		590BE6142500A12800E9B573 /* Torus.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6132500A12800E9B573 /* Torus.metal */; };
 		590BE6182500C55C00E9B573 /* Rays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6172500C55C00E9B573 /* Rays.swift */; };
 		590BE61A2500C66D00E9B573 /* Rays.metal in Sources */ = {isa = PBXBuildFile; fileRef = 590BE6192500C66D00E9B573 /* Rays.metal */; };
@@ -73,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		590090452511D27200187ADB /* Raymarching.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Raymarching.metal; sourceTree = "<group>"; };
 		590BE6132500A12800E9B573 /* Torus.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Torus.metal; sourceTree = "<group>"; };
 		590BE6172500C55C00E9B573 /* Rays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rays.swift; sourceTree = "<group>"; };
 		590BE6192500C66D00E9B573 /* Rays.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Rays.metal; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 				59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */,
 				59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */,
 				590BE6132500A12800E9B573 /* Torus.metal */,
+				590090452511D27200187ADB /* Raymarching.metal */,
 				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
 			);
 			path = ShaderToy;
@@ -383,6 +386,7 @@
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* RepeatingCircles.metal in Sources */,
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
+				590090462511D27200187ADB /* Raymarching.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
 				595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */,
