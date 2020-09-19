@@ -51,9 +51,10 @@ extension Scene {
 
 var allScenes: [Scene.Type] {
     [
+        RepeatingCircles.self,
+        Simplest3D.self,
         RayMarching.self,
         QuizlesHappyJumping.self,
-        RepeatingCircles.self,
         Rays.self,
 //        Torus.self,
         MetalByTutorials04.self,
@@ -76,6 +77,12 @@ struct Torus: Scene {
     var name: String { "Torus" }
     var vertexFuncName: String { "torus_vertex" }
     var fragmentFuncName: String { "torus_fragment" }
+}
+
+struct Simplest3D: Scene {
+    var name: String { "Simplest 3D" }
+    var vertexFuncName: String { "simplest_3d_vertex" }
+    var fragmentFuncName: String { "simplest_3d_fragment" }
 }
 
 struct RayMarching: Scene {
