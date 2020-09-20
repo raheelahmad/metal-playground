@@ -124,7 +124,9 @@ float2 circlesIntersctionPoint(float r, bool at_top, float2 center0, float2 cent
 
 struct Mask {
     float circleMask;
-    float lineMask;
+    float polygonMask;
+    // circle intersections from which we build new circles
+    float2 intersections [6];
 };
 
 Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
@@ -143,10 +145,8 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
 
     Mask mask;
     mask.circleMask = CircleBand(st, centerPos, r, thickness, blur); // start w/ middle circle
-    mask.lineMask = 0;
+    mask.polygonMask = 0;
 
-    // circle intersections from which we build new circles
-    float2 intersections [6];
     // midpoints between consecutive intersections
     float2 midpoints[6];
 
@@ -155,7 +155,7 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
         float2 circle2Pos = (idx == 0) ?
         circle2Pos = {centerPos.x + r, 0} // to the right first
         :
-        intersections[idx - 1]; // or the last circle
+        mask.intersections[idx - 1]; // or the last circle
 
         float2 intersection = circlesIntersctionPoint(r, true, centerPos, circle2Pos);
         mask.circleMask += CircleBand(st, intersection, r, thickness, blur);
@@ -166,7 +166,7 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
 
         midpoints[idx] = float2((line_point1.x+line_point2.x)/2, (line_point1.y+line_point2.y)/2);
 
-        intersections[idx] = intersection;
+        mask.intersections[idx] = intersection;
     }
 
     // Lines between midpoints of the inner hexagon
@@ -179,7 +179,7 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
                                      );
         float2 p2 = midpoints[idx];
         float fallsOnLine1 = onLine(st, p1, p2);
-        mask.lineMask = max(mask.lineMask, fallsOnLine1);
+        mask.polygonMask = max(mask.polygonMask, fallsOnLine1);
 
         float2 p3 = lineIntersection(
                                      midpoints[idx], midpoints[(idx + n - 2)%n],
@@ -188,18 +188,39 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
                                      );
         float2 p4 = midpoints[idx];
         float fallsOnLine2 = onLine(st, p3, p4);
-        mask.lineMask = max(mask.lineMask, fallsOnLine2);
+        mask.polygonMask = max(mask.polygonMask, fallsOnLine2);
     }
 
     mask.circleMask = min(mask.circleMask, 1.0);
     return mask;
 }
 
-float3 colorForMask(Mask mask) {
+float3 colorForMask(Mask mask, float2 st, float scale) {
     float3 basePerimeterColor = float3(0.4, 0.2, 0.42);
     float3 baseLineColor = float3(0.9, 0.8, 0.1);
-    float3 color = (1 - mask.lineMask) * mask.circleMask * basePerimeterColor + mask.lineMask * baseLineColor;
-    color = min(color, 1.0);
+    float3 color = 0;
+
+    // Circle outline
+    color += (1 - mask.polygonMask) * mask.circleMask * basePerimeterColor;
+    // Polygon
+    color += mask.polygonMask * baseLineColor;
+
+    // Intersection circles
+    if (scale == 1) {
+        float3 intersectionColor = 0;
+        for (int i=0; i<6; i++) {
+            float dist = distance(st, mask.intersections[i]);
+            float thickness = 0.01;
+            dist = smoothstep(thickness, thickness - 0.001, dist);
+            intersectionColor += dist * basePerimeterColor;
+        }
+
+        if (length(intersectionColor) > 0) {
+            color = intersectionColor;
+        }
+    }
+
+//    color = min(color, 1.0);
     return color;
 }
 
@@ -219,7 +240,7 @@ float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count,
     for (int i=0; i<polygons_count;i++) {
         st = Rotate(rotationAngle) * st;
         Mask rotatedMask = repeating_circles_mask(st, r, rotating, scale, time);
-        color += colorForMask(rotatedMask);
+        color += colorForMask(rotatedMask, st, scale);
     }
     return color;
 }
