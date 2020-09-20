@@ -220,7 +220,7 @@ float3 colorForMask(Mask mask, float2 st, float scale) {
         }
     }
 
-//    color = min(color, 1.0);
+    color = min(color, 1.0);
     return color;
 }
 
@@ -232,6 +232,7 @@ float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count,
     st = fract(st);
 
     st -= 0.5;
+    st *= 1.01; // inset a little bit from the edges
 
     float angleBetweenPoints = M_PI_F / 3.0; // 6 in 2_PI
     float rotationAngle = angleBetweenPoints / polygons_count;

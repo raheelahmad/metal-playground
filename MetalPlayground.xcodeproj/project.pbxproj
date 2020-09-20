@@ -31,6 +31,7 @@
 		5981BA97246B22EB00E39E86 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5981BA96246B22EB00E39E86 /* Shaders.metal */; };
 		599B22A12504778C007EB419 /* RaysConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B22A02504778C007EB419 /* RaysConfig.swift */; };
 		599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */ = {isa = PBXBuildFile; fileRef = 599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */; };
+		59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */; };
 		59BCCB4624BD261300595132 /* ShaderToy01.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59BCCB4524BD261300595132 /* ShaderToy01.metal */; };
 		59C2BD25246A709D00335E59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C2BD24246A709D00335E59 /* AppDelegate.swift */; };
 		59C2BD27246A709D00335E59 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C2BD26246A709D00335E59 /* ViewController.swift */; };
@@ -100,6 +101,7 @@
 		5981BA96246B22EB00E39E86 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		599B22A02504778C007EB419 /* RaysConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaysConfig.swift; sourceTree = "<group>"; };
 		599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToySmiley.metal; sourceTree = "<group>"; };
+		59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSlider.swift; sourceTree = "<group>"; };
 		59BCCB4524BD261300595132 /* ShaderToy01.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToy01.metal; sourceTree = "<group>"; };
 		59C2BD21246A709D00335E59 /* MetalPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C2BD24246A709D00335E59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -190,6 +192,14 @@
 			path = Explorations;
 			sourceTree = "<group>";
 		};
+		59A3125C2517EFF300F6ACA2 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		59BCCB4424BD260300595132 /* ShaderToy */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +237,7 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				59A3125C2517EFF300F6ACA2 /* UI */,
 				590BE6152500C4C200E9B573 /* Scenes */,
 				59C2BD24246A709D00335E59 /* AppDelegate.swift */,
 				59C2BD26246A709D00335E59 /* ViewController.swift */,
@@ -380,6 +391,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */,
+				59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */,
 				591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */,
 				59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */,
 				59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */,

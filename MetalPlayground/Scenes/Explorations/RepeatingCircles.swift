@@ -51,25 +51,16 @@ class RepeatingCircles: Scene {
         var body: some View {
             VStack(alignment: .leading) {
                 Toggle("Rotating", isOn: $config.rotating)
-                HStack {
-                    Text("Rows")
-                    Spacer()
-                    Text("\(Int(config.numRows))")
-                    Stepper("", value: $config.numRows, in: 0...10)
-                }
-                HStack {
-                    Text("Polygons")
-                    Spacer()
-                    Text("\(Int(config.numPolygons))")
-                    Stepper("", value: $config.numPolygons, in: 0...10)
-                }
-                HStack {
-                    Text("Scale")
-                    Spacer()
-                    Text(config.scale.str)
-                    Spacer().frame(width: 20)
-                    Slider(value: $config.scale, in: 0.1...4.0)
-                        .frame(width: 80)
+                VStack {
+                    TitledSlider(title: "Rows", value: $config.numRows, in: 1...10, step: 1) {
+                        self.config.numRows = 1
+                    }
+                    TitledSlider(title: "Polygons", value: $config.numPolygons, in: 1...10, step: 1) {
+                        self.config.numPolygons = 1
+                    }
+                    TitledSlider(title: "Scale", value: $config.scale, in: 0.1...4.0) {
+                        self.config.scale = 1
+                    }
                 }
                 Spacer()
             }
