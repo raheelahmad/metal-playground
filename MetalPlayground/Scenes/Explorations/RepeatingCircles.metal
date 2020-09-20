@@ -125,7 +125,6 @@ float2 circlesIntersctionPoint(float r, bool at_top, float2 center0, float2 cent
 struct Mask {
     float circleMask;
     float lineMask;
-    float2 topRight;
 };
 
 Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
@@ -142,10 +141,9 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
     float thickness = 0.004;
     float blur = 0.001;
 
-    float onAnyCircleMask = 0;
-    float onAnyLineMask = 0;
-
-    onAnyCircleMask = CircleBand(st, centerPos, r, thickness, blur); // start w/ middle circle
+    Mask mask;
+    mask.circleMask = CircleBand(st, centerPos, r, thickness, blur); // start w/ middle circle
+    mask.lineMask = 0;
 
     // circle intersections from which we build new circles
     float2 intersections [6];
@@ -160,7 +158,7 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
         intersections[idx - 1]; // or the last circle
 
         float2 intersection = circlesIntersctionPoint(r, true, centerPos, circle2Pos);
-        onAnyCircleMask += CircleBand(st, intersection, r, thickness, blur);
+        mask.circleMask += CircleBand(st, intersection, r, thickness, blur);
 
         float2 line_point1 = circle2Pos;
         float2 line_point2 = intersection;
@@ -181,7 +179,7 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
                                      );
         float2 p2 = midpoints[idx];
         float fallsOnLine1 = onLine(st, p1, p2);
-        onAnyLineMask = max(onAnyLineMask, fallsOnLine1);
+        mask.lineMask = max(mask.lineMask, fallsOnLine1);
 
         float2 p3 = lineIntersection(
                                      midpoints[idx], midpoints[(idx + n - 2)%n],
@@ -190,11 +188,11 @@ Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFacto
                                      );
         float2 p4 = midpoints[idx];
         float fallsOnLine2 = onLine(st, p3, p4);
-        onAnyLineMask = max(onAnyLineMask, fallsOnLine2);
+        mask.lineMask = max(mask.lineMask, fallsOnLine2);
     }
 
-    onAnyCircleMask = min(onAnyCircleMask, 1.0);
-    return Mask { onAnyCircleMask, onAnyLineMask, intersections[4] };
+    mask.circleMask = min(mask.circleMask, 1.0);
+    return mask;
 }
 
 float3 colorForMask(Mask mask) {
