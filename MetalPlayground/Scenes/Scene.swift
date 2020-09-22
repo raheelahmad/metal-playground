@@ -19,12 +19,12 @@ protocol Scene {
     var view: NSView? { get }
     func mesh(device: MTLDevice) -> MTKMesh?
     var vertices: [simd_float3]? { get }
-    mutating func tick(time: Float)
+    func tick(time: Float)
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
 }
 
 extension Scene {
-    mutating func tick(time: Float) { }
+    func tick(time: Float) { }
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineState {
         let pipelineDesc = MTLRenderPipelineDescriptor()
         let library = device.makeDefaultLibrary()
@@ -49,6 +49,50 @@ extension Scene {
     var vertices: [simd_float3]? { nil }
 }
 
+enum SceneKind: Int, CaseIterable, Identifiable {
+    case girihPattern1
+    case smiley
+    case starfield
+    case simplest3D
+    case rays
+    case polarScene
+    case domainDisortion
+    case bookOfShaders05
+    case bookOfShaders06
+
+    var id: Int {
+        rawValue
+    }
+
+    var name: String {
+        switch self {
+        case .girihPattern1: return "Girih Pattern #1"
+        case .starfield: return "Starfield"
+        case .smiley: return "Smiley"
+        case .simplest3D: return "Simplest 3D"
+        case .rays: return "Rays"
+        case .polarScene: return "Polar scene"
+        case .domainDisortion: return "Domain distortion"
+        case .bookOfShaders05: return "Book of Shaders 05"
+        case .bookOfShaders06: return "Book of Shaders 06"
+        }
+    }
+
+    var scene: Scene {
+        switch self {
+        case .girihPattern1: return RepeatingCircles()
+        case .starfield: return StarField()
+        case .smiley: return Smiley()
+        case .simplest3D: return Simplest3D()
+        case .rays: return Rays()
+        case .polarScene: return PolarScene()
+        case .domainDisortion: return DomainDistortion()
+        case .bookOfShaders05: return BookOfShaders05()
+        case .bookOfShaders06: return BookOfShaders06()
+        }
+    }
+}
+
 var allScenes: [Scene.Type] {
     [
         RepeatingCircles.self,
@@ -56,7 +100,6 @@ var allScenes: [Scene.Type] {
         RayMarching.self,
         QuizlesHappyJumping.self,
         Rays.self,
-//        Torus.self,
         MetalByTutorials04.self,
         MetalByTutorials03.self,
         PolarScene.self,
@@ -67,37 +110,41 @@ var allScenes: [Scene.Type] {
 class StarFieldConfig: ObservableObject {
     @Published var rotating: Bool = false
     @Published var flying: Bool = true
-    @Published var numDepthLayers = 1
-    @Published var numDensityLayers = 1
+    @Published var numDepthLayers: Float = 1
+    @Published var numDensityLayers: Float = 1
 }
 
 let starfieldConfig = StarFieldConfig()
 
-struct Torus: Scene {
+class Torus: Scene {
     var name: String { "Torus" }
     var vertexFuncName: String { "torus_vertex" }
     var fragmentFuncName: String { "torus_fragment" }
+    required init() {}
 }
 
-struct Simplest3D: Scene {
+class Simplest3D: Scene {
     var name: String { "Simplest 3D" }
     var vertexFuncName: String { "simplest_3d_vertex" }
     var fragmentFuncName: String { "simplest_3d_fragment" }
+    required init() {}
 }
 
-struct RayMarching: Scene {
+class RayMarching: Scene {
     var name: String { "Ray Marching" }
     var vertexFuncName: String { "raymarching_vertex" }
     var fragmentFuncName: String { "raymarching_fragment" }
+    required init() {}
 }
 
-struct QuizlesHappyJumping: Scene {
+class QuizlesHappyJumping: Scene {
     var name: String { "Torus" }
     var vertexFuncName: String { "quizles_happy_jumping_vertex" }
     var fragmentFuncName: String { "quizles_happy_jumping_fragment" }
+    required init() {}
 }
 
-struct StarField: Scene {
+class StarField: Scene {
     struct Uniforms {
         var rotating: Bool
         var flying: Bool
@@ -119,12 +166,15 @@ struct StarField: Scene {
         @EnvironmentObject var config: StarFieldConfig
 
         var body: some View {
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 19) {
                 Toggle("Rotating", isOn: $config.rotating)
                 Toggle("Flying", isOn: $config.flying)
-                Stepper("Depth Layers \(config.numDepthLayers)", value: $config.numDepthLayers, in: 0...10)
-                Stepper("Density Layers \(config.numDensityLayers)", value: $config.numDensityLayers, in: 0...10)
-                Spacer()
+                TitledSlider(title: "Depth Layers", value: $config.numDepthLayers, in: 0...10, step: 1) {
+                    self.config.numDepthLayers = 1
+                }
+                TitledSlider(title: "Density Layers", value: $config.numDensityLayers, in: 1...10, step: 1) {
+                    self.config.numDensityLayers = 1
+                }
             }
         }
     }
@@ -141,16 +191,18 @@ struct StarField: Scene {
             rootView: ConfigView().environmentObject(starfieldConfig)
         )
     }
+    required init() {}
 }
 
-struct Smiley: Scene {
+class Smiley: Scene {
     var name: String { "Smiley" }
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
+    required init() {}
 }
 
-struct MetalByTutorials03: Scene {
+class MetalByTutorials03: Scene {
     var name: String { "3 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials01_vertex" }
     var fragmentFuncName: String { "metalByTutorials01_fragment" }
@@ -174,9 +226,10 @@ struct MetalByTutorials03: Scene {
             return nil
         }
     }
+    required init() {}
 }
 
-struct MetalByTutorials04: Scene {
+class MetalByTutorials04: Scene {
     var name: String { "3 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials04_vertex" }
     var fragmentFuncName: String { "metalByTutorials04_fragment" }
@@ -184,9 +237,10 @@ struct MetalByTutorials04: Scene {
     var vertices: [simd_float3]? {
         [[0,0,0.5]]
     }
+    required init() {}
 }
 
-struct MetalByTutorials01: Scene {
+class MetalByTutorials01: Scene {
     var name: String { "1 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials01_vertex" }
     var fragmentFuncName: String { "metalByTutorials01_fragment" }
@@ -217,39 +271,45 @@ struct MetalByTutorials01: Scene {
             return nil
         }
     }
+    required init() {}
 }
 
-struct PolarScene: Scene {
+class PolarScene: Scene {
     var name: String { "Polar Experiments" }
 
     var vertexFuncName: String { "polar_experiments_vertex" }
     var fragmentFuncName: String { "polar_experiments_fragment" }
+    required init() {}
 }
 
-struct DomainDistortion: Scene {
+class DomainDistortion: Scene {
     var name: String { "Domain Distortion" }
 
     var vertexFuncName: String { "domain_distortion_vertex" }
     var fragmentFuncName: String { "domain_distortion_fragment" }
+    required init() {}
 }
 
-struct BasicShaderToy: Scene {
+class BasicShaderToy: Scene {
     var name: String { "Basic ShaderToy" }
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shadertoy01" }
+    required init() {}
 }
 
-struct BookOfShaders05: Scene {
+class BookOfShaders05: Scene {
     var name: String { "Book of Shaders 05 - Algorithmic" }
 
     var vertexFuncName: String { "smoothing_vertex" }
     var fragmentFuncName: String { "smoothing_fragment" }
+    required init() {}
 }
 
-struct BookOfShaders06: Scene {
+class BookOfShaders06: Scene {
     var name: String { "Book of Shaders 06 - Colors" }
 
     var vertexFuncName: String { "color_vertex" }
     var fragmentFuncName: String { "color_fragment" }
+    required init() {}
 }

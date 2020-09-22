@@ -27,6 +27,7 @@ public struct TitledSlider: View {
 
     static func valueLabel(value: Float) -> some View {
         Text(nf.string(from: NSNumber(floatLiteral: Double(value)))!)
+            .bold()
     }
 
     init(title: String, value: Binding<Float>, in bounds: ClosedRange<Float>, step: Float? = nil, reset: @escaping (() -> ())) {
@@ -59,13 +60,20 @@ public struct TitledSlider: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(spacing: 12) {
                 Text(title)
                 Spacer()
                 Self.valueLabel(value: value.wrappedValue)
-                Button("reset") {
+                Button(action: {
                     self.reset()
+                }) {
+                    Image("reset")
+                        .resizable()
+                        .foregroundColor(Color(red: 185/255.0, green: 160/255.0, blue: 176/255.0))
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 19)
                 }
+                .buttonStyle(PlainButtonStyle())
             }
             slider
         }

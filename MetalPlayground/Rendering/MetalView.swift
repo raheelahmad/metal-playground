@@ -9,7 +9,7 @@
 import MetalKit
 
 final class MetalView: MTKView {
-    let renderer = Renderer()
+    var renderer: Renderer!
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()

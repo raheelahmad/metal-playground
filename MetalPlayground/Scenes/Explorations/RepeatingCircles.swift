@@ -49,9 +49,8 @@ class RepeatingCircles: Scene {
         @EnvironmentObject private var config: Config
 
         var body: some View {
-            VStack(alignment: .leading) {
-                Toggle("Rotating", isOn: $config.rotating)
-                VStack {
+            VStack(alignment: .leading, spacing: 19) {
+                    Toggle("Rotating", isOn: $config.rotating)
                     TitledSlider(title: "Rows", value: $config.numRows, in: 1...10, step: 1) {
                         self.config.numRows = 1
                     }
@@ -61,8 +60,6 @@ class RepeatingCircles: Scene {
                     TitledSlider(title: "Scale", value: $config.scale, in: 0.1...4.0) {
                         self.config.scale = 1
                     }
-                }
-                Spacer()
             }
         }
     }
