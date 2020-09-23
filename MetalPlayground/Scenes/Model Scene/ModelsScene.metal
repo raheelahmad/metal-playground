@@ -13,10 +13,10 @@ struct VertexIn {
     float4 position [[attribute(0)]];
 };
 
-vertex float4 metalByTutorials01_vertex(const VertexIn vIn [[stage_in]]) {
+vertex float4 models_vertex(const VertexIn vIn [[stage_in]]) {
     return vIn.position;
 }
 
-fragment float4 metalByTutorials01_fragment() {
+fragment float4 models_fragment() {
     return float4(1, 0,0,1);
 }
