@@ -47,7 +47,6 @@ float2 polar(float2 st) {
 
 
 fragment float4 polar_experiments_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    float t = uniforms.time;
     float3 col = {0.7, 0.5, 0.1};
 
     float2 st = {

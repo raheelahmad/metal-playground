@@ -55,27 +55,19 @@ final class Renderer: NSObject, MTKViewDelegate {
     var currentTime: Double = 0
     let gpuLock = DispatchSemaphore(value: 1)
 
-    var scene: Scene = allScenes[0].init() {
+    var scene: Scene = SceneKind.allCases[0].scene {
         didSet {
             setupPipeline()
         }
     }
 
-    var mesh: MTKMesh?
     var vertexBuffer: MTLBuffer?
 
     private func setupPipeline() {
-        piplelineState = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
+        let setup = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
 
-        mesh = scene.mesh(device: device)
-
-        if let mesh = mesh {
-            vertexBuffer = mesh.vertexBuffers[0].buffer
-        } else if var vertices = scene.vertices {
-            vertexBuffer = device.makeBuffer(bytes: &vertices, length: MemoryLayout<simd_float3>.stride * vertices.count, options: [])
-        } else {
-            vertexBuffer = device.makeBuffer(bytes: vertices, length: MemoryLayout<Vertex>.stride * vertices.count, options: [])
-        }
+        self.piplelineState = setup.0
+        self.vertexBuffer = setup.1
     }
 
     func draw(in view: MTKView) {
@@ -106,17 +98,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         let uniformsBuffer = device.makeBuffer(bytes: &uniforms, length: MemoryLayout<FragmentUniforms>.size, options: [])
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 0)
         scene.setUniforms(device: device, encoder: encoder)
-
-        if let mesh = mesh {
-            for submesh in mesh.submeshes {
-//                encoder.setTriangleFillMode(.lines)
-                encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
-            }
-        } else if let vertices = scene.vertices {
-            encoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: vertices.count)
-        } else {
-            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: 6)
-        }
+        scene.draw(encoder: encoder)
 
         encoder.endEncoding()
         commandBuffer.present(view.currentDrawable!)
@@ -128,14 +110,4 @@ final class Renderer: NSObject, MTKViewDelegate {
         uniforms.screen_height = Float(size.height)
         Self.aspectRatio = Float(uniforms.screen_width/uniforms.screen_height)
     }
-
-    private var vertices: [Vertex] = [
-        Vertex(position: [-1, -1]),
-        Vertex(position: [-1, 1]),
-        Vertex(position: [1, 1]),
-
-        Vertex(position: [-1, -1]),
-        Vertex(position: [1, 1]),
-        Vertex(position: [1, -1]),
-    ]
 }

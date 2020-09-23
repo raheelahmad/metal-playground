@@ -39,7 +39,10 @@ struct RootView: View {
             }
             else {
                 VStack(spacing: 28) {
-                    Picker(selection: viewModel.sceneSelection, label: Text("Scenes")) {
+                    Picker(
+                        selection: viewModel.sceneSelection,
+                        label: Text("Scenes").font(.callout)
+                    ) {
                         ForEach(SceneKind.allCases) {
                             Text("\($0.name)").tag($0)
                         }

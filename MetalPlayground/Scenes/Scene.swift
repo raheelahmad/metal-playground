@@ -17,36 +17,53 @@ protocol Scene {
     init()
 
     var view: NSView? { get }
-    func mesh(device: MTLDevice) -> MTKMesh?
-    var vertices: [simd_float3]? { get }
     func tick(time: Float)
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer)
+    func draw(encoder: MTLRenderCommandEncoder)
 }
 
 extension Scene {
     func tick(time: Float) { }
-    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineState {
+    private var basicVertices: [Vertex] {
+        [
+            Vertex(position: [-1, -1]),
+            Vertex(position: [-1, 1]),
+            Vertex(position: [1, 1]),
+
+            Vertex(position: [-1, -1]),
+            Vertex(position: [1, 1]),
+            Vertex(position: [1, -1]),
+        ]
+    }
+
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+        let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
+        let pipeline = (try? device.makeRenderPipelineState(descriptor: descriptor))!
+
+
+        let vertexBuffer = device.makeBuffer(bytes: basicVertices, length: MemoryLayout<Vertex>.stride * basicVertices.count, options: [])
+        return (pipeline, vertexBuffer!)
+    }
+
+    func buildBasicPipelineDescriptor(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineDescriptor {
         let pipelineDesc = MTLRenderPipelineDescriptor()
         let library = device.makeDefaultLibrary()
         pipelineDesc.vertexFunction = library?.makeFunction(name: vertexFuncName)
         pipelineDesc.fragmentFunction = library?.makeFunction(name: fragmentFuncName)
         pipelineDesc.colorAttachments[0].pixelFormat = pixelFormat
-        if let mesh = self.mesh(device: device) {
-            pipelineDesc.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.vertexDescriptor)
-        }
-        return (try? device.makeRenderPipelineState(descriptor: pipelineDesc))!
+        return pipelineDesc
     }
 
+    func draw(encoder: MTLRenderCommandEncoder) {
+        encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: basicVertices.count)
+    }
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) { }
 
     var view: NSView? {
         nil
     }
-
-    func mesh(device: MTLDevice) -> MTKMesh? { nil }
-
-    var vertices: [simd_float3]? { nil }
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
@@ -59,6 +76,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case domainDisortion
     case bookOfShaders05
     case bookOfShaders06
+    case metalByTutorials01
 
     var id: Int {
         rawValue
@@ -75,6 +93,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .domainDisortion: return "Domain distortion"
         case .bookOfShaders05: return "Book of Shaders 05"
         case .bookOfShaders06: return "Book of Shaders 06"
+        case .metalByTutorials01: return "Metal by Tutorials 01"
         }
     }
 
@@ -89,22 +108,9 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .domainDisortion: return DomainDistortion()
         case .bookOfShaders05: return BookOfShaders05()
         case .bookOfShaders06: return BookOfShaders06()
+        case .metalByTutorials01: return MetalByTutorials01()
         }
     }
-}
-
-var allScenes: [Scene.Type] {
-    [
-        RepeatingCircles.self,
-        Simplest3D.self,
-        RayMarching.self,
-        QuizlesHappyJumping.self,
-        Rays.self,
-        MetalByTutorials04.self,
-        MetalByTutorials03.self,
-        PolarScene.self,
-        MetalByTutorials01.self,
-        DomainDistortion.self, BasicShaderToy.self, StarField.self, Smiley.self, BookOfShaders05.self, BookOfShaders06.self]
 }
 
 class StarFieldConfig: ObservableObject {
@@ -116,31 +122,10 @@ class StarFieldConfig: ObservableObject {
 
 let starfieldConfig = StarFieldConfig()
 
-class Torus: Scene {
-    var name: String { "Torus" }
-    var vertexFuncName: String { "torus_vertex" }
-    var fragmentFuncName: String { "torus_fragment" }
-    required init() {}
-}
-
 class Simplest3D: Scene {
     var name: String { "Simplest 3D" }
     var vertexFuncName: String { "simplest_3d_vertex" }
     var fragmentFuncName: String { "simplest_3d_fragment" }
-    required init() {}
-}
-
-class RayMarching: Scene {
-    var name: String { "Ray Marching" }
-    var vertexFuncName: String { "raymarching_vertex" }
-    var fragmentFuncName: String { "raymarching_fragment" }
-    required init() {}
-}
-
-class QuizlesHappyJumping: Scene {
-    var name: String { "Torus" }
-    var vertexFuncName: String { "quizles_happy_jumping_vertex" }
-    var fragmentFuncName: String { "quizles_happy_jumping_fragment" }
     required init() {}
 }
 
@@ -185,7 +170,6 @@ class StarField: Scene {
         encoder.setFragmentBytes(&uniform, length: length, index: 1)
     }
 
-
     var view: NSView? {
         NSHostingView(
             rootView: ConfigView().environmentObject(starfieldConfig)
@@ -202,48 +186,26 @@ class Smiley: Scene {
     required init() {}
 }
 
-class MetalByTutorials03: Scene {
-    var name: String { "3 - Metal By Tutorials"}
-    var vertexFuncName: String { "metalByTutorials01_vertex" }
-    var fragmentFuncName: String { "metalByTutorials01_fragment" }
-
-    func mesh(device: MTLDevice) -> MTKMesh? {
-        let allocator = MTKMeshBufferAllocator(device: device)
-        let size: Float = 1
-        let mdlMesh = MDLMesh(
-            boxWithExtent: [size, size, size],
-            segments: [1,1,1],
-            inwardNormals: false,
-            geometryType: .triangles,
-            allocator: allocator
-        )
-
-        do {
-            let mesh = try MTKMesh(mesh: mdlMesh, device: device)
-            return mesh
-        } catch {
-            assertionFailure(error.localizedDescription)
-            return nil
-        }
-    }
-    required init() {}
-}
-
-class MetalByTutorials04: Scene {
-    var name: String { "3 - Metal By Tutorials"}
-    var vertexFuncName: String { "metalByTutorials04_vertex" }
-    var fragmentFuncName: String { "metalByTutorials04_fragment" }
-
-    var vertices: [simd_float3]? {
-        [[0,0,0.5]]
-    }
-    required init() {}
-}
-
 class MetalByTutorials01: Scene {
     var name: String { "1 - Metal By Tutorials"}
     var vertexFuncName: String { "metalByTutorials01_vertex" }
     var fragmentFuncName: String { "metalByTutorials01_fragment" }
+
+    var mesh: MTKMesh!
+
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+        let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
+        let mesh = self.mesh(device: device)!
+        descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.vertexDescriptor)
+        let pipeline =  (try? device.makeRenderPipelineState(descriptor: descriptor))!
+
+        let vertexBuffer = mesh.vertexBuffers[0].buffer
+
+        // let's set up the mesh so we don't recreate it in draw()
+        self.mesh = mesh
+
+        return (pipeline, vertexBuffer)
+    }
 
     func mesh(device: MTLDevice) -> MTKMesh? {
         let allocator = MTKMeshBufferAllocator(device: device)
@@ -262,7 +224,6 @@ class MetalByTutorials01: Scene {
         let asset = MDLAsset(url: assetURL, vertexDescriptor: meshDescriptor, bufferAllocator: allocator)
         let mdlMesh = asset.childObjects(of: MDLMesh.self).first as! MDLMesh
 
-//        let mdlMesh = MDLMesh(sphereWithExtent: [0.75, 0.75, 0.75], segments: [100, 100], inwardNormals: false, geometryType: .triangles, allocator: allocator)
         do {
             let mesh = try MTKMesh(mesh: mdlMesh, device: device)
             return mesh
@@ -271,6 +232,14 @@ class MetalByTutorials01: Scene {
             return nil
         }
     }
+
+    func draw(encoder: MTLRenderCommandEncoder) {
+        for submesh in mesh.submeshes {
+            //                encoder.setTriangleFillMode(.lines)
+            encoder.drawIndexedPrimitives(type: .triangle, indexCount: submesh.indexCount, indexType: submesh.indexType, indexBuffer: submesh.indexBuffer.buffer, indexBufferOffset: submesh.indexBuffer.offset)
+        }
+    }
+
     required init() {}
 }
 
