@@ -68,7 +68,7 @@ extension Scene {
 
 enum SceneKind: Int, CaseIterable, Identifiable {
     case modelsScene
-    case girihPattern1
+    case girihPattern
     case smiley
     case starfield
     case simplest3D
@@ -85,7 +85,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     var name: String {
         switch self {
         case .modelsScene: return "Models"
-        case .girihPattern1: return "Girih Pattern #1"
+        case .girihPattern: return "Girih Pattern #1"
         case .starfield: return "Starfield"
         case .smiley: return "Smiley"
         case .simplest3D: return "Simplest 3D"
@@ -99,7 +99,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Scene {
         switch self {
-        case .girihPattern1: return RepeatingCircles()
+        case .girihPattern: return Girih()
         case .starfield: return StarField()
         case .smiley: return Smiley()
         case .simplest3D: return Simplest3D()

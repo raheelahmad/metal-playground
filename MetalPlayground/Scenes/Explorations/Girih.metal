@@ -34,7 +34,7 @@ struct RepatingCirclesUniforms {
     float scale;
 };
 
-vertex VertexOut repeating_cirlces_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+vertex VertexOut girih_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
     VertexIn in = vertexArray[vid];
     VertexOut out;
     out.pos = float4(in.pos, 0, 1);
@@ -129,7 +129,7 @@ struct Mask {
     float2 intersections [6];
 };
 
-Mask repeating_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
+Mask girih_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
     if (rotating) {
         st *= Rotate(sin(time/4) * M_PI_F);
     }
@@ -225,7 +225,7 @@ float3 colorForMask(Mask mask, float2 st, float scale) {
 }
 
 
-float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count, bool rotating, float scale, float time) {
+float3 girih_color(float2 st, int rows_count, int polygons_count, bool rotating, float scale, float time) {
     float r = 0.5;
 
     st *= rows_count;
@@ -240,13 +240,13 @@ float3 repeating_circles_singular(float2 st, int rows_count, int polygons_count,
     float3 color = 0;
     for (int i=0; i<polygons_count;i++) {
         st = Rotate(rotationAngle) * st;
-        Mask rotatedMask = repeating_circles_mask(st, r, rotating, scale, time);
+        Mask rotatedMask = girih_circles_mask(st, r, rotating, scale, time);
         color += colorForMask(rotatedMask, st, scale);
     }
     return color;
 }
 
-fragment float4 repeating_circles_fragment(
+fragment float4 girih_fragment(
                            VertexOut interpolated [[stage_in]],
                            constant FragmentUniforms &uniforms [[buffer(0)]],
                            constant RepatingCirclesUniforms &repeating_uniforms [[buffer(1)]]
@@ -254,7 +254,7 @@ fragment float4 repeating_circles_fragment(
     float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
 
-    float3 color = repeating_circles_singular(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, repeating_uniforms.scale, t);
+    float3 color = girih_color(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, repeating_uniforms.scale, t);
 
     return vector_float4(color, 1.0);
 }

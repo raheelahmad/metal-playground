@@ -1,5 +1,5 @@
 //
-//  RepeatingCircles.swift
+//  Girih.swift
 //  MetalPlayground
 //
 //  Created by Raheel Ahmad on 9/14/20.
@@ -31,7 +31,7 @@ extension Float {
 
 private var config = Config()
 
-class RepeatingCircles: Scene {
+class Girih: Scene {
     struct Uniforms {
         var rotating: Bool
         var numRows: Float
@@ -80,8 +80,8 @@ class RepeatingCircles: Scene {
         )
     }
 
-    var vertexFuncName: String { "repeating_cirlces_vertex" }
-    var fragmentFuncName: String { "repeating_circles_fragment" }
+    var vertexFuncName: String { "girih_vertex" }
+    var fragmentFuncName: String { "girih_fragment" }
 
     required init() { }
 }

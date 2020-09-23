@@ -66,4 +66,3 @@ class StarField: Scene {
     }
     required init() {}
 }
-
