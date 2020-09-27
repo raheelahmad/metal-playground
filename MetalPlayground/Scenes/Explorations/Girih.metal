@@ -18,6 +18,10 @@ struct VertexIn {
     vector_float2 pos;
 };
 
+typedef enum {
+    GirihPatternFirstThingsFirst = 0,
+    GirihPatternSixesInterpolated = 1
+} GirihPatternKind;
 
 struct FragmentUniforms {
     float time;
@@ -27,7 +31,8 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
-struct RepatingCirclesUniforms {
+struct GirihUniforms {
+    GirihPatternKind kind;
     bool rotating;
     float num_rows;
     float num_polygons;
@@ -150,6 +155,9 @@ Mask girih_circles_mask(float2 st, float r, float rotating, float scaleFactor, f
     // midpoints between consecutive intersections
     float2 midpoints[6];
 
+    // for outer intersections
+    float2 innerCircleCenters[6];
+
     // Build circles and intersections, and collect midpoints
     for (int idx = 0; idx < totalCircles; idx++) {
         float2 circle2Pos = (idx == 0) ?
@@ -160,9 +168,15 @@ Mask girih_circles_mask(float2 st, float r, float rotating, float scaleFactor, f
         float2 intersection = circlesIntersctionPoint(r, true, centerPos, circle2Pos);
         mask.circleMask += CircleBand(st, intersection, r, thickness, blur);
 
+        innerCircleCenters[idx] = circle2Pos;
+
+//        if (idx > 0) {
+            float2 outerIntersection = circlesIntersctionPoint(r, true, circle2Pos, intersection);
+            mask.circleMask += CircleBand(st, outerIntersection, r, thickness, blur);
+//        }
+
         float2 line_point1 = circle2Pos;
         float2 line_point2 = intersection;
-        //        onAnyLineMask = max(onAnyLineMask, onLine(st, line_point1, line_point2));
 
         midpoints[idx] = float2((line_point1.x+line_point2.x)/2, (line_point1.y+line_point2.y)/2);
 
@@ -249,12 +263,17 @@ float3 girih_color(float2 st, int rows_count, int polygons_count, bool rotating,
 fragment float4 girih_fragment(
                            VertexOut interpolated [[stage_in]],
                            constant FragmentUniforms &uniforms [[buffer(0)]],
-                           constant RepatingCirclesUniforms &repeating_uniforms [[buffer(1)]]
+                           constant GirihUniforms &repeating_uniforms [[buffer(1)]]
                                            ) {
     float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
 
-    float3 color = girih_color(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, repeating_uniforms.scale, t);
+    float3 color = 0;
+    if (repeating_uniforms.kind == GirihPatternFirstThingsFirst) {
+        color = girih_color(st, repeating_uniforms.num_rows, repeating_uniforms.num_polygons, repeating_uniforms.rotating, repeating_uniforms.scale, t);
+    } else {
+        color = {0.2, 0.2, 0.2};
+    }
 
     return vector_float4(color, 1.0);
 }
