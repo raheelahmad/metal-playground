@@ -67,6 +67,8 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
+    case sierpinski
+    case happyJumping
     case modelsScene
     case girihPattern
     case smiley
@@ -84,6 +86,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
+        case .sierpinski: return "Sierpinski"
         case .modelsScene: return "Models"
         case .girihPattern: return "Girih Pattern #1"
         case .starfield: return "Starfield"
@@ -94,11 +97,14 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .domainDisortion: return "Domain distortion"
         case .bookOfShaders05: return "Book of Shaders 05"
         case .bookOfShaders06: return "Book of Shaders 06"
+        case .happyJumping: return "Happy Jumping"
         }
     }
 
     var scene: Scene {
         switch self {
+        case .sierpinski: return Sierpinski()
+        case .happyJumping: return HappyJumping()
         case .girihPattern: return Girih()
         case .starfield: return StarField()
         case .smiley: return Smiley()
@@ -111,6 +117,155 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .modelsScene: return ModelsScene()
         }
     }
+}
+
+extension MDLVertexDescriptor {
+    var vertexAttributes: [MDLVertexAttribute] {
+        attributes as! [MDLVertexAttribute]
+    }
+
+    var bufferLayouts: [MDLVertexBufferLayout] {
+        layouts as! [MDLVertexBufferLayout]
+    }
+
+    static var `default`: MDLVertexDescriptor = {
+        let vd = MDLVertexDescriptor()
+        // position
+        vd.vertexAttributes[0].name = MDLVertexAttributePosition
+        vd.vertexAttributes[0].format = .float3
+        vd.vertexAttributes[0].offset = 0
+        vd.vertexAttributes[0].bufferIndex = 0
+        var nextOffset = MemoryLayout<float3>.size
+
+        // normal
+//        vd.vertexAttributes[1].name = MDLVertexAttributeNormal
+//        vd.vertexAttributes[1].format = .float3
+//        vd.vertexAttributes[1].offset = nextOffset
+//        vd.vertexAttributes[1].bufferIndex = 0
+//        nextOffset += MemoryLayout<Float>.size * 3
+        vd.bufferLayouts[0].stride = nextOffset
+
+        return vd
+    }()
+}
+
+class Sierpinski: Scene {
+    var name: String { "Sierpinski" }
+    var vertexFuncName: String { "sierpinski_vertex" }
+    var fragmentFuncName: String { "sierpinski_fragment" }
+    var mesh: MTKMesh!
+    var vertexBuffer: MTLBuffer!
+
+    var pointsCount = 0
+
+    required init() {}
+
+
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+        let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
+        descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(MDLVertexDescriptor.default)
+        let pipeline =  (try? device.makeRenderPipelineState(descriptor: descriptor))!
+
+        self.vertexBuffer = equation(device: device)
+
+        return (pipeline, vertexBuffer)
+    }
+
+    struct Vertex {
+        let pos: float3
+    }
+
+    func equation(device: MTLDevice) -> MTLBuffer {
+        var x: Float = -1
+        var z: Float = -1
+
+        let dimCount = 200
+        var data: [float3] = .init(repeating: .zero, count: 200 * 200)
+
+        for xi in 0..<dimCount {
+
+            x = Float(dimCount/2 - xi)/Float(dimCount)
+            for zi in 0..<dimCount {
+                z = Float(dimCount/2 - zi)/Float(dimCount)
+                let y: Float = pow((x*x + z*z), 0.5)
+                data[zi * dimCount + xi] = .init(x, y, z)
+            }
+        }
+
+        var points: [float3] = []
+        // add along x
+        for idx in 0..<dimCount {
+            let startIdx = idx * dimCount
+            let endIndx = (idx + 1) * dimCount
+            points.append(contentsOf: data[startIdx..<endIndx])
+        }
+        // add along z
+        for idx in 0..<dimCount {
+            let indices = (0..<dimCount).map { data[$0 + idx] }
+            points.append(contentsOf: indices)
+        }
+
+        self.pointsCount = points.count
+        return device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * pointsCount, options: [])!
+    }
+
+    func sphere(device: MTLDevice) -> MTLBuffer {
+        var points: [float3] = []
+        for theta in (0..<360).map({ radians_from_degrees(Float($0))}) {
+            for phi in (0..<360).map({ radians_from_degrees(Float($0)) }) {
+                let x = sin(theta) * cos(phi)
+                let y = cos(theta) * cos(phi)
+                let z = sin(phi)
+                points.append(float3(x,y,z))
+            }
+        }
+        self.pointsCount = points.count
+
+        return device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * pointsCount, options: [])!
+    }
+
+    func sierpinski(device: MTLDevice) -> MTLBuffer {
+        var points: [float3] = [
+            float3(-1.0, -1.0,  0.0),
+            float3(0.0,  1.0,  0.0),
+            float3(1.0, -1.0,  0.0),
+        ]
+
+        let vertices: [float3] = [
+            float3(-1.0, -1.0,  0.0),
+            float3(0.0,  1.0,  0.0),
+            float3(1.0, -1.0,  0.0),
+        ]
+        let u = 0.5 * (vertices[0] + vertices[1])
+        let v = 0.5 * (vertices[0] + vertices[2])
+        let p = 0.5 * (u + v)
+        points = [p]
+
+        for idx in (1..<10000) {
+            let j = Int(Float.random(in: 0..<1.0) * 3)
+            let m: Float = 0.5
+            let p: float3 = m * (points[idx - 1]) + (1 - m) * vertices[j]
+            points.append(p)
+        }
+
+        self.pointsCount = points.count
+
+        let mesh = device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * points.count, options: [])
+        return mesh!
+    }
+
+    func draw(encoder: MTLRenderCommandEncoder) {
+        encoder.setTriangleFillMode(.lines)
+        encoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: pointsCount)
+    }
+}
+
+
+class HappyJumping: Scene {
+    var name: String { "Simplest 3D" }
+    var vertexFuncName: String { "happy_jumping_vertex" }
+    var fragmentFuncName: String { "happy_jumping_fragment" }
+    required init() {}
 }
 
 class Simplest3D: Scene {
