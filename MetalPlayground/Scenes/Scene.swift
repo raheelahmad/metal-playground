@@ -55,6 +55,8 @@ extension Scene {
         return pipelineDesc
     }
 
+    /// In most scenes where fragment shaders do the rendering themselves, basicVertices can be used for full screen Clip space coordinates.
+    /// Hence this default implementation
     func draw(encoder: MTLRenderCommandEncoder) {
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: basicVertices.count)
     }
@@ -154,7 +156,8 @@ class Sierpinski: Scene {
     var vertexFuncName: String { "sierpinski_vertex" }
     var fragmentFuncName: String { "sierpinski_fragment" }
     var mesh: MTKMesh!
-    var vertexBuffer: MTLBuffer!
+
+    var pointsBuffer: MTLBuffer!
 
     var pointsCount = 0
 
@@ -166,85 +169,29 @@ class Sierpinski: Scene {
         descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(MDLVertexDescriptor.default)
         let pipeline =  (try? device.makeRenderPipelineState(descriptor: descriptor))!
 
-        self.vertexBuffer = equation(device: device)
+        self.pointsBuffer = sierpinski(device: device)
 
-        return (pipeline, vertexBuffer)
-    }
-
-    struct Vertex {
-        let pos: float3
-    }
-
-    func equation(device: MTLDevice) -> MTLBuffer {
-        var x: Float = -1
-        var z: Float = -1
-
-        let dimCount = 200
-        var data: [float3] = .init(repeating: .zero, count: 200 * 200)
-
-        for xi in 0..<dimCount {
-
-            x = Float(dimCount/2 - xi)/Float(dimCount)
-            for zi in 0..<dimCount {
-                z = Float(dimCount/2 - zi)/Float(dimCount)
-                let y: Float = pow((x*x + z*z), 0.5)
-                data[zi * dimCount + xi] = .init(x, y, z)
-            }
-        }
-
-        var points: [float3] = []
-        // add along x
-        for idx in 0..<dimCount {
-            let startIdx = idx * dimCount
-            let endIndx = (idx + 1) * dimCount
-            points.append(contentsOf: data[startIdx..<endIndx])
-        }
-        // add along z
-        for idx in 0..<dimCount {
-            let indices = (0..<dimCount).map { data[$0 + idx] }
-            points.append(contentsOf: indices)
-        }
-
-        self.pointsCount = points.count
-        return device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * pointsCount, options: [])!
-    }
-
-    func sphere(device: MTLDevice) -> MTLBuffer {
-        var points: [float3] = []
-        for theta in (0..<360).map({ radians_from_degrees(Float($0))}) {
-            for phi in (0..<360).map({ radians_from_degrees(Float($0)) }) {
-                let x = sin(theta) * cos(phi)
-                let y = cos(theta) * cos(phi)
-                let z = sin(phi)
-                points.append(float3(x,y,z))
-            }
-        }
-        self.pointsCount = points.count
-
-        return device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * pointsCount, options: [])!
+        return (pipeline, pointsBuffer)
     }
 
     func sierpinski(device: MTLDevice) -> MTLBuffer {
-        var points: [float3] = [
-            float3(-1.0, -1.0,  0.0),
-            float3(0.0,  1.0,  0.0),
-            float3(1.0, -1.0,  0.0),
-        ]
-
+        // vertices of the outer triangle
         let vertices: [float3] = [
             float3(-1.0, -1.0,  0.0),
             float3(0.0,  1.0,  0.0),
             float3(1.0, -1.0,  0.0),
         ]
-        let u = 0.5 * (vertices[0] + vertices[1])
-        let v = 0.5 * (vertices[0] + vertices[2])
-        let p = 0.5 * (u + v)
-        points = [p]
+        let u = mix(vertices[0], vertices[1], t: 0.5)
+        let v = mix(vertices[0], vertices[2], t: 0.5)
+        let p = mix(u, v, t: 0.5)
+
+        // points to render
+        var points: [float3] = [p]
 
         for idx in (1..<10000) {
             let j = Int(Float.random(in: 0..<1.0) * 3)
             let m: Float = 0.5
-            let p: float3 = m * (points[idx - 1]) + (1 - m) * vertices[j]
+            let p: float3 = mix(points[idx - 1], vertices[j], t: m);
             points.append(p)
         }
 
@@ -255,7 +202,6 @@ class Sierpinski: Scene {
     }
 
     func draw(encoder: MTLRenderCommandEncoder) {
-        encoder.setTriangleFillMode(.lines)
         encoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: pointsCount)
     }
 }
