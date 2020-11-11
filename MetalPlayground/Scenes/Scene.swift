@@ -163,6 +163,9 @@ class Sierpinski: Scene {
 
     required init() {}
 
+    enum Kind { case points, triangles }
+
+    let kind: Kind = .triangles
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
@@ -175,6 +178,47 @@ class Sierpinski: Scene {
     }
 
     func sierpinski(device: MTLDevice) -> MTLBuffer {
+        switch kind {
+        case .points: return sierpinskiPoints(device: device)
+        case .triangles: return sierpinskiTriangles(device: device)
+        }
+    }
+
+    func sierpinskiTriangles(device: MTLDevice) -> MTLBuffer {
+        var points: [float3] = []
+        func triangle(_ a: float3, _ b: float3, _ c: float3) {
+            points += [a,b,c]
+        }
+
+        func divideTriangle(a: float3, b: float3, c: float3, count: Int) {
+            if count == 0 {
+                triangle(a, b, c)
+            } else {
+                let ab = mix(a, b, t: 0.5);
+                let ac = mix(a, c, t: 0.5);
+                let bc = mix(b, c, t: 0.5);
+
+                let nextCount = count - 1;
+
+                divideTriangle(a: a, b: ab, c: ac, count: nextCount)
+                divideTriangle(a: c, b: ac, c: bc, count: nextCount)
+                divideTriangle(a: b, b: bc, c: ab, count: nextCount)
+            }
+        }
+
+        let vertices: [float3] = [
+            [-1.0, -1.0, 0],
+            [0.0, 1.0, 0],
+            [1.0, -1.0, 0],
+        ]
+
+        divideTriangle(a: vertices[0], b: vertices[1], c: vertices[2], count: 9)
+        self.pointsCount = points.count
+        let buff = device.makeBuffer(bytes: &points, length: MemoryLayout<float3>.stride * points.count, options: [])
+        return buff!
+    }
+
+    func sierpinskiPoints(device: MTLDevice) -> MTLBuffer {
         // vertices of the outer triangle
         let vertices: [float3] = [
             float3(-1.0, -1.0,  0.0),
@@ -202,7 +246,14 @@ class Sierpinski: Scene {
     }
 
     func draw(encoder: MTLRenderCommandEncoder) {
-        encoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: pointsCount)
+        assert(pointsCount > 0)
+        switch kind {
+        case .points:
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: pointsCount)
+        case .triangles:
+            encoder.setTriangleFillMode(.fill)
+            encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: pointsCount)
+        }
     }
 }
 
