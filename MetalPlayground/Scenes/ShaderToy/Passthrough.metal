@@ -17,6 +17,9 @@ struct VertexIn {
 //
 };
 
+struct VertexUniforms {
+    float angle;
+};
 
 struct FragmentUniforms {
     float time;
@@ -28,20 +31,26 @@ struct FragmentUniforms {
 
 struct VertexOut {
     float4 pos [[position]];
-//    float3 normal;
-//    float3 uv;
 };
 
-vertex VertexOut sierpinski_vertex(VertexIn vin [[stage_in]]) {
+vertex VertexOut passthrough_vertex(VertexIn vin [[stage_in]]) {
     VertexOut out;
     out.pos = float4(vin.pos, 1);
-//    out.normal = vin.normal;
-//    out.uv = vin.uv;
+    return out;
+}
+
+vertex VertexOut rotate_vertex(VertexIn vin [[stage_in]], constant VertexUniforms &uniforms [[buffer(1)]]) {
+    VertexOut out;
+    float4 pos = float4(vin.pos, 1);
+    float thet = uniforms.angle;
+    pos.x = -sin(thet) * vin.pos.x + cos(thet) * vin.pos.y;
+    pos.y = sin(thet) * vin.pos.y + cos(thet) * vin.pos.x;
+    out.pos = pos;
     return out;
 }
 
 // ---
-fragment float4 sierpinski_fragment( VertexOut interpolated [[stage_in]],
+fragment float4 passthrough_fragment(VertexOut interpolated [[stage_in]],
                                     constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float3 col = interpolated.pos.xyz;
 

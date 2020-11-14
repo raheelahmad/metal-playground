@@ -10,9 +10,8 @@ import MetalKit
 
 class Sierpinski: Scene {
     var name: String { "Sierpinski" }
-    var vertexFuncName: String { "sierpinski_vertex" }
-    var fragmentFuncName: String { "sierpinski_fragment" }
-    var mesh: MTKMesh!
+    var vertexFuncName: String { "passthrough_vertex" }
+    var fragmentFuncName: String { "passthrough_fragment" }
 
     var pointsBuffer: MTLBuffer!
 

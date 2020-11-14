@@ -22,7 +22,7 @@
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
 		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
-		59438CA4252A5B8600713DB9 /* Sierpinski.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59438CA3252A5B8600713DB9 /* Sierpinski.metal */; };
+		59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59438CA3252A5B8600713DB9 /* Passthrough.metal */; };
 		594651E0251B198E009947C2 /* Starfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594651DF251B198E009947C2 /* Starfield.swift */; };
 		595D7282246CFD4000FC8054 /* Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7281246CFD4000FC8054 /* Shapes.metal */; };
 		595D7284246D23F500FC8054 /* Random.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7283246D23F500FC8054 /* Random.metal */; };
@@ -32,6 +32,7 @@
 		5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */; };
 		597743E624B82CC500AAB07C /* 06Colors.metal in Sources */ = {isa = PBXBuildFile; fileRef = 597743E524B82CC500AAB07C /* 06Colors.metal */; };
 		597EC6C5255B92650035AD88 /* Sierpinski.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC6C4255B92650035AD88 /* Sierpinski.swift */; };
+		597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */; };
 		5981BA97246B22EB00E39E86 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5981BA96246B22EB00E39E86 /* Shaders.metal */; };
 		599B22A12504778C007EB419 /* RaysConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B22A02504778C007EB419 /* RaysConfig.swift */; };
 		599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */ = {isa = PBXBuildFile; fileRef = 599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */; };
@@ -82,7 +83,7 @@
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
 		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
-		59438CA3252A5B8600713DB9 /* Sierpinski.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Sierpinski.metal; sourceTree = "<group>"; };
+		59438CA3252A5B8600713DB9 /* Passthrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Passthrough.metal; sourceTree = "<group>"; };
 		594651DF251B198E009947C2 /* Starfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starfield.swift; sourceTree = "<group>"; };
 		595D7281246CFD4000FC8054 /* Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shapes.metal; sourceTree = "<group>"; };
 		595D7283246D23F500FC8054 /* Random.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Random.metal; sourceTree = "<group>"; };
@@ -93,6 +94,7 @@
 		5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07ShapePrimitives.metal; sourceTree = "<group>"; };
 		597743E524B82CC500AAB07C /* 06Colors.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 06Colors.metal; sourceTree = "<group>"; };
 		597EC6C4255B92650035AD88 /* Sierpinski.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sierpinski.swift; sourceTree = "<group>"; };
+		597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotatingSquare.swift; sourceTree = "<group>"; };
 		5981BA96246B22EB00E39E86 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		599B22A02504778C007EB419 /* RaysConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaysConfig.swift; sourceTree = "<group>"; };
 		599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToySmiley.metal; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			isa = PBXGroup;
 			children = (
 				597EC6C4255B92650035AD88 /* Sierpinski.swift */,
+				597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */,
 			);
 			path = ICGraphicsBook;
 			sourceTree = "<group>";
@@ -237,7 +240,7 @@
 				59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */,
 				590BE6132500A12800E9B573 /* Torus.metal */,
 				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
-				59438CA3252A5B8600713DB9 /* Sierpinski.metal */,
+				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
 				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
 			);
 			path = ShaderToy;
@@ -390,7 +393,8 @@
 				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
-				59438CA4252A5B8600713DB9 /* Sierpinski.metal in Sources */,
+				597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */,
+				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
 				592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */,
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
@@ -470,7 +474,6 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -523,7 +526,6 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};

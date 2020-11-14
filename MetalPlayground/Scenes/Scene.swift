@@ -69,8 +69,9 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
-    case sierpinski
     case happyJumping
+    case rotatingSquare
+    case sierpinski
     case modelsScene
     case girihPattern
     case smiley
@@ -87,24 +88,12 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     }
 
     var name: String {
-        switch self {
-        case .sierpinski: return "Sierpinski"
-        case .modelsScene: return "Models"
-        case .girihPattern: return "Girih Pattern #1"
-        case .starfield: return "Starfield"
-        case .smiley: return "Smiley"
-        case .simplest3D: return "Simplest 3D"
-        case .rays: return "Rays"
-        case .polarScene: return "Polar scene"
-        case .domainDisortion: return "Domain distortion"
-        case .bookOfShaders05: return "Book of Shaders 05"
-        case .bookOfShaders06: return "Book of Shaders 06"
-        case .happyJumping: return "Happy Jumping"
-        }
+        scene.name
     }
 
     var scene: Scene {
         switch self {
+        case .rotatingSquare: return RotatingSquare()
         case .sierpinski: return Sierpinski()
         case .happyJumping: return HappyJumping()
         case .girihPattern: return Girih()
