@@ -69,12 +69,12 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
+    case smiley
     case happyJumping
     case rotatingSquare
     case sierpinski
     case modelsScene
     case girihPattern
-    case smiley
     case starfield
     case simplest3D
     case rays

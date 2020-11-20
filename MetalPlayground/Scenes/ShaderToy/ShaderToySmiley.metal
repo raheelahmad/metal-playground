@@ -27,110 +27,133 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
-#define S(a, b, t) smoothstep(a, b, t)
-
-float remap(float a, float b, float c, float d, float t) {
-    float val = (t - a) / (b - a) * (d - c) + c;
-    return clamp(val, 0.0, 1.0);
+float random1(float2 st) {
+    return fract(sin(st.x * 0.122190) * 21001.);
 }
 
-/// Normalize st within the box: if st.x == 0, it will be on left side; if st.y == 0, it will be on bottom side;
+float lerp2(float a, float b, float m, float n, float t) {
+    return saturate(m + (t - a) / (b - a) * (n - m));
+}
+
 float2 within(float2 st, float4 rect) {
-    return (st - rect.xy) / (rect.zw - rect.xy);
+    // Like mapping but inside a rect
+    return (st - rect.xy)/(rect.zw - rect.xy);
 }
 
-float4 head(float2 st) {
-    // the color
-    float4 col = float4(0.9, 0.65, 0.1, 1.0);
-    // a light blur boundary before going to black
+float Circle(float2 st, float2 pos, float r, float blur) {
+    st -= pos;
+    float c = smoothstep(r, r - blur, length(st));
+    return c;
+}
+
+float4 Head(float2 st) {
     float d = length(st);
-    col.a = S(0.5, 0.49, d);
 
-    // Give a blended edge before it fades to black
-    // 1st map from 0.35 → 0.5 to 0 → 1
-    float edgeShade = remap(0.35, 0.5, 0, 1, d);
-    // we want a nice fall off, not a linear one
-    edgeShade *= edgeShade;
-    // invert and attenuate
-    col.rgb *= 1 - edgeShade * 0.5;
-    col.rgb = mix(col.rgb, float3(.6, .3, .1), S(.47, 0.48, d));
+    float4 col = float4(0.9, 0.6, 0.1, 1.);
 
-    // Upper highlight
-    // ends at 0.41 (1 inside, 0 outside)
-    float highlight = S(.41, .40, d) * .75;
-    // fade it from 0 y to 0.41
-    highlight = remap(0, 0.46, 0, highlight, st.y);
-    // make it highlight(almost white) inside, and col.rgb outside
+    // add shadow to the edge
+    float edgeShadow = smoothstep(0.35, 0.5, d);
+    edgeShadow *= edgeShadow;
+    col.rgb *= 1.0 - edgeShadow * 0.2;
+
+    // make everything go inside a circle of 0.5 radius
+    col.a = smoothstep(0.5, 0.5 - 0.001, d);
+
+    /// top highlight
+    // white inner circle of r=0.41
+    float highlight = smoothstep(0.41, 0.405, d);
+    // circle is light white (0.75 at 0.41, vanishes at -0.1)
+    highlight *= lerp2(0.41, -0.1, 0.75, 0., st.y);
     col.rgb = mix(col.rgb, float3(1), highlight);
 
-    // Something I was trying
-//    d = length(st - float2(.1, .1));
-//    float maxD = length(float2(.1,.1));
-//    col.rgb = mix(float3(0.6, .0, .0), col.rgb, remap(0, maxD, 0, 1, d));
-
-    d = length(st - float2(.25, -.2));
-    float cheek = S(.18, .01, d) * .4;
-
-    col.rgb = mix(col.rgb, float3(1, .1,.1), cheek);
+    /// Cheek
+    // on both sides
+    st.x = abs(st.x);
+    // new d for cheek position
+    float2 cheekPos = {0.25, -0.2};
+    d = length(st - cheekPos);
+    // the gradient
+    float cheek = smoothstep(0.2, 0.0, d);
+    cheek *= cheek;
+    col.rgb = mix(col.rgb, float3(1.0,0.3,0.1), cheek);
 
     return col;
 }
 
-float4 eye(float2 st) {
+
+float4 Eye(float2 st) {
+    // receives in 0 → 1
+    st -= 0.5;
+
     float d = length(st);
+    float4 irisCol = float4(.3,.5,1,1);
+    // goes from white at .1 to irisCol at .7 (whole effect is then halved)
+    float4 col = mix(float4(1), irisCol, smoothstep(.1, .7, d) * 0.5);
 
-    float4 irisCol = float4(.3, .5, 1, .1);
-    float4 col = mix(float4(1), irisCol, S(.1, .7, d) * .5);
+    // inner shadow next to the nose
+    col.rgb *= 1. - smoothstep(.45, .5, d) * saturate(-st.y-st.x);
 
-    col.rgb *= 1 - S(.45, .5, d) * 0.5 * clamp(0., 1., -st.y - st.x);
-    col.rgb = mix(col.rgb, 0, S(.3, .28, d));
-    irisCol.rgb *= 1 + S(.3, .05, d);
-    col.rgb = mix(col.rgb, irisCol.rgb, S(.28, .25, d));
-    col.rgb = mix(col.rgb, 0, S(.15, .145, d));
+    col.rgb = mix(float3(0), col.rgb, smoothstep(0.3, 0.31, d));
+    col.rgb = mix(irisCol.rgb, col.rgb, smoothstep(0.25, 0.3, d));
+    col.rgb = mix(float3(0), col.rgb, smoothstep(0.189, 0.19, d));
 
-    col.a = S(.5, .48, d);
+    /// small circles
+    // positioned at .1,.1
+    float highlight = smoothstep(0.1, 0.09, length(st - float2(0.14,0.1)));
+    col.rgb = mix(col.rgb, float3(1), highlight);
+    // positioned at -.1,-.1. Smaller (0.04)
+    highlight += smoothstep(0.04, 0.03, length(st - float2(-0.1,-0.1)));
+    col.rgb = mix(col.rgb, float3(1), highlight);
+
+    // only have it go till half the length
+    col.a = smoothstep(0.5, 0.48, d);
+
     return col;
 }
 
-float4 mouth(float2 st) {
-    st.y *= 1.4; // makes thinner; since y < 1
-    st.y -= st.x * st.x * 2;
+float4 Mouth(float2 st) {
+    st -= .5;
+    st.y *= 1.5;
+    st.y -= 2 * st.x * st.x;
+    float4 col = float4(0.5, 0.18, 0.05, 1.);
     float d = length(st);
+    col.a = smoothstep(0.5, 0.49, d);
 
-    float4 col = {.8, .02, .05, 1};
-    col.rgb *= mix(col.rgb, 0.3, S(0.5, 0.3, d));
-    col.a = S(0.5, 0.49, d);
+
+    // teeth
+    float td = length(st - float2(0, .6));
+    float3 toothCol = float3(1) * smoothstep(0.6, 0.35, d);
+    col.rgb = mix(toothCol, col.rgb, smoothstep(0.49, 0.5, td));
+
     return col;
 }
 
-float4 smiley(float2 st) {
-    float4 col = 0;
-    float4 hd = head(st);
+float4 Smiley(float2 st) {
+    float4 col = float4(0);
 
-    // Eye will be drawn in a box; subtract 0.5 to again go to -.5→.5 coordinates
-    float2 eyeSt = within(st, float4(.03, -.1, .37, .25)) - 0.5;
-    float4 ey = eye(eyeSt);
-    // Mouth also will be drawn in a box
-    float2 mouthSt = within(st, float4(-.3, -.3, .3, -.1)) - 0.5;
-    float4 mth = mouth(mouthSt + float2(0, .4));
+    // Duplicate the right to the left as well:
+    st.x = abs(st.x);
 
-    // blend: if alpha is 1 will pick head, otherwise col (background)
-    col = mix(col, hd, hd.a);
-    col = mix(col, ey, ey.a);
-    col = mix(col, mth, mth.a);
+    // the alpha of Eye, Head, etc. will be 0 outside their drawing,
+    // so that doing the mix with col using the `alpha` would only draw "within"
+
+    float4 eye = Eye(within(st, float4(0.03, -0.1, 0.37, 0.25)));
+    float4 head = Head(st);
+    float4 mouth = Mouth(within(st, float4(-.3,-.4,.3,-.1)));
+
+    col = mix(col, head, head.a);
+    col = mix(col, eye, eye.a);
+    col = mix(col, mouth, mouth.a);
+
     return col;
 }
 
 fragment float4 shaderToySmiley(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
 //    float t = uniforms.time;
-    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
-    st -= 0.5;
-    st.x *= uniforms.screen_width / uniforms.screen_height;
+    float2 st  = {interpolated.pos.x / uniforms.screen_width, interpolated.pos.y / uniforms.screen_height};
+    st.y = 1. - st.y; // make it go from bottom to top
+    st -= 0.5; // center
 
-    // draw what's on right, also on the left
-    st.x = abs(st.x);
-
-    float4 color = smiley(st);
-
-    return color;
+    float4 smiley = Smiley(st);
+    return smiley;
 }
