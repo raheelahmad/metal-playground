@@ -20,6 +20,7 @@
 		592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B960C251AD74C00549407 /* MetalSwiftUIView.swift */; };
 		592B9611251ADFDE00549407 /* ModelsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B9610251ADFDE00549407 /* ModelsScene.swift */; };
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
+		5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5933FB11256F5B6D002D854A /* HappyJumping.metal */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
 		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
 		59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59438CA3252A5B8600713DB9 /* Passthrough.metal */; };
@@ -81,6 +82,7 @@
 		592B960C251AD74C00549407 /* MetalSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalSwiftUIView.swift; sourceTree = "<group>"; };
 		592B9610251ADFDE00549407 /* ModelsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsScene.swift; sourceTree = "<group>"; };
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
+		5933FB11256F5B6D002D854A /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
 		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
 		59438CA3252A5B8600713DB9 /* Passthrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Passthrough.metal; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
 				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
 				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
+				5933FB11256F5B6D002D854A /* HappyJumping.metal */,
 			);
 			path = ShaderToy;
 			sourceTree = "<group>";
@@ -391,6 +394,7 @@
 				594651E0251B198E009947C2 /* Starfield.swift in Sources */,
 				591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */,
 				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
+				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
 				597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */,

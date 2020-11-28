@@ -9,6 +9,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+/*
+
 struct VertexOut {
     float4 pos [[position]];
     float4 color;
@@ -77,7 +79,7 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
-vertex VertexOut happy_jumping_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+vertex VertexOut happy_jumping_vertex_old(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
     VertexIn in = vertexArray[vid];
     VertexOut out;
     out.pos = float4(in.pos, 0, 1);
@@ -85,7 +87,7 @@ vertex VertexOut happy_jumping_vertex(const device VertexIn *vertexArray [[buffe
 }
 
 
-fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
+fragment float4 happy_jumping_fragment_old( VertexOut in [[stage_in]],
                                constant FragmentUniforms &uniforms [[buffer( 0 )]] )
 {
 //    float2 uv = in.pos.xy;
@@ -149,3 +151,4 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     return float4( col, 1.0 );
 }
 
+ */

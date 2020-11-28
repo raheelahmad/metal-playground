@@ -69,26 +69,44 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
-    case smiley
     case happyJumping
+    case smiley
     case rotatingSquare
     case sierpinski
     case modelsScene
     case girihPattern
     case starfield
     case simplest3D
-    case rays
     case polarScene
     case domainDisortion
-    case bookOfShaders05
-    case bookOfShaders06
 
     var id: Int {
         rawValue
     }
 
     var name: String {
-        scene.name
+        switch self {
+        case .happyJumping:
+            return "Happy Jumping"
+        case .smiley:
+            return "Smiley"
+        case .rotatingSquare:
+            return "Rotating Square"
+        case .sierpinski:
+            return "Sierpinski"
+        case .modelsScene:
+            return "Loading Models"
+        case .girihPattern:
+            return "Girih"
+        case .starfield:
+            return "Starfield"
+        case .simplest3D:
+            return "Simplest 3D"
+        case .domainDisortion:
+            return "Domain Distortion"
+        case .polarScene:
+            return "Polar"
+        }
     }
 
     var scene: Scene {
@@ -100,11 +118,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .starfield: return StarField()
         case .smiley: return Smiley()
         case .simplest3D: return Simplest3D()
-        case .rays: return Rays()
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
-        case .bookOfShaders05: return BookOfShaders05()
-        case .bookOfShaders06: return BookOfShaders06()
         case .modelsScene: return ModelsScene()
         }
     }
