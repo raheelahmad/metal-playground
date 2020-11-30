@@ -40,25 +40,40 @@ vertex VertexOut happy_jumping_vertex(const device VertexIn *vertexArray [[buffe
     return out;
 }
 
+float sdEllipsoid(float3 pos, float3 radii) {
+    float k0 = length(pos/radii);
+    float k1 = length(pos/radii/radii);
+    return k0 * (k0 - 1.0) / k1;
+}
 
-float RayMarch(float3 pos) {
-    float sphereR = 0.25;
-    float sphereD = length(pos) - sphereR;
+float sdGuy(float3 pos, float time, float3 center) {
+    time = fract(time);
+    float y = 4.0 * (1 - time) * time;
+    center.y = y;
+    float scaleY = 0.5 + 0.5 * y; // deform in y
+    float scaleZ = 1.0 / scaleY; // inverse deform in z, so volume is preserved
+    float3 radii = float3(0.25, 0.25 * scaleY, 0.25 * scaleZ);
+    float d = sdEllipsoid(pos - center, radii);
+    return d;
+}
+
+float RayMarch(float3 pos, float t) {
+    float guy1 = sdGuy(pos, t, float3(0, 0, 0.1));
 
     float planeY = -0.25;
     float planeD = pos.y - planeY;
 
-    float d = min(planeD, sphereD);
+    float d = min(planeD, guy1);
     return d;
 }
 
-float3 calcNormal(float3 pos) {
+float3 calcNormal(float3 pos, float t) {
     float2 e = float2(0.001, 0.);
     return normalize(
                      float3(
-                            RayMarch(pos+e.xyy) - RayMarch(pos-e.xyy),
-                            RayMarch(pos+e.yxy) - RayMarch(pos-e.yxy),
-                            RayMarch(pos+e.yyx) - RayMarch(pos-e.yyx)
+                            RayMarch(pos+e.xyy, t) - RayMarch(pos-e.xyy, t),
+                            RayMarch(pos+e.yxy, t) - RayMarch(pos-e.yxy, t),
+                            RayMarch(pos+e.yyx, t) - RayMarch(pos-e.yyx, t)
                             )
                      );
 }
@@ -66,12 +81,12 @@ float3 calcNormal(float3 pos) {
 #define MAX_ITER 200
 #define MAX_DIST 20
 
-float castRay(float3 ro, float3 rd) {
+float castRay(float3 ro, float3 rd, float time) {
     // distance from camera in to the scene
     float t = 0;
     for (int i = 0; i < MAX_ITER; i++) {
         float3 pos = ro + t * rd; // current sampling position in to the scene
-        float h = RayMarch(pos); // distance of nearest item in scene from pos
+        float h = RayMarch(pos, time); // distance of nearest item in scene from pos
         if (h < 0.001) { // we have hit something
             break;
         }
@@ -95,28 +110,30 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     uv = 2 * uv - 1.0;
     uv.y = -uv.y;
 
+    float time = uniforms.time;
     float mouseOffset = 10.0 * uniforms.mousePos.x;
 
-    float3 ro = float3(sin(mouseOffset),0,1.0 * cos(mouseOffset));
+    float3 ta = float3(0,0.5,0); // camera target
 
-    float3 ta = float3(0,0,0);
+    float3 ro = ta + float3(1.5 * sin(mouseOffset), 0 , 1.5*cos(mouseOffset));
+
     float3 ww = normalize(ta - ro);
     float3 uu = normalize(cross(ww, float3(0,1,0)));
     float3 vv = normalize(cross(uu, ww));
 
-    float screenPos = -1.5;
+    float screenPos = -0.8;
     float3 rd = normalize( uv.x*uu + uv.y*vv - screenPos*ww);
 
     float3 sky_col = float3(.7,.75,.89);
     float sky_gradient = uv.y * 0.4;
     float3 col = sky_col - sky_gradient;
 
-    float t = castRay(ro, rd);
+    float t = castRay(ro, rd, time);
 
     if (t > 0) { // we did hit something (-1 for not hit)
         /// Calculate lighting
         float3 pos = ro + t * rd; // position at the param t
-        float3 normal = calcNormal(pos);
+        float3 normal = calcNormal(pos, time);
 
         // grass has albedo 0.2. Can use that as base color for objects.
 
@@ -125,7 +142,7 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
         float3 sun_dir = {0.8,0.4,0.2};
         float sun_dif = clamp(dot(normal, sun_dir), 0.,1.0);
         float3 sun_col = material * float3(7.0,5.0,2.6);
-        float sun_sha = step(castRay(pos + normal * 0.001, sun_dir), 0);
+        float sun_sha = step(castRay(pos + normal * 0.001, sun_dir, time), 0);
         col = sun_col * sun_dif * sun_sha;
 
         float3 sky_col = material * float3(0.5, 0.8, 0.9);
