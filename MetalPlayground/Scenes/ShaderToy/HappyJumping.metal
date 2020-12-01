@@ -46,24 +46,43 @@ float sdEllipsoid(float3 pos, float3 radii) {
     return k0 * (k0 - 1.0) / k1;
 }
 
+float smin(float a, float b, float k) {
+    float h = max(k - abs(a-b), 0.0);
+    float val = min(a, b) - h * h / (k * 4.0);
+    return val;
+}
+
 float sdGuy(float3 pos, float time, float3 center) {
     time = fract(time);
+    time = 0.5; // for modeling
     float y = 4.0 * (1 - time) * time;
     center.y = y;
-    float scaleY = 0.5 + 0.5 * y; // deform in y
-    float scaleZ = 1.0 / scaleY; // inverse deform in z, so volume is preserved
-    float3 radii = float3(0.25, 0.25 * scaleY, 0.25 * scaleZ);
-    float d = sdEllipsoid(pos - center, radii);
+
+    float sy = 0.5 + 0.5 * y; // deform in y
+    float sz = 1.0 / sy; // inverse deform in z, so volume is preserved
+    float3 radii = float3(0.25, 0.25 * sy, 0.25 * sz);
+
+    float3 q = pos - center;
+    float d = sdEllipsoid(q, radii);
+
+    float3 h = pos - center - float3(0,0.3,0);
+    float d2 = sdEllipsoid(h, float3(0.2));
+
+    d = smin(d, d2, 0.13);
+
     return d;
 }
 
 float RayMarch(float3 pos, float t) {
-    float guy1 = sdGuy(pos, t, float3(0, 0, 0.1));
+    float guy1 = sdGuy(pos, t, float3(0, 0, 0.4));
 
     float planeY = -0.25;
     float planeD = pos.y - planeY;
+    float planeZ = pos.z - (-2.0 + 2 *sin(t));
+    planeZ = 20; // disable planeZ
 
     float d = min(planeD, guy1);
+    d = min(d, planeZ);
     return d;
 }
 
@@ -113,7 +132,7 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     float time = uniforms.time;
     float mouseOffset = 10.0 * uniforms.mousePos.x;
 
-    float3 ta = float3(0,0.5,0); // camera target
+    float3 ta = float3(0,0.95,0); // camera target
 
     float3 ro = ta + float3(1.5 * sin(mouseOffset), 0 , 1.5*cos(mouseOffset));
 
