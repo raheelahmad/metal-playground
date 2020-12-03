@@ -46,6 +46,10 @@ float sdEllipsoid(float3 pos, float3 radii) {
     return k0 * (k0 - 1.0) / k1;
 }
 
+float sdSphere(float3 sphere, float radius) {
+    return length(sphere) - radius;
+}
+
 float smin(float a, float b, float k) {
     float h = max(k - abs(a-b), 0.0);
     float val = min(a, b) - h * h / (k * 4.0);
@@ -63,18 +67,28 @@ float sdGuy(float3 pos, float time, float3 center) {
     float3 radii = float3(0.25, 0.25 * sy, 0.25 * sz);
 
     float3 q = pos - center;
+
+    // main body
     float d = sdEllipsoid(q, radii);
 
-    float3 h = pos - center - float3(0,0.3,0);
-    float d2 = sdEllipsoid(h, float3(0.2));
+    float3 h = q;
 
-    d = smin(d, d2, 0.13);
+    // head
+    float d2 = sdEllipsoid(h - float3(0.,0.28,0.), float3(0.2));
+    float d3 = sdEllipsoid(h - float3(0.,0.28,-0.1), float3(0.2)); // head's back
+    float head = smin(d3, d2, 0.03);
+    d = smin(d, head, 0.1);
+
+    // eye
+    float3 heye = {abs(h.x), h.y, h.z};
+    float eye = sdSphere(heye - float3(0.08, 0.28, 0.16), 0.05);
+    d = min(d, eye);
 
     return d;
 }
 
 float RayMarch(float3 pos, float t) {
-    float guy1 = sdGuy(pos, t, float3(0, 0, 0.4));
+    float guy1 = sdGuy(pos, t, float3(0, 0, 0.0));
 
     float planeY = -0.25;
     float planeD = pos.y - planeY;
@@ -83,6 +97,7 @@ float RayMarch(float3 pos, float t) {
 
     float d = min(planeD, guy1);
     d = min(d, planeZ);
+
     return d;
 }
 
@@ -130,18 +145,31 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     uv.y = -uv.y;
 
     float time = uniforms.time;
-    float mouseOffset = 10.0 * uniforms.mousePos.x;
+    float mouseOffset = 30.0 * uniforms.mousePos.x;
+//    mouseOffset = 0;
 
-    float3 ta = float3(0,0.95,0); // camera target
+//     float3 ro = {2 * sin(mouseOffset),1, 2 * cos(mouseOffset)};
+//     float zoom = 1;
+//
+//     // ray from camera to the screen point (and then in to the screen to hit an object)
+//     float3 lookAt = {0};
+//
+//     float3 forward = normalize(lookAt - ro);
+//     float3 right = normalize(cross( float3(0, 1, 0), forward));
+//     float3 up = normalize(cross(forward, right));
+//
+//     float3 screenCenter = ro + forward * zoom;
+//
+//     float3 screenPoint = screenCenter + uv.x * right + uv.y * up;
+//     float3 rd = normalize(screenPoint - ro);
 
-    float3 ro = ta + float3(1.5 * sin(mouseOffset), 0 , 1.5*cos(mouseOffset));
-
-    float3 ww = normalize(ta - ro);
-    float3 uu = normalize(cross(ww, float3(0,1,0)));
-    float3 vv = normalize(cross(uu, ww));
-
-    float screenPos = -0.8;
-    float3 rd = normalize( uv.x*uu + uv.y*vv - screenPos*ww);
+    float3 lookAt = float3(0,0.95,0); // camera target
+    float3 ro = lookAt + float3(1.5 * sin(mouseOffset), 0 , 1.5*cos(mouseOffset));
+    float3 forward = normalize(lookAt - ro);
+    float3 right = normalize(cross(forward, float3(0,1,0)));
+    float3 up = normalize(cross(right, forward));
+    float screenZPos = 1.3;
+    float3 rd = normalize( uv.x*right + uv.y*up + screenZPos*forward);
 
     float3 sky_col = float3(.7,.75,.89);
     float sky_gradient = uv.y * 0.4;
