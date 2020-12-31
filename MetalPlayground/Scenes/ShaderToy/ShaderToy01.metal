@@ -74,7 +74,7 @@ float rect(float2 st, float left, float right, float bottom, float top, float bl
     ;
 }
 
-float lerp(float t, float a, float b, float c, float d) {
+float lerp1(float t, float a, float b, float c, float d) {
     return c + (t - a) / (b - a) * (d - c);
 }
 
@@ -84,7 +84,7 @@ float snake(float2 st, float time) {
 
     float m = sin(x*18 + time) * 0.3 * (0.5 + x);
     y -= m;
-    float blur = lerp(x, -0.5, 0.5, 0.01, 0.25);
+    float blur = lerp1(x, -0.5, 0.5, 0.01, 0.25);
     blur = pow(blur * 3, 3);
     st = {x, y};
     float mask = rect(st, -0.5, 0.5, -0.1, 0.1, blur);

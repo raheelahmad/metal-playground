@@ -56,8 +56,15 @@ float smin(float a, float b, float k) {
     return val;
 }
 
-float sdGuy(float3 pos, float time, float3 center) {
-    time = fract(time);
+
+float smax(float a, float b, float k) {
+    float h = max(k - abs(a-b), 0.0);
+    float val = max(a, b) + h * h / (k * 4.0);
+    return val;
+}
+
+float2 sdGuy(float3 pos, float time, float3 center) {
+    time = fract(time / 2.0);
     time = 0.5; // for modeling
     float y = 4.0 * (1 - time) * time;
     center.y = y;
@@ -79,35 +86,54 @@ float sdGuy(float3 pos, float time, float3 center) {
     float head = smin(d3, d2, 0.03);
     d = smin(d, head, 0.1);
 
-    // eye
     float3 heye = {abs(h.x), h.y, h.z};
-    float eye = sdSphere(heye - float3(0.08, 0.28, 0.16), 0.05);
-    d = min(d, eye);
 
-    return d;
+    // eye brows
+    float3 eyebrowCoordinates = heye - float3(0.12,0.34,0.15);
+    // to rotate, can multiply by a pythagorean triplet;
+    // {3, 4, 5} → gives us 40-ish angle
+    float2x2 rotator = float2x2(3,4,-4,3);
+    float denom = 5.0;
+    eyebrowCoordinates.xy = ((rotator) * eyebrowCoordinates.xy) / denom;
+    float dEyebrow = sdEllipsoid(eyebrowCoordinates, float3(0.06, 0.035, 0.05));
+    d = smin(d, dEyebrow, 0.04);
+
+    // mouth
+    float dMouth = sdEllipsoid(h - float3(0.0, 0.1, 0.1), float3(0.1,0.035,0.3));
+    // carve out the mouth using smax
+    d =smax(d, -dMouth, 0.03);
+
+    float2 result = float2(d, 2.0); // 1 is the body identifier, 2 is head
+
+    // eye
+    float eye = sdSphere(heye - float3(0.08, 0.28, 0.16), 0.05);
+    if (eye < d) {
+        result = float2(eye, 3.0); // 3 is the eye id
+    }
+    float pupil = sdSphere(heye - float3(0.09, 0.28, 0.19), 0.02);
+    if (pupil < d) {
+        result = float2(pupil, 4.0); // 4 is the pupil id
+    }
+
+    return result;
 }
 
-float RayMarch(float3 pos, float t) {
-    float guy1 = sdGuy(pos, t, float3(0, 0, 0.0));
+float2 RayMarch(float3 pos, float t) {
+    float2 guy1 = sdGuy(pos, t, float3(0, 0, 0.0));
 
     float planeY = -0.25;
     float planeD = pos.y - planeY;
-    float planeZ = pos.z - (-2.0 + 2 *sin(t));
-    planeZ = 20; // disable planeZ
 
-    float d = min(planeD, guy1);
-    d = min(d, planeZ);
-
-    return d;
+    return (planeD < guy1.x) ? float2(planeD, 1.0) : guy1; // 1 is plane-id
 }
 
 float3 calcNormal(float3 pos, float t) {
     float2 e = float2(0.001, 0.);
     return normalize(
                      float3(
-                            RayMarch(pos+e.xyy, t) - RayMarch(pos-e.xyy, t),
-                            RayMarch(pos+e.yxy, t) - RayMarch(pos-e.yxy, t),
-                            RayMarch(pos+e.yyx, t) - RayMarch(pos-e.yyx, t)
+                            RayMarch(pos+e.xyy, t).x - RayMarch(pos-e.xyy, t).x,
+                            RayMarch(pos+e.yxy, t).x - RayMarch(pos-e.yxy, t).x,
+                            RayMarch(pos+e.yyx, t).x - RayMarch(pos-e.yyx, t).x
                             )
                      );
 }
@@ -115,25 +141,56 @@ float3 calcNormal(float3 pos, float t) {
 #define MAX_ITER 200
 #define MAX_DIST 20
 
-float castRay(float3 ro, float3 rd, float time) {
+/// ro → position of the point (probably on some surface) that we are checking if it's in shadow
+/// rd → direction to light source
+float castShadow(float3 ro, float3 rd, float current_material) {
+    float res = 1.0;
+
+    float t = 0.001;
+    for (int i=0; i<100; i++) {
+        // if we hit something, we are in shadow, since we can't reach the light
+        // we'll also mark how close we are from hitting something, even if it didn't hit any objects
+
+        float3 pos = ro + t * rd;
+        float2 closest = RayMarch(pos, t);
+        float h = closest.x;
+
+
+        // t → how far we have come from pos
+        // h → the distance to the closest thing at t
+        // divide h by  → closer things will have a stronger shadow
+        if (closest.y != current_material) {
+            res = min(res, 16.0 * h / t); // find the closest thing, so min
+        }
+
+        h += t;
+
+        if (t > MAX_DIST) { break; }
+    }
+    return res;
+}
+
+float2 castRay(float3 ro, float3 rd, float time) {
+    float material = -1.0 ; // unknown
     // distance from camera in to the scene
     float t = 0;
     for (int i = 0; i < MAX_ITER; i++) {
         float3 pos = ro + t * rd; // current sampling position in to the scene
-        float h = RayMarch(pos, time); // distance of nearest item in scene from pos
-        if (h < 0.001) { // we have hit something
+        float2 h = RayMarch(pos, time); // distance and material of nearest item in scene from pos
+        material = h.y;
+        if (h.x < 0.001) { // we have hit something
             break;
         }
-        t += h; // march further in to scene (by the safe distance h)
+        t += h.x; // march further in to scene (by the safe distance h)
         if (t > MAX_DIST) {
             break; // we have gone too far without hitting
         }
     }
 
     if (t > MAX_DIST) {
-        t = -1.0; // if not hit, send -1.0
+        material = -1.0; // if not hit, send -1.0
     }
-    return t;
+    return float2(t, material);
 }
 
 fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
@@ -148,21 +205,6 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     float mouseOffset = 30.0 * uniforms.mousePos.x;
 //    mouseOffset = 0;
 
-//     float3 ro = {2 * sin(mouseOffset),1, 2 * cos(mouseOffset)};
-//     float zoom = 1;
-//
-//     // ray from camera to the screen point (and then in to the screen to hit an object)
-//     float3 lookAt = {0};
-//
-//     float3 forward = normalize(lookAt - ro);
-//     float3 right = normalize(cross( float3(0, 1, 0), forward));
-//     float3 up = normalize(cross(forward, right));
-//
-//     float3 screenCenter = ro + forward * zoom;
-//
-//     float3 screenPoint = screenCenter + uv.x * right + uv.y * up;
-//     float3 rd = normalize(screenPoint - ro);
-
     float3 lookAt = float3(0,0.95,0); // camera target
     float3 ro = lookAt + float3(1.5 * sin(mouseOffset), 0 , 1.5*cos(mouseOffset));
     float3 forward = normalize(lookAt - ro);
@@ -175,9 +217,11 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
     float sky_gradient = uv.y * 0.4;
     float3 col = sky_col - sky_gradient;
 
-    float t = castRay(ro, rd, time);
+    float2 tAndMaterial = castRay(ro, rd, time);
 
-    if (t > 0) { // we did hit something (-1 for not hit)
+    float t = tAndMaterial.x;
+    float tMaterial = tAndMaterial.y;
+    if (tMaterial > 0) { // we did hit something (-1 for not hit)
         /// Calculate lighting
         float3 pos = ro + t * rd; // position at the param t
         float3 normal = calcNormal(pos, time);
@@ -186,10 +230,22 @@ fragment float4 happy_jumping_fragment( VertexOut in [[stage_in]],
 
         float3 material = 0.18;
 
+        if (tMaterial < 1.5) {
+            material = {0.03, 0.13, 0.01};
+        } else if (tMaterial < 2.5) {
+            material = {0.1, 0.12, 0.01};
+        } else if (tMaterial < 3.5) {
+            material = {0.4, 0.52, 0.41};
+        } else if (tMaterial < 4.5) {
+            material = float3(0.001);
+        }
+
         float3 sun_dir = {0.8,0.4,0.2};
         float sun_dif = clamp(dot(normal, sun_dir), 0.,1.0);
         float3 sun_col = material * float3(7.0,5.0,2.6);
-        float sun_sha = step(castRay(pos + normal * 0.001, sun_dir, time), 0);
+        float sun_sha =
+//        step(castShadow(pos + normal * 0.001, sun_dir, tMaterial), 0);
+        step(castRay(pos + normal * 0.001, sun_dir, time).y, 0);
         col = sun_col * sun_dif * sun_sha;
 
         float3 sky_col = material * float3(0.5, 0.8, 0.9);

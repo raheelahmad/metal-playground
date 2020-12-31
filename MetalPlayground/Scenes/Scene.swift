@@ -79,6 +79,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case simplest3D
     case polarScene
     case domainDisortion
+    case futuristicUI
 
     var id: Int {
         rawValue
@@ -106,11 +107,14 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             return "Domain Distortion"
         case .polarScene:
             return "Polar"
+        case .futuristicUI:
+            return "Futuristic UI"
         }
     }
 
     var scene: Scene {
         switch self {
+        case .futuristicUI: return FuturisticUI()
         case .rotatingSquare: return RotatingSquare()
         case .sierpinski: return Sierpinski()
         case .happyJumping: return HappyJumping()
@@ -174,6 +178,14 @@ class Smiley: Scene {
 
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
+    required init() {}
+}
+
+class FuturisticUI: Scene {
+    var name: String { "Futuristic UI" }
+
+    var vertexFuncName: String { "futuristic_UI_vertex" }
+    var fragmentFuncName: String { "futuristic_UI_fragment" }
     required init() {}
 }
 

@@ -39,6 +39,10 @@ vertex VertexOut domain_distortion_vertex(const device VertexIn *vertices [[buff
 float baand(float p, float start, float end, float endsBlur) {
     float m = smoothstep(start - endsBlur, start + endsBlur, p);
     m *= smoothstep(end + endsBlur, end - endsBlur, p);
+    float2x2 ma = float2x2(0,1,1,0);
+    float3 x = {0};
+    float2 mas = x.xz * ma;
+    x.xz = mas;
     return m;
 }
 

@@ -51,6 +51,7 @@
 		59CF2B1D24DB5E8500606BB2 /* train.obj in Resources */ = {isa = PBXBuildFile; fileRef = 59CF2B1C24DB5E8500606BB2 /* train.obj */; };
 		59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */ = {isa = PBXBuildFile; fileRef = 59CF2B1E24DB826A00606BB2 /* mushroom.obj */; };
 		59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */; };
+		59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */; };
 		59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */; };
 		59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Scene.swift */; };
 /* End PBXBuildFile section */
@@ -117,6 +118,7 @@
 		59CF2B1C24DB5E8500606BB2 /* train.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = train.obj; sourceTree = "<group>"; };
 		59CF2B1E24DB826A00606BB2 /* mushroom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mushroom.obj; sourceTree = "<group>"; };
 		59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalByTutorials04.metal; sourceTree = "<group>"; };
+		59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07FuturisticUI.metal; sourceTree = "<group>"; };
 		59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = QuizlesHappyJumping.metal; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -168,6 +170,7 @@
 				5942A33724BA28DD00993BD7 /* 07Shape.metal */,
 				5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */,
 				597743E524B82CC500AAB07C /* 06Colors.metal */,
+				59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */,
 			);
 			path = BookShaders;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */,
 				59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */,
 				591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */,
+				59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */,
 				59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */,
 				59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */,
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
