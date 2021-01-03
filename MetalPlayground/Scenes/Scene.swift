@@ -69,6 +69,8 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
+    case leftRightTiler
+    case futuristicUI
     case happyJumping
     case smiley
     case rotatingSquare
@@ -79,7 +81,6 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case simplest3D
     case polarScene
     case domainDisortion
-    case futuristicUI
 
     var id: Int {
         rawValue
@@ -87,6 +88,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
+        case .leftRightTiler:
+            return "Book of Shaders - Left/Right Tiler"
         case .happyJumping:
             return "Happy Jumping"
         case .smiley:
@@ -114,6 +117,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Scene {
         switch self {
+        case .leftRightTiler: return BoSLeftRightTiler()
         case .futuristicUI: return FuturisticUI()
         case .rotatingSquare: return RotatingSquare()
         case .sierpinski: return Sierpinski()
@@ -186,6 +190,14 @@ class FuturisticUI: Scene {
 
     var vertexFuncName: String { "futuristic_UI_vertex" }
     var fragmentFuncName: String { "futuristic_UI_fragment" }
+    required init() {}
+}
+
+class BoSLeftRightTiler: Scene {
+    var name: String { "Book of Shaders - Left/Right Tiler" }
+
+    var vertexFuncName: String { "leftright_vertex" }
+    var fragmentFuncName: String { "leftright_fragment" }
     required init() {}
 }
 
