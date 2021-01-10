@@ -34,11 +34,7 @@ struct FragmentUniforms {
 };
 
 struct MattCourseUniforms {
-    SketchKind kind;
-    bool rotating;
-    float num_rows;
-    float num_polygons;
-    float scale;
+    float kind;
 };
 
 vertex VertexOut matt_course_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
@@ -54,9 +50,15 @@ fragment float4 matt_course_fragment(
                                constant MattCourseUniforms &repeating_uniforms [[buffer(1)]]
                                ) {
     float t = uniforms.time;
-    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
+//    float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
+//
+    float3 color = 0.5;
 
-    float3 color = 0;
+    if (repeating_uniforms.kind == Sketch1) {
+        color = float3(sin(t),.1, .9);
+    } else if (repeating_uniforms.kind == Sketch2) {
+        color = float3(.9,.1, .9);
+    }
 
     return vector_float4(color, 1.0);
 }
