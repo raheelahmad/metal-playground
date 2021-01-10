@@ -30,6 +30,8 @@
 		595D7284246D23F500FC8054 /* Random.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7283246D23F500FC8054 /* Random.metal */; };
 		595D7286246DE28600FC8054 /* Noise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7285246DE28600FC8054 /* Noise.metal */; };
 		595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7287246DFF9300FC8054 /* MoreNoise.metal */; };
+		595FA20325AB88D300316062 /* MattCourse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595FA20225AB88D300316062 /* MattCourse.swift */; };
+		595FA20525AB88DE00316062 /* MattCourse.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595FA20425AB88DE00316062 /* MattCourse.metal */; };
 		595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595FBBE124708BEE00222613 /* CellularNoise.metal */; };
 		5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */; };
 		597743E624B82CC500AAB07C /* 06Colors.metal in Sources */ = {isa = PBXBuildFile; fileRef = 597743E524B82CC500AAB07C /* 06Colors.metal */; };
@@ -97,6 +99,8 @@
 		595D7283246D23F500FC8054 /* Random.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Random.metal; sourceTree = "<group>"; };
 		595D7285246DE28600FC8054 /* Noise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Noise.metal; sourceTree = "<group>"; };
 		595D7287246DFF9300FC8054 /* MoreNoise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MoreNoise.metal; sourceTree = "<group>"; };
+		595FA20225AB88D300316062 /* MattCourse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MattCourse.swift; sourceTree = "<group>"; };
+		595FA20425AB88DE00316062 /* MattCourse.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MattCourse.metal; sourceTree = "<group>"; };
 		595FBBE124708BEE00222613 /* CellularNoise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CellularNoise.metal; sourceTree = "<group>"; };
 		5973D19E24BA9A55006AFC50 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07ShapePrimitives.metal; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 		590BE6152500C4C200E9B573 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				595FA20125AB88C400316062 /* MattCourse */,
 				59E5BC6925AAC6B50061154A /* Helpers.metal */,
 				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
@@ -230,6 +235,15 @@
 				595D7285246DE28600FC8054 /* Noise.metal */,
 			);
 			path = Explorations;
+			sourceTree = "<group>";
+		};
+		595FA20125AB88C400316062 /* MattCourse */ = {
+			isa = PBXGroup;
+			children = (
+				595FA20225AB88D300316062 /* MattCourse.swift */,
+				595FA20425AB88DE00316062 /* MattCourse.metal */,
+			);
+			path = MattCourse;
 			sourceTree = "<group>";
 		};
 		597EC6C3255B92550035AD88 /* ICGraphicsBook */ = {
@@ -392,6 +406,7 @@
 			files = (
 				592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */,
 				59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */,
+				595FA20325AB88D300316062 /* MattCourse.swift in Sources */,
 				591226B724B3A24E00AF7663 /* Book-Uniforms.metal in Sources */,
 				59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */,
 				59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */,
@@ -408,6 +423,7 @@
 				59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */,
 				592B9611251ADFDE00549407 /* ModelsScene.swift in Sources */,
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
+				595FA20525AB88DE00316062 /* MattCourse.metal in Sources */,
 				595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */,
 				59BCCB4624BD261300595132 /* ShaderToy01.metal in Sources */,
 				5981BA97246B22EB00E39E86 /* Shaders.metal in Sources */,

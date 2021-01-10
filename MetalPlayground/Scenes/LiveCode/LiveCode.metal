@@ -31,5 +31,5 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float t = circle(uv, uniforms.time, 0.9, float2(0,0));
 
-    return float4(float3(0.3,0.3, t/1), 1);
+    return float4(float3(0.0,0.0, t/1), 1);
 }

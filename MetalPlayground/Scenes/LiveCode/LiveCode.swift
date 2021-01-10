@@ -18,35 +18,24 @@ final class LiveCodeScene: Scene {
     private var shaderContents = ""
 
     init() { }
+    func tearDown() {
+    }
 
     private var device: MTLDevice?
     private var pixelFormat: MTLPixelFormat?
 
-    // TODO: retain cycle?
     private var built: Built?
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
         self.device = device
         self.pixelFormat = pixelFormat
 
-        beginCopyTimer()
         self.built = built
 
         compile()
     }
 
-    private var timer: Timer?
-    private func beginCopyTimer() {
-        let timer = Timer(timeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.compile()
-        }
-        RunLoop.main.add(timer, forMode: .common)
-        self.timer = timer
-    }
-
-    deinit { timer?.invalidate() }
-
-    private func tick() {
+    func tick(time: Float) {
         compileQueue.async {
             self.compile()
         }
@@ -54,11 +43,14 @@ final class LiveCodeScene: Scene {
 
     private func compile() {
         let fm = FileManager()
+        let filename = #filePath as NSString
+        let shaderPath: String = (filename.deletingPathExtension) + ".metal"
+        let helpersPath = (filename.deletingLastPathComponent as NSString).deletingLastPathComponent + "/Helpers.metal"
         guard
-            let shaderContentsData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Scenes/LiveCode/LiveCode.metal"),
-            let headerData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Scenes/Helpers.metal"),
+            let shaderContentsData = fm.contents(atPath: shaderPath),
+            let helpersData = fm.contents(atPath: helpersPath),
             var shaderContents = String(data: shaderContentsData, encoding: .utf8),
-            let headerContents = String(data: headerData, encoding: .utf8)
+            let helperContents = String(data: helpersData, encoding: .utf8)
         else {
             assertionFailure()
             return
@@ -67,7 +59,7 @@ final class LiveCodeScene: Scene {
         if let headerIndex = shaderContentLines.firstIndex(where: { $0 == "#include \"../ShaderHeaders.h\"" }) {
             shaderContentLines.remove(at: headerIndex)
 
-            var headerLines = headerContents.split(separator: "\n")
+            var headerLines = helperContents.split(separator: "\n")
             if let helperHeaderIndex = headerLines.firstIndex(where: { String($0) == "#include \"ShaderHeaders.h\"" }) {
                 headerLines.remove(at: helperHeaderIndex)
             }
