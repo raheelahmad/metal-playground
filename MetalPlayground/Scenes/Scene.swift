@@ -10,6 +10,7 @@ import MetalKit
 import SwiftUI
 
 protocol Scene {
+    typealias Built = (MTLRenderPipelineState, MTLBuffer) -> ()
     var name: String { get }
     var vertexFuncName: String { get }
     var fragmentFuncName: String { get }
@@ -19,13 +20,13 @@ protocol Scene {
     var view: NSView? { get }
     func tick(time: Float)
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
-    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer)
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built)
     func draw(encoder: MTLRenderCommandEncoder)
 }
 
 extension Scene {
     func tick(time: Float) { }
-    private var basicVertices: [Vertex] {
+    var basicVertices: [Vertex] {
         [
             Vertex(position: [-1, -1]),
             Vertex(position: [-1, 1]),
@@ -37,13 +38,14 @@ extension Scene {
         ]
     }
 
-    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
         let pipeline = (try? device.makeRenderPipelineState(descriptor: descriptor))!
 
 
         let vertexBuffer = device.makeBuffer(bytes: basicVertices, length: MemoryLayout<Vertex>.stride * basicVertices.count, options: [])
-        return (pipeline, vertexBuffer!)
+        built(pipeline, vertexBuffer!)
     }
 
     func buildBasicPipelineDescriptor(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineDescriptor {
@@ -69,6 +71,7 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
+    case liveCode
     case leftRightTiler
     case futuristicUI
     case happyJumping
@@ -88,6 +91,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
+        case .liveCode:
+            return "Live Code"
         case .leftRightTiler:
             return "Book of Shaders - Left/Right Tiler"
         case .happyJumping:
@@ -117,6 +122,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Scene {
         switch self {
+        case .liveCode: return LiveCodeScene()
         case .leftRightTiler: return BoSLeftRightTiler()
         case .futuristicUI: return FuturisticUI()
         case .rotatingSquare: return RotatingSquare()

@@ -33,7 +33,7 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     static var aspectRatio: Float = 1.0
 
-    var piplelineState: MTLRenderPipelineState!
+    var pipelineState: MTLRenderPipelineState!
     private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0, mouseLocation: .init(0,0))
 
     override init() {
@@ -64,15 +64,16 @@ final class Renderer: NSObject, MTKViewDelegate {
     var vertexBuffer: MTLBuffer?
 
     private func setupPipeline() {
-        let setup = scene.buildPipeline(device: device, pixelFormat: pixelFormat)
-
-        self.piplelineState = setup.0
-        self.vertexBuffer = setup.1
+        scene.buildPipeline(device: device, pixelFormat: pixelFormat) { [weak self] pipelineState,vertexBuffer in
+            self?.pipelineState = pipelineState
+            self?.vertexBuffer = vertexBuffer
+        }
     }
 
     func draw(in view: MTKView) {
         guard let commandBuffer = queue.makeCommandBuffer() else { return }
         guard let passDescriptor = view.currentRenderPassDescriptor else { return }
+        guard let pipelineState = self.pipelineState else { return }
 
         if lastRenderTime == nil, var frame = view.window?.frame {
             frame.size = .init(width: 500, height: 500)
@@ -91,7 +92,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor) else { return }
         scene.tick(time: Float(currentTime))
 
-        encoder.setRenderPipelineState(piplelineState)
+        encoder.setRenderPipelineState(pipelineState)
 
         encoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
 

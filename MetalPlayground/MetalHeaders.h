@@ -6,6 +6,10 @@
 //  Copyright © 2020 Raheel Ahmad. All rights reserved.
 //
 
+
+#ifndef METAL_CONSTANTS
+#define METAL_CONSTANTS
+
 struct VertexIn {
     vector_float2 pos;
 };
@@ -34,3 +38,5 @@ float3 outlineRect(float2 st, float4 margins, float time);
 float circle(float2 st, float time, float rad, float2 center);
 
 float remap(float a, float b, float c, float d, float t);
+
+#endif

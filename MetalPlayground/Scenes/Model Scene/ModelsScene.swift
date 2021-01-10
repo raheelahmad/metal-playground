@@ -28,7 +28,7 @@ extension ModelsScene {
 
 // MARK: Pipeline
 extension ModelsScene {
-    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
         let mesh = self.mesh(device: device)!
         descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(mesh.vertexDescriptor)
@@ -39,7 +39,7 @@ extension ModelsScene {
         // let's set up the mesh so we don't recreate it in draw()
         self.mesh = mesh
 
-        return (pipeline, vertexBuffer)
+        built(pipeline, vertexBuffer)
     }
 
     func mesh(device: MTLDevice) -> MTKMesh? {

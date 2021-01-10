@@ -22,14 +22,14 @@ final class RotatingSquare: Scene {
 
     var pointsBuffer: MTLBuffer!
 
-    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat) -> (MTLRenderPipelineState, MTLBuffer) {
+    func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
         descriptor.vertexDescriptor = MTKMetalVertexDescriptorFromModelIO(MDLVertexDescriptor.default)
         let pipeline =  (try? device.makeRenderPipelineState(descriptor: descriptor))!
 
         self.pointsBuffer = squarePoints(device: device)
 
-        return (pipeline, pointsBuffer)
+        built(pipeline, pointsBuffer)
     }
 
     func squarePoints(device: MTLDevice) -> MTLBuffer {

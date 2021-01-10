@@ -55,6 +55,9 @@
 		59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */; };
 		59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */; };
 		59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Scene.swift */; };
+		59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* LiveCode.metal */; };
+		59E5BC6825AAA9220061154A /* LiveCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6725AAA9220061154A /* LiveCode.swift */; };
+		59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6925AAC6B50061154A /* Helpers.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -123,6 +126,10 @@
 		59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07FuturisticUI.metal; sourceTree = "<group>"; };
 		59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = QuizlesHappyJumping.metal; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		59E5BC6525AAA2A30061154A /* LiveCode.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = LiveCode.metal; sourceTree = "<group>"; };
+		59E5BC6725AAA9220061154A /* LiveCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCode.swift; sourceTree = "<group>"; };
+		59E5BC6925AAC6B50061154A /* Helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Helpers.metal; sourceTree = "<group>"; };
+		59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderHeaders.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +146,7 @@
 		590BE6152500C4C200E9B573 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				59E5BC6425AAA2940061154A /* LiveCode */,
 				592B960F251ADFC600549407 /* Model Scene */,
 				595D7287246DFF9300FC8054 /* MoreNoise.metal */,
 				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
@@ -148,6 +156,7 @@
 				5941236A24D79E1B0027B0DC /* Explorations */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
+				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -298,6 +307,16 @@
 			path = MetalByTutorials;
 			sourceTree = "<group>";
 		};
+		59E5BC6425AAA2940061154A /* LiveCode */ = {
+			isa = PBXGroup;
+			children = (
+				59E5BC6525AAA2A30061154A /* LiveCode.metal */,
+				59E5BC6925AAC6B50061154A /* Helpers.metal */,
+				59E5BC6725AAA9220061154A /* LiveCode.swift */,
+			);
+			path = LiveCode;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -386,6 +405,7 @@
 				592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */,
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
+				59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */,
 				592B9611251ADFDE00549407 /* ModelsScene.swift in Sources */,
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
 				595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */,
@@ -397,6 +417,7 @@
 				59A312652517F72E00F6ACA2 /* ViewModel.swift in Sources */,
 				5920719925106CBC006E579F /* Girih.swift in Sources */,
 				59CF2B0C24D7CE0C00606BB2 /* ShaderToyDistortions.metal in Sources */,
+				59E5BC6825AAA9220061154A /* LiveCode.swift in Sources */,
 				59CF2B1B24DB46A300606BB2 /* ModelsScene.metal in Sources */,
 				59CF2B1824DA738D00606BB2 /* PolarExperiments.metal in Sources */,
 				594651E0251B198E009947C2 /* Starfield.swift in Sources */,
@@ -405,6 +426,7 @@
 				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
+				59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */,
 				597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
