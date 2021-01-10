@@ -146,6 +146,9 @@
 		590BE6152500C4C200E9B573 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				59E5BC6925AAC6B50061154A /* Helpers.metal */,
+				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
+				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59E5BC6425AAA2940061154A /* LiveCode */,
 				592B960F251ADFC600549407 /* Model Scene */,
 				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
@@ -169,6 +172,10 @@
 		591226BA24B40BDA00AF7663 /* BookShaders */ = {
 			isa = PBXGroup;
 			children = (
+				5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */,
+				597743E524B82CC500AAB07C /* 06Colors.metal */,
+				592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */,
+				5942A33724BA28DD00993BD7 /* 07Shape.metal */,
 			);
 			path = BookShaders;
 			sourceTree = "<group>";
@@ -186,6 +193,7 @@
 		592B960F251ADFC600549407 /* Model Scene */ = {
 			isa = PBXGroup;
 			children = (
+				59CF2B1A24DB46A300606BB2 /* ModelsScene.metal */,
 				592B9610251ADFDE00549407 /* ModelsScene.swift */,
 			);
 			path = "Model Scene";
@@ -194,10 +202,32 @@
 		5941236A24D79E1B0027B0DC /* Explorations */ = {
 			isa = PBXGroup;
 			children = (
+				595D7287246DFF9300FC8054 /* MoreNoise.metal */,
+				5941236B24D79E2A0027B0DC /* Girih.metal */,
+				591226BB24B40BF800AF7663 /* 05Algorithmic.metal */,
+				59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */,
+				590BE6192500C66D00E9B573 /* Rays.metal */,
 				590BE6172500C55C00E9B573 /* Rays.swift */,
 				599B22A02504778C007EB419 /* RaysConfig.swift */,
 				5920719825106CBC006E579F /* Girih.swift */,
 				594651DF251B198E009947C2 /* Starfield.swift */,
+				59BCCB4524BD261300595132 /* ShaderToy01.metal */,
+				599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */,
+				592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */,
+				59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */,
+				59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */,
+				59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */,
+				590BE6132500A12800E9B573 /* Torus.metal */,
+				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
+				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
+				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
+				5933FB11256F5B6D002D854A /* HappyJumping.metal */,
+				595FBBE124708BEE00222613 /* CellularNoise.metal */,
+				5981BA96246B22EB00E39E86 /* Shaders.metal */,
+				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
+				595D7281246CFD4000FC8054 /* Shapes.metal */,
+				595D7283246D23F500FC8054 /* Random.metal */,
+				595D7285246DE28600FC8054 /* Noise.metal */,
 			);
 			path = Explorations;
 			sourceTree = "<group>";
@@ -256,7 +286,6 @@
 		59C2BD23246A709D00335E59 /* MetalPlayground */ = {
 			isa = PBXGroup;
 			children = (
-				59E5BC6D25AACB510061154A /* Shaders */,
 				592B960E251AD81D00549407 /* Rendering */,
 				59A3125F2517F45500F6ACA2 /* Root */,
 				59A3125C2517EFF300F6ACA2 /* UI */,
@@ -283,46 +312,9 @@
 			isa = PBXGroup;
 			children = (
 				59E5BC6725AAA9220061154A /* LiveCode.swift */,
+				59E5BC6525AAA2A30061154A /* LiveCode.metal */,
 			);
 			path = LiveCode;
-			sourceTree = "<group>";
-		};
-		59E5BC6D25AACB510061154A /* Shaders */ = {
-			isa = PBXGroup;
-			children = (
-				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
-				59E5BC6525AAA2A30061154A /* LiveCode.metal */,
-				59E5BC6925AAC6B50061154A /* Helpers.metal */,
-				5941236B24D79E2A0027B0DC /* Girih.metal */,
-				590BE6192500C66D00E9B573 /* Rays.metal */,
-				59CF2B1A24DB46A300606BB2 /* ModelsScene.metal */,
-				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
-				591226BB24B40BF800AF7663 /* 05Algorithmic.metal */,
-				595D7287246DFF9300FC8054 /* MoreNoise.metal */,
-				5942A33724BA28DD00993BD7 /* 07Shape.metal */,
-				5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */,
-				597743E524B82CC500AAB07C /* 06Colors.metal */,
-				59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */,
-				592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */,
-				59BCCB4524BD261300595132 /* ShaderToy01.metal */,
-				599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */,
-				592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */,
-				59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */,
-				59CF2B0B24D7CE0C00606BB2 /* ShaderToyDistortions.metal */,
-				59CF2B1724DA738D00606BB2 /* PolarExperiments.metal */,
-				590BE6132500A12800E9B573 /* Torus.metal */,
-				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
-				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
-				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
-				5933FB11256F5B6D002D854A /* HappyJumping.metal */,
-				595FBBE124708BEE00222613 /* CellularNoise.metal */,
-				5981BA96246B22EB00E39E86 /* Shaders.metal */,
-				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
-				595D7281246CFD4000FC8054 /* Shapes.metal */,
-				595D7283246D23F500FC8054 /* Random.metal */,
-				595D7285246DE28600FC8054 /* Noise.metal */,
-			);
-			path = Shaders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

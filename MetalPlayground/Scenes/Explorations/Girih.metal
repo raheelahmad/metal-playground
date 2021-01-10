@@ -9,7 +9,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-#include "ShaderHeaders.h"
+#include "../ShaderHeaders.h"
 
 struct VertexOut {
     float4 pos [[position]];

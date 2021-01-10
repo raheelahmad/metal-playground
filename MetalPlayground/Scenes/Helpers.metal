@@ -15,12 +15,22 @@ float2x2 rotate(float angle) {
     return float2x2(cos(angle),sin(-angle), sin(angle),cos(angle));
 }
 
-float2x2 scale(float2 _scale){
-    return float2x2(_scale.x,0.0, 0.0,_scale.y);
+float2x2 scale(float2 sc) {
+    sc = 1/sc;
+    return float2x2(
+                    sc.x, 0.,
+                    0., sc.y
+                    );
 }
 
-float lerp(float x, float m, float n, float a, float b) {
-    return a + (x-m)/(n-m) * (b - a);
+
+float lerp(float x, float u, float v, float m, float n) {
+    float prog = (x - u) / (v - u);
+    return m + (n - m) * prog;
+}
+
+float lerpU(float x, float u, float v) {
+    return lerp(x, u, v, 0.0, 1.0);
 }
 
 float circle(float2 st, float time, float rad, float2 center) {

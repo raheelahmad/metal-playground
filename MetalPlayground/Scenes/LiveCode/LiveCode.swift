@@ -55,8 +55,8 @@ final class LiveCodeScene: Scene {
     private func compile() {
         let fm = FileManager()
         guard
-            let shaderContentsData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Shaders/LiveCode.metal"),
-            let headerData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Shaders/Helpers.metal"),
+            let shaderContentsData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Scenes/LiveCode/LiveCode.metal"),
+            let headerData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Scenes/Helpers.metal"),
             var shaderContents = String(data: shaderContentsData, encoding: .utf8),
             let headerContents = String(data: headerData, encoding: .utf8)
         else {
@@ -64,7 +64,7 @@ final class LiveCodeScene: Scene {
             return
         }
         var shaderContentLines = shaderContents.split(separator: "\n")
-        if let headerIndex = shaderContentLines.firstIndex(where: { $0 == "#include \"ShaderHeaders.h\"" }) {
+        if let headerIndex = shaderContentLines.firstIndex(where: { $0 == "#include \"../ShaderHeaders.h\"" }) {
             shaderContentLines.remove(at: headerIndex)
 
             var headerLines = headerContents.split(separator: "\n")

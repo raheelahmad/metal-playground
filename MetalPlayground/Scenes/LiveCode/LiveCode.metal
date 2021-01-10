@@ -1,6 +1,6 @@
 #include <metal_stdlib>
 using namespace metal;
-#include "ShaderHeaders.h"
+#include "../ShaderHeaders.h"
 
 struct VertexIn {
     vector_float2 pos;
@@ -28,7 +28,8 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     uv -= 0.5;
     uv *= 2;
+
     float t = circle(uv, uniforms.time, 0.9, float2(0,0));
 
-    return float4(float3(t), 1);
+    return float4(float3(0.3,0.3, t/1), 1);
 }
