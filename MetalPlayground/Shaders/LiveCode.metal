@@ -1,15 +1,6 @@
-//
-//  MoreNoise.metal
-//  MetalPlayground
-//
-//  Created by Raheel Ahmad on 5/14/20.
-//  Copyright © 2020 Raheel Ahmad. All rights reserved.
-//
-
 #include <metal_stdlib>
 using namespace metal;
-
-//#include "Helpers.metal"
+#include "ShaderHeaders.h"
 
 struct VertexIn {
     vector_float2 pos;
@@ -34,8 +25,10 @@ vertex VertexOut liveCodeVertexShader(const device VertexIn *vertices [[buffer(0
 }
 
 fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    float sinned = sin(uniforms.time*12);
-//    sinned = lerpS(sinned, -1., 1., 0., 1.);
+    float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
+    uv -= 0.5;
+    uv *= 2;
+    float t = circle(uv, uniforms.time, 0.9, float2(0,0));
 
-    return float4(float3(sinned,sinned,sinned/12.), 1);
+    return float4(float3(t), 1);
 }

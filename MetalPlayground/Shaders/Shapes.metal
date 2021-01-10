@@ -32,7 +32,7 @@ vertex VertexOut vertexShapeShader(const device VertexIn *vertexArray [[buffer(0
     return out;
 }
 
-vector_float3 circle(vector_float2 pos, vector_float2 center, float radius, float3 col, FragmentUniforms uniforms) {
+vector_float3 circleAnimated(vector_float2 pos, vector_float2 center, float radius, float3 col, FragmentUniforms uniforms) {
     bool animate = 1;
     float timeOffset = animate ? sin(uniforms.time) : 1;
 
@@ -46,8 +46,8 @@ fragment float4 fragmentShapeShader(VertexOut interpolated [[stage_in]], constan
     float y = 1 - interpolated.pos.y / uniforms.screen_height;
     vector_float2 pos = vector_float2(x, y) ;
 
-    vector_float3 col1 = circle(pos, {0.3, 0.5}, 0.1, float3(0.3, 0.1, 0.9), uniforms);
-    vector_float3 col2 = circle(pos, {0.8, 0.6}, 0.15, float3(0.8, 0.2, 0.6), uniforms);
+    vector_float3 col1 = circleAnimated(pos, {0.3, 0.5}, 0.1, float3(0.3, 0.1, 0.9), uniforms);
+    vector_float3 col2 = circleAnimated(pos, {0.8, 0.6}, 0.15, float3(0.8, 0.2, 0.6), uniforms);
 
     vector_float3 col = col1 + col2;
 

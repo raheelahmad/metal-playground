@@ -9,6 +9,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#include "ShaderHeaders.h"
 
 struct VertexOut {
     float4 pos [[position]];
@@ -28,15 +29,6 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
-float lerp(float x, float u, float v, float m, float n) {
-    float prog = (x - u) / (v - u);
-    return m + (n - m) * prog;
-}
-
-float lerpU(float x, float u, float v) {
-    return lerp(x, u, v, 0.0, 1.0);
-}
-
 // --- Primitives
 
 // box: left, top, right, bottom
@@ -51,7 +43,7 @@ float3 rectangle(float2 uv, float4 box, float3 color) {
     (left*top * right*bottom) * color;
 }
 
-float circle(float2 uv, float r) {
+float circleSmooth(float2 uv, float r) {
     return smoothstep(r+0.01, r, length(uv));
 }
 
@@ -79,28 +71,16 @@ float triangle(float2 uv) {
 
 // --- Transformation
 
-float2x2 rotate(float angle) {
-    return float2x2(cos(angle),sin(-angle), sin(angle),cos(angle));
-}
-
-float2x2 scaleBy(float2 sc) {
-    sc = 1/sc;
-    return float2x2(
-                    sc.x, 0.,
-                    0., sc.y
-                    );
-}
-
 // --- Shapes
 
 float circleOutline(float2 uv, float r, float th) {
-    return circle(uv, r) - circle(uv, r - th);
+    return circleSmooth(uv, r) - circleSmooth(uv, r - th);
 }
 
 float wedge(float2 uv, float r, float s, float e) {
     float angle = atan2(uv.y, uv.x);
     float modulate = smoothstep(s, e, angle) * (1. - step(e, angle)) * 0.6;
-    return circle(uv, r) * modulate;
+    return circleSmooth(uv, r) * modulate;
 }
 
 float arc(float2 uv, float r, float angleSt, float angleEnd, float th) {
@@ -192,11 +172,11 @@ float3 fui(float2 uv, float time) {
     float2 triUV = abs(uv);
     triUV.y -= triOffset;
 
-    triUV = scaleBy(.021)*triUV;
+    triUV = scale(.021)*triUV;
     float triTop = triangle(triUV);
     triUV = abs(uv);
     triUV.x -= triOffset;
-    triUV = rotate(-M_PI_F/2.) * scaleBy(.021)*triUV;
+    triUV = rotate(-M_PI_F/2.) * scale(.021)*triUV;
     float triRight = triangle(triUV);
 
     // move in elliptical angles
@@ -215,7 +195,7 @@ float3 fui(float2 uv, float time) {
 
     float3 pulseSmallStaticCircle = circleOutline(redBigCircleUV, 0.015, 0.005) * pulseColor;
     float smallPulseDuration = step(0.0, (sin(anim*40.))/4.0);
-    float3 pulseSmallPulsingCircle = circle(redBigCircleUV, 0.007) * smallPulseDuration * pulseColor;
+    float3 pulseSmallPulsingCircle = circleSmooth(redBigCircleUV, 0.007) * smallPulseDuration * pulseColor;
 
     // float radarAngle = lerp(anim, -1.0, 1.0, 0, 2*M_PI_F);
     float radarSpan = 0.5;

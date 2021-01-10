@@ -55,12 +55,26 @@ final class LiveCodeScene: Scene {
     private func compile() {
         let fm = FileManager()
         guard
-            let shaderContentsData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Scenes/LiveCode/LiveCode.metal"),
-            let shaderContents = String(data: shaderContentsData, encoding: .utf8)
+            let shaderContentsData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Shaders/LiveCode.metal"),
+            let headerData = fm.contents(atPath: "/Users/raheel/Projects/etc/MetalPlayground/MetalPlayground/Shaders/Helpers.metal"),
+            var shaderContents = String(data: shaderContentsData, encoding: .utf8),
+            let headerContents = String(data: headerData, encoding: .utf8)
         else {
             assertionFailure()
             return
         }
+        var shaderContentLines = shaderContents.split(separator: "\n")
+        if let headerIndex = shaderContentLines.firstIndex(where: { $0 == "#include \"ShaderHeaders.h\"" }) {
+            shaderContentLines.remove(at: headerIndex)
+
+            var headerLines = headerContents.split(separator: "\n")
+            if let helperHeaderIndex = headerLines.firstIndex(where: { String($0) == "#include \"ShaderHeaders.h\"" }) {
+                headerLines.remove(at: helperHeaderIndex)
+            }
+            shaderContentLines.insert(contentsOf: headerLines, at: headerIndex)
+        }
+        shaderContents = shaderContentLines.joined(separator: "\n")
+
         let oldValue = self.shaderContents
         self.shaderContents = shaderContents
 

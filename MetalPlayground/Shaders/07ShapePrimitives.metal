@@ -49,16 +49,3 @@ float3 outlineRect(float2 st, float4 margins, float time) {
     return color;
 }
 
-float circle(float2 st, float time, float rad, float2 center) {
-    float variation =
-    (1 + cos(time)) / 2.0
-    ;
-    float pct =
-        distance(st, center)
-//    distance(st, center) * distance(st, 1 - center) // a blob
-                                                    //    min(distance(st, center), distance(st, 1 - center)) // undeformed circles
-                                                    //    max(distance(st, center), distance(st, 1 - center)) // an eye
-    ;
-    float dist = 1 - step(rad * variation, pct);
-    return dist;
-}

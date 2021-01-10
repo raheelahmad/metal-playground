@@ -9,6 +9,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
+#include "ShaderHeaders.h"
+
 struct VertexOut {
     float4 pos [[position]];
     float4 color;
@@ -63,15 +65,6 @@ float CircleBand(float2 st, float2 pos, float r, float thickness, float blur) {
 
 
 // ---
-
-float2x2 scale(float2 _scale){
-    return float2x2(_scale.x,0.0, 0.0,_scale.y);
-}
-
-float2x2 Rotate(float a) {
-    float s = sin(a), c = cos(a);
-    return float2x2(c, -s, s, c);
-}
 
 float lineDistance(float2 p, float2 v, float2 w) {
     const float l2 = length_squared(w - v);  // i.e. |w-v|^2 -  avoid a sqrt
@@ -136,7 +129,7 @@ struct Mask {
 
 Mask girih_circles_mask(float2 st, float r, float rotating, float scaleFactor, float time) {
     if (rotating) {
-        st *= Rotate(sin(time/4) * M_PI_F);
+        st *= rotate(sin(time/4) * M_PI_F);
     }
 
     // scale down a bit so we are away from the boundary
@@ -253,7 +246,7 @@ float3 girih_color(float2 st, int rows_count, int polygons_count, bool rotating,
 
     float3 color = 0;
     for (int i=0; i<polygons_count;i++) {
-        st = Rotate(rotationAngle) * st;
+        st = rotate(rotationAngle) * st;
         Mask rotatedMask = girih_circles_mask(st, r, rotating, scale, time);
         color += colorForMask(rotatedMask, st, scale);
     }
