@@ -31,22 +31,6 @@ struct FragmentUniforms {
 
 // --- Primitives
 
-// box: left, top, right, bottom
-float3 rectangle(float2 uv, float4 box, float3 color) {
-    float d = 0.001;
-    float left = smoothstep(box.x, box.x+d, uv.x);
-    float top = smoothstep(box.y+d, box.y, uv.y);
-    float right = smoothstep(box.z+d, box.z, uv.x);
-    float bottom = smoothstep(box.w, box.w+d, uv.y);
-
-    return
-    (left*top * right*bottom) * color;
-}
-
-float circleSmooth(float2 uv, float r) {
-    return smoothstep(r+0.01, r, length(uv));
-}
-
 float triangle(float2 uv) {
     // Number of sides of your shape
     int N = 3;
@@ -73,22 +57,10 @@ float triangle(float2 uv) {
 
 // --- Shapes
 
-float circleOutline(float2 uv, float r, float th) {
-    return circleSmooth(uv, r) - circleSmooth(uv, r - th);
-}
-
 float wedge(float2 uv, float r, float s, float e) {
     float angle = atan2(uv.y, uv.x);
     float modulate = smoothstep(s, e, angle) * (1. - step(e, angle)) * 0.6;
-    return circleSmooth(uv, r) * modulate;
-}
-
-float arc(float2 uv, float r, float angleSt, float angleEnd, float th) {
-    uv = rotate(M_PI_F) * uv;
-    float angle = atan2(uv.y, uv.x);
-    angle = lerp(angle, -M_PI_F, M_PI_F, 0, M_PI_F * 2.);
-    if (angle < angleSt || angle > angleEnd) { return 0.; }
-    return circleOutline(uv, r, th);
+    return circle(uv, r) * modulate;
 }
 
 float animatedArc(float2 uv, float r, float time) {
@@ -195,7 +167,7 @@ float3 fui(float2 uv, float time) {
 
     float3 pulseSmallStaticCircle = circleOutline(redBigCircleUV, 0.015, 0.005) * pulseColor;
     float smallPulseDuration = step(0.0, (sin(anim*40.))/4.0);
-    float3 pulseSmallPulsingCircle = circleSmooth(redBigCircleUV, 0.007) * smallPulseDuration * pulseColor;
+    float3 pulseSmallPulsingCircle = circle(redBigCircleUV, 0.007) * smallPulseDuration * pulseColor;
 
     // float radarAngle = lerp(anim, -1.0, 1.0, 0, 2*M_PI_F);
     float radarSpan = 0.5;

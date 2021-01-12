@@ -55,7 +55,7 @@ fragment float4 matt_course_fragment(
     float3 color = 0.5;
 
     if (repeating_uniforms.kind == Sketch1) {
-        color = float3(sin(t),.1, .9);
+        color = float3(lerp(sin(t*1), -1, 1, 0.2, 1.),.1, .9);
     } else if (repeating_uniforms.kind == Sketch2) {
         color = float3(.9,.1, .9);
     }
