@@ -31,35 +31,42 @@ float sdArc( float2 p, float2 sca, float2 scb, float ra, float rb ) {
     return sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
 }
 
-float3 stemF(float2 uv, float yOverX, float time) {
-    float t = 0;
-    time = fract(time/3);
-    uv.x /= yOverX;
+float4 stemF(float2 uv, float progress) {
+    float4 col = 0;
+    float4 stemCol = float4(0.8,0.8, 0.6, 1);
+    float4 budCol = float4(0.4, 0.4, 0.1, 1);
 
     float r1 = 1.2;
-    float2 arcCenterOffset = {-1.2,-.3};
-    r1 = 1.2;
+    float2 arcCenterOffset = {-1.1,-.3};
 
     uv -= arcCenterOffset;
 
-    float a1 = 0;
-    float a2 = M_PI_F/1.8;
+    float a2Variant = lerp(progress, 0, 1, 0.33, 1);
+//    a2Variant = 0.3;
+    float a1 = 0.0;
+    float a2 = M_PI_F/1.8 * a2Variant;
     uv = rotate(-M_PI_F/2.5) * uv;
-    t = arc(uv, r1, a1, a2, 0.01);
-    float circleR = 0.3;
-    t += circle(uv-float2(r1*cos(a2), r1*sin(a2)) , circleR);
 
-//    t += 1. - step(0.00, tArc);
+    // stem
+    float tStem = arc(uv, r1, a1, a2, 0.01);
+    col = mix(col, stemCol, tStem);
 
-    return t;
+    // bud
+    float circleR = 0.04;
+    float tBud = circle(uv-float2(r1*cos(a2), r1*sin(a2)) , circleR);
+    col = mix(col, budCol, tBud);
+
+    return col;
 }
 
-float3 flower(float2 uv, float yOverX, float time) {
-    float3 bg = {0.8, 0.3, 0.41};
-    float3 stemCol = float3(0.8,0.8, 0.6);
-    float3 stem = stemF(uv, yOverX, time);
+float4 flower(float2 uv, float yOverX, float progress) {
+    uv.x /= yOverX;
+    float4 col = 0;
+    float4 bg = {0.8, 0.4, 0.51, 1};
+    float4 stem = stemF(uv, progress);
+    col = mix(bg, stem, stem.a);
 
-    return mix(bg, stemCol, stem);
+    return col;
 }
 
 // ----- NOISE experiments
@@ -127,8 +134,12 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float time = uniforms.time;
 
-//    float3  color = noiseCreature(uv, time);
-    float3 color = flower(st, yOverX, time);
+    time /= 10;
 
-    return float4(color, 1);
+    float progress = fract(time);
+
+//    float3  color = noiseCreature(uv, time);
+    float4 color = flower(st, yOverX, progress);
+
+    return color;
 }
