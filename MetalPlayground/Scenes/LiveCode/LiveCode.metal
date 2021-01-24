@@ -31,6 +31,8 @@ float sdArc( float2 p, float2 sca, float2 scb, float ra, float rb ) {
     return sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
 }
 
+//float4 budF
+
 float4 leafF(float2 uv, float R, float r, float progress) {
     float leafR = r;
 //    uv = rotate(M_PI_F/8) * uv;
@@ -45,67 +47,72 @@ float4 leafF(float2 uv, float R, float r, float progress) {
     return float4(color, t);
 }
 
-float4 stemF(float2 uv, float progress) {
-    float2 originalUV = uv;
-    // TEST
-    progress = 0.99;
+float4 leaves(float2 uv, float a2Variant, float stemArcR, float stemTH, float progress) {
+    // how far down (angle) the stem do we place the leaf
+    float a2 = M_PI_F/2.1 * a2Variant;
+    /// leaves are intersection of two circles (radius `R`) that are moved left and right by `r`.
+    float R = 0.15; // circles
+    float r = 0.09 * 1/a2Variant;
+    // height of the intersection
+    float a = 2 * sqrt(R*R - r*r);
+    stemArcR -= stemTH/2; // move to center of stem's thickness
 
     float4 col = 0;
-    float4 stemCol = float4(0.8,0.8, 0.6, 1);
-    float4 budCol = float4(0.4, 0.4, 0.1, 1);
 
-    float r1 = 1.2;
-    float2 arcCenterOffset = {-1.1,-.3};
-
-    uv -= arcCenterOffset;
-
-    float a2Variant = lerp(progress, 0, 1, 0.33, 1);
-    float a1 = 0.0;
-    float a2 = M_PI_F/1.8 * a2Variant;
-    uv = rotate(-M_PI_F/2.5) * uv;
-
-    // stem
-    float stemTH = 0.04;
-    float tStem = arc(uv, r1, a1, a2, stemTH);
-    col = mix(col, stemCol, tStem);
-
-    // bud
-    float circleR = 0.04;
-    float2 budUV = uv;
-    budUV += circleR/4;
-    budUV = budUV-float2(r1*cos(a2), r1*sin(a2));
-    float tBud = circle(budUV, circleR);
-    col = mix(col, budCol, tBud);
-
-    // leaf
-//    float2 leafSt = st;
-//    float R = 0.15;
-//    float r = 0.08;
-//    float a = 2 * sqrt(R*R - r*r);
-//    leafSt = rotate(M_PI_F/3) * st;
-//    leafSt.y -= a/2.;
-//    float4 leaf = leafF(leafSt, R, r, progress);
-//    color = mix(color, leaf, leaf.a);
-
-
-    a2 = M_PI_F/2.1 * a2Variant;
-    float R = 0.15;
-    float r = 0.09;
-    float a = 2 * sqrt(R*R - r*r);
-    r1 -= stemTH/2;
-
-    float2 leafUV = uv-float2(r1*cos(a2), r1*sin(a2));
+    // 1
+    float2 leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
     leafUV = rotate(M_PI_F*2.2) * leafUV;
     leafUV.y -= a/2.;
     float4 leaf = leafF(leafUV, R, r, progress);
     col = mix(col, leaf, leaf.a);
 
-    a2 -=  0.4;
-    leafUV = uv-float2(r1*cos(a2), r1*sin(a2));
+    // 2
+    a2 -=  0.3;
+    leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
     leafUV = rotate(M_PI_F*0.7) * leafUV;
     leafUV.y -= a/2.;
     leaf = leafF(leafUV, R, r, progress);
     col = mix(col, leaf, leaf.a);
+
+    return col;
+}
+
+float4 stemF(float2 uv, float progress) {
+    // TEST
+//    progress = 0.99;
+
+    float4 col = 0;
+    float4 stemCol = float4(0.8,0.8, 0.6, 1);
+    float4 budCol = float4(0.4, 0.4, 0.1, 1);
+
+    // Stem and the whole flower, is laid out on a giant circle's arc
+    float stemArcR = 1.2;
+    float a2Variant = lerp(progress, 0, 1, 0.33, 1);
+    // a1 and a2 are start/end of the arc
+    float a1 = 0.0;
+    float a2 = M_PI_F/1.8 * a2Variant;
+    // The arc is offset way to the left of the screen
+    float2 arcCenterOffset = {-1.1,-.3};
+
+    uv -= arcCenterOffset;
+    // arc is rotated down (a1 is always 0) so it shoots from the bottom of the screen
+    uv = rotate(-M_PI_F/2.5) * uv;
+
+    // stem
+    float stemTH = 0.02;
+    float tStem = arc(uv, stemArcR, a1, a2, stemTH);
+    col = mix(col, stemCol, tStem);
+
+    // bud
+    float circleR = 0.04;
+    float2 budUV = uv + circleR/4;
+    budUV = budUV-float2(stemArcR*cos(a2), stemArcR*sin(a2));
+    float tBud = circle(budUV, circleR);
+    col = mix(col, budCol, tBud);
+
+    // leaves
+    float4 leafCol = leaves(uv, a2Variant, stemArcR, stemTH, progress);
+    col = mix(col, leafCol, leafCol.a);
 
     return col;
 }
