@@ -31,7 +31,25 @@ float sdArc( float2 p, float2 sca, float2 scb, float ra, float rb ) {
     return sqrt( dot(p,p) + ra*ra - 2.0*ra*k ) - rb;
 }
 
+float4 leafF(float2 uv, float R, float r, float progress) {
+    float leafR = r;
+//    uv = rotate(M_PI_F/8) * uv;
+//    uv.y -= leafR
+    float3 color = {0.3, 0.8, 0.2};
+    float2 left = uv;
+    left.x += leafR;
+    float2 right = uv;
+    right.x -= leafR;
+    float t = circle(left, R) * circle(right, R);
+
+    return float4(color, t);
+}
+
 float4 stemF(float2 uv, float progress) {
+    float2 originalUV = uv;
+    // TEST
+    progress = 0.99;
+
     float4 col = 0;
     float4 stemCol = float4(0.8,0.8, 0.6, 1);
     float4 budCol = float4(0.4, 0.4, 0.1, 1);
@@ -42,29 +60,64 @@ float4 stemF(float2 uv, float progress) {
     uv -= arcCenterOffset;
 
     float a2Variant = lerp(progress, 0, 1, 0.33, 1);
-//    a2Variant = 0.3;
     float a1 = 0.0;
     float a2 = M_PI_F/1.8 * a2Variant;
     uv = rotate(-M_PI_F/2.5) * uv;
 
     // stem
-    float tStem = arc(uv, r1, a1, a2, 0.01);
+    float stemTH = 0.04;
+    float tStem = arc(uv, r1, a1, a2, stemTH);
     col = mix(col, stemCol, tStem);
 
     // bud
     float circleR = 0.04;
-    float tBud = circle(uv-float2(r1*cos(a2), r1*sin(a2)) , circleR);
+    float2 budUV = uv;
+    budUV += circleR/4;
+    budUV = budUV-float2(r1*cos(a2), r1*sin(a2));
+    float tBud = circle(budUV, circleR);
     col = mix(col, budCol, tBud);
+
+    // leaf
+//    float2 leafSt = st;
+//    float R = 0.15;
+//    float r = 0.08;
+//    float a = 2 * sqrt(R*R - r*r);
+//    leafSt = rotate(M_PI_F/3) * st;
+//    leafSt.y -= a/2.;
+//    float4 leaf = leafF(leafSt, R, r, progress);
+//    color = mix(color, leaf, leaf.a);
+
+
+    a2 = M_PI_F/2.1 * a2Variant;
+    float R = 0.15;
+    float r = 0.09;
+    float a = 2 * sqrt(R*R - r*r);
+    r1 -= stemTH/2;
+
+    float2 leafUV = uv-float2(r1*cos(a2), r1*sin(a2));
+    leafUV = rotate(M_PI_F*2.2) * leafUV;
+    leafUV.y -= a/2.;
+    float4 leaf = leafF(leafUV, R, r, progress);
+    col = mix(col, leaf, leaf.a);
+
+    a2 -=  0.4;
+    leafUV = uv-float2(r1*cos(a2), r1*sin(a2));
+    leafUV = rotate(M_PI_F*0.7) * leafUV;
+    leafUV.y -= a/2.;
+    leaf = leafF(leafUV, R, r, progress);
+    col = mix(col, leaf, leaf.a);
 
     return col;
 }
 
 float4 flower(float2 uv, float yOverX, float progress) {
     uv.x /= yOverX;
-    float4 col = 0;
     float4 bg = {0.8, 0.4, 0.51, 1};
+
+    float4 col = bg;
     float4 stem = stemF(uv, progress);
-    col = mix(bg, stem, stem.a);
+    col = mix(col, stem, stem.a);
+
 
     return col;
 }
@@ -134,12 +187,29 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float time = uniforms.time;
 
-    time /= 10;
+    time /= 3;
 
     float progress = fract(time);
 
-//    float3  color = noiseCreature(uv, time);
-    float4 color = flower(st, yOverX, progress);
+    float4 color = 0;
+
+    color = flower(st, yOverX, progress);
+
+    // TEST
+//    st.x /= yOverX;
+//    float2 leafSt = st;
+//    float R = 0.15;
+//    float r = 0.08;
+//    float a = 2 * sqrt(R*R - r*r);
+//    leafSt = rotate(M_PI_F/3) * st;
+//    leafSt.y -= a/2.;
+//    float4 leaf = leafF(leafSt, R, r, progress);
+//    color = mix(color, leaf, leaf.a);
+//    leafSt = rotate(M_PI_F/1) * st;
+//    leafSt.y -= a/2.;
+//    leaf = leafF(leafSt, R, r, progress);
+//    color = mix(color, leaf, leaf.a);
+//    color += circle(st, 0.02);
 
     return color;
 }
