@@ -176,33 +176,34 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, float progress)
 
     float4 leafColor = {0.3, 0.7, 0.2, 1.};
 
-    // 1
-    float2 leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
-    leafUV = rotate(M_PI_F*2.1) * leafUV;
-    leafUV.y -= a/2.;
-    float leafT = leafF(leafUV, R, r, progress);
-    col = mix(col, leafColor, leafT);
+    typedef struct {
+        float offset;
+        float rotation;
+    } LeafVals;
 
-    // 2
-    a2 -=  0.14;
-    leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
-    leafUV = rotate(M_PI_F*0.7) * leafUV;
-    leafUV.y -= a/2.;
-    leafT = leafF(leafUV, R, r, progress);
-    col = mix(col, leafColor, leafT);
+    const LeafVals vals[6] = {
+        LeafVals{.offset = 0,.rotation = M_PI_F/2.0},
+        LeafVals{.offset = 0.03,.rotation = 0.3},
+        LeafVals{.offset = 0.06,.rotation = M_PI_F/2.0},
+        LeafVals{.offset = 0.01,.rotation = 0.0},
+        LeafVals{.offset = 0.08,.rotation = M_PI_F/1.7},
+        LeafVals{.offset = 0.02,.rotation = 0.5},
+    };
 
-    // 3
-    a2 -=  0.05;
-    leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
-    leafUV = rotate(M_PI_F*2.1) * leafUV;
-    leafUV.y -= a/2.;
-    leafT = leafF(leafUV, R, r, progress);
-    col = mix(col, leafColor, leafT);
+    for(int i=0; i<6; i++) {
+        LeafVals val = vals[i];
+        a2 -= val.offset;
+        float2 leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
+        leafUV = rotate(val.rotation) * leafUV;
+        leafUV.y -= a/2.;
+        float leafT = leafF(leafUV, R, r, progress);
+        col = mix(col, leafColor, leafT);
+    }
 
     return col;
 }
 
-float4 bud(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
+float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
     // TEST
 //    progress = 1.0;
 
@@ -210,11 +211,11 @@ float4 bud(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
     float4 col = 0;
     float circleR = 0.14;
     float2 budCenterUV = uv;
-//    a2 += 0.1; // TEST
 
     stemArcR -= stemTH/2;
 
     budCenterUV = budCenterUV-float2(stemArcR*cos(a2), stemArcR*sin(a2));
+    budCenterUV = rotate(progress) * budCenterUV;
     float tBud = circle(budCenterUV, 0.01);
     col = mix(col, budCenterCol, tBud);
 
@@ -225,7 +226,6 @@ float4 bud(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
         float a = circleR;
         float2 leaf1UV = rotate(M_PI_F* 0.36 + i) * (budCenterUV);
         leaf1UV.y += a*progress;
-//        leaf1UV.x -= 0.01;
         float leaf1 = leafF(scale(progress) * leaf1UV, 0.3, 0.258, progress);
         col = mix(col, budColor, smoothstep(0.0, 1.0, leaf1));
     }
@@ -237,17 +237,18 @@ float4 stemF(float2 uv, float progress) {
     // TEST
 //    progress = 1.00;
     float originalProgress = lerp(progress, 0, 1, 0.3, 1.); // don't start from zero
-    progress = 1.0; // stem is always fully grown
+    float stemProgress = 1.0; // stem is always fully grown
 
     float4 col = 0;
     float4 stemCol = float4(0.8,0.8, 0.6, 1);
 
     // Stem and the whole flower, is laid out on a giant circle's arc
     float stemArcR = 2.4;
-    float a2Variant = lerp(progress, 0, 1, 0.45, 0.8);
+    // stem is currently full grown (stemProgress is 1.0)
+    float a2Variant = lerp(stemProgress, 0, 1, 0.45, 0.8);
     // a1 and a2 are start/end of the arc
     float a1 = 0.0;
-    float a2 = M_PI_F/2.0 * a2Variant;
+    float a2 = M_PI_F/2.05 * a2Variant;
     // The arc is offset way to the left of the screen
     float2 arcCenterOffset = {-2.35,-.3};
 
@@ -261,11 +262,11 @@ float4 stemF(float2 uv, float progress) {
     col = mix(col, stemCol, tStem);
 
     // bud
-    float4 budCol = bud(uv, a2, stemArcR, stemTH, originalProgress);
+    float4 budCol = budAndPetals(uv, a2, stemArcR, stemTH, originalProgress);
     col = mix(col, budCol, budCol.a);
 
     // leaves
-    a2 -= 0.25;
+    a2 -= 0.18;
     float4 leafCol = leaves(uv, a2, stemArcR, stemTH, originalProgress);
     col = mix(col, leafCol, leafCol.a);
 
