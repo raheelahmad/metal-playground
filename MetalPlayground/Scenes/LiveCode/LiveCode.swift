@@ -8,7 +8,17 @@
 
 import MetalKit
 
+
 final class LiveCodeScene: Scene {
+    enum StampKind: Int {
+        case flower = 1
+    }
+
+    struct Uniforms {
+        var stamp: Float
+        var progress: Float
+    }
+
     let name = "Live Code"
 
     let vertexFuncName = "liveCodeVertexShader"
@@ -25,6 +35,7 @@ final class LiveCodeScene: Scene {
     private var pixelFormat: MTLPixelFormat?
 
     private var built: Built?
+    private var uniforms = Uniforms(stamp: Float(StampKind.flower.rawValue), progress: 0.5)
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
         self.device = device
@@ -39,6 +50,11 @@ final class LiveCodeScene: Scene {
         compileQueue.async {
             self.compile()
         }
+        uniforms.progress = simd_fract(time/10)
+    }
+
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
+        encoder.setFragmentBytes(&uniforms, length: MemoryLayout<Uniforms>.stride, index: 1)
     }
 
     private func compile() {
@@ -75,11 +91,9 @@ final class LiveCodeScene: Scene {
         }
 
         do {
-
             guard let device = self.device, let pixelFormat = self.pixelFormat else {
                 fatalError()
             }
-
 
             let pipelineDesc = MTLRenderPipelineDescriptor()
             let library = try device.makeLibrary(source: shaderContents, options: nil)

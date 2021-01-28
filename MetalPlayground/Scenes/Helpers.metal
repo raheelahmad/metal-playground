@@ -65,7 +65,7 @@ float noise( float2 p )
 // -- shapes
 
 float circle(float2 uv, float r) {
-    return smoothstep(r+0.001, r, length(uv));
+    return smoothstep(r+0.0001, r, length(uv));
 }
 
 float circleOutline(float2 uv, float r, float th) {
