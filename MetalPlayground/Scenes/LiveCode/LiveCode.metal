@@ -160,13 +160,14 @@ float leafF(float2 uv, float R, float r, float progress) {
     float2 right = uv;
     right.x -= leafR;
     float t = circle(left, R) * circle(right, R);
+//    t = circleOutline(left, R, 0.01) * circle(right, R) + circleOutline(right, R, 0.01) * circle(left, R);
     return t;
 }
 
 float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
     // a2 → how far down (angle) the stem do we place the leaf
     /// leaves are intersection of two circles (radius `R`) that are moved left and right by `r`.
-    float R = 0.12; // circles
+    float R = 0.11; // circles
     float r = 0.09 * 1./lerp(progress, 0, 1, 0.8, 1.);
     // height of the intersection
     float a = 2 * sqrt(R*R - r*r);
@@ -207,48 +208,60 @@ float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, float pro
     // TEST
 //    progress = 1.0;
 
-    float4 budCenterCol = float4(0.0, 0.4, 0.02, 1);
+    float4 budCenterCol = float4(0.9, 0.4, 0.02, 1);
     float4 col = 0;
-    float circleR = 0.14;
+    float circleR = 0.16;
     float2 budCenterUV = uv;
 
     stemArcR -= stemTH/2;
 
     budCenterUV = budCenterUV-float2(stemArcR*cos(a2), stemArcR*sin(a2));
-    budCenterUV = rotate(progress) * budCenterUV;
-    float tBud = circle(budCenterUV, 0.01);
-    col = mix(col, budCenterCol, tBud);
+    budCenterUV = rotate(progress) * budCenterUV; // keep rotating the flower with progress
 
-    float count = 10;
+    float count = 20;
     float leafOffsetAngle = (M_PI_F*2)/count;
-    float4 budColor = {0.9,0.1, 0.3, 1.};
-    for (float i=0; i <= M_PI_F*2.0; i+=leafOffsetAngle) {
-        float a = circleR;
-        float2 leaf1UV = rotate(M_PI_F* 0.36 + i) * (budCenterUV);
-        leaf1UV.y += a*progress;
-        float leaf1 = leafF(scale(progress) * leaf1UV, 0.3, 0.258, progress);
-        col = mix(col, budColor, smoothstep(0.0, 1.0, leaf1));
+
+    float petalColorsCount = 2;
+    float4 petalColors[2] = {
+        {0.2,0.4, 0.3, 1.},
+        {0.2,0.3, 0.2, 1.}
+    };
+
+    for(int petalIdx=0; petalIdx<petalColorsCount; petalIdx++) {
+        for (float i=leafOffsetAngle*petalIdx; i <= M_PI_F*2.0; i+=leafOffsetAngle*petalColorsCount) {
+            float a = circleR;
+            float2 leaf1UV = rotate(M_PI_F* 0.36 + i) * (budCenterUV);
+            leaf1UV.y += a*progress;
+            float leaf1 = leafF(scale(progress) * leaf1UV, 0.27, 0.240, progress);
+            col = mix(col, petalColors[petalIdx], smoothstep(0.0, 1.0, leaf1));
+        }
     }
+
+    float tBud = circle(budCenterUV, 0.05*progress);
+    col = mix(col, budCenterCol, tBud);
 
     return col;
 }
 
 float4 stemF(float2 uv, float progress) {
     // TEST
-//    progress = 1.00;
-    float originalProgress = lerp(progress, 0, 1, 0.3, 1.); // don't start from zero
-    float stemProgress = 1.0; // stem is always fully grown
+    progress = 1.00;
+    float budsAndPetalsProgress = lerp(progress, 0, 1, 0.4, 1.); // don't start from zero
+//    budsAndPetalsProgress = 1.0;
+    float stemProgress = lerp(progress, 0, 1, 0.6, 1.); // don't start from zero
+//    stemProgress = 1;
 
     float4 col = 0;
-    float4 stemCol = float4(0.8,0.8, 0.6, 1);
+    float4 stemCol = float4(0.18,0.3, 0.11, 1);
 
     // Stem and the whole flower, is laid out on a giant circle's arc
     float stemArcR = 2.4;
     // stem is currently full grown (stemProgress is 1.0)
-    float a2Variant = lerp(stemProgress, 0, 1, 0.45, 0.8);
+    float a2Variant = lerp(stemProgress, 0, 1, 0.25, 0.8);
     // a1 and a2 are start/end of the arc
     float a1 = 0.0;
-    float a2 = M_PI_F/2.05 * a2Variant;
+//    a2Variant = 0;
+    float a2 = M_PI_F/2.01 * a2Variant;
     // The arc is offset way to the left of the screen
     float2 arcCenterOffset = {-2.35,-.3};
 
@@ -257,17 +270,17 @@ float4 stemF(float2 uv, float progress) {
     uv = rotate(-M_PI_F/3.0) * uv;
 
     // stem
-    float stemTH = 0.01;
+    float stemTH = 0.013*stemProgress;
     float tStem = arc(uv, stemArcR, a1, a2, stemTH);
     col = mix(col, stemCol, tStem);
 
     // bud
-    float4 budCol = budAndPetals(uv, a2, stemArcR, stemTH, originalProgress);
+    float4 budCol = budAndPetals(uv, a2, stemArcR, stemTH, budsAndPetalsProgress);
     col = mix(col, budCol, budCol.a);
 
     // leaves
-    a2 -= 0.18;
-    float4 leafCol = leaves(uv, a2, stemArcR, stemTH, originalProgress);
+    a2 -= 0.2;
+    float4 leafCol = leaves(uv, a2, stemArcR, stemTH, budsAndPetalsProgress);
     col = mix(col, leafCol, leafCol.a);
 
     return col;
