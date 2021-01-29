@@ -14,8 +14,11 @@ final class LiveCodeScene: Scene {
         case flower = 1
     }
 
+    // Uniforms for the stamp
     struct Uniforms {
         var stamp: Float
+        var startTime: Float
+        var fullDuration: Float
         var progress: Float
     }
 
@@ -35,7 +38,12 @@ final class LiveCodeScene: Scene {
     private var pixelFormat: MTLPixelFormat?
 
     private var built: Built?
-    private var uniforms = Uniforms(stamp: Float(StampKind.flower.rawValue), progress: 0.5)
+    private var uniforms = Uniforms(
+        stamp: Float(StampKind.flower.rawValue),
+        startTime: Float(Date().timeIntervalSince1970),
+        fullDuration: Float(15 * 60 ),
+        progress: 0.0
+    )
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
         self.device = device

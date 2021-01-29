@@ -20,6 +20,8 @@ typedef enum {
 
 struct StampUniforms {
     float kind;
+    float startTime;
+    float fullDuration;
     float progress;
 };
 
@@ -160,17 +162,20 @@ float leafF(float2 uv, float R, float r, float progress) {
     float2 right = uv;
     right.x -= leafR;
     float t = circle(left, R) * circle(right, R);
+    // Outlines:
 //    t = circleOutline(left, R, 0.01) * circle(right, R) + circleOutline(right, R, 0.01) * circle(left, R);
     return t;
 }
 
-float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
+float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms uniforms) {
+    float progress = uniforms.progress;
     // a2 → how far down (angle) the stem do we place the leaf
     /// leaves are intersection of two circles (radius `R`) that are moved left and right by `r`.
-    float R = 0.11; // circles
-    float r = 0.09 * 1./lerp(progress, 0, 1, 0.8, 1.);
+    float R = 0.115; // circles
+    float r = lerp(progress, 0, 1, 0.11, 0.07);
+
     // height of the intersection
-    float a = 2 * sqrt(R*R - r*r);
+    float a = 2 * sqrt(abs(R*R - r*r));
     stemArcR -= stemTH/2; // move to center of stem's thickness
 
     float4 col = 0;
@@ -183,8 +188,8 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, float progress)
     } LeafVals;
 
     const LeafVals vals[6] = {
-        LeafVals{.offset = 0,.rotation = M_PI_F/2.0},
-        LeafVals{.offset = 0.03,.rotation = 0.3},
+        LeafVals{.offset = 0,.rotation = M_PI_F/1.9},
+        LeafVals{.offset = 0.03,.rotation = 0.17},
         LeafVals{.offset = 0.06,.rotation = M_PI_F/2.0},
         LeafVals{.offset = 0.01,.rotation = 0.0},
         LeafVals{.offset = 0.08,.rotation = M_PI_F/1.7},
@@ -204,9 +209,8 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, float progress)
     return col;
 }
 
-float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, float progress) {
-    // TEST
-//    progress = 1.0;
+float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms uniforms) {
+    float progress = lerp(uniforms.progress, 0, 1, 0.4, 1.2);
 
     float4 budCenterCol = float4(0.9, 0.4, 0.02, 1);
     float4 col = 0;
@@ -232,7 +236,7 @@ float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, float pro
             float a = circleR;
             float2 leaf1UV = rotate(M_PI_F* 0.36 + i) * (budCenterUV);
             leaf1UV.y += a*progress;
-            float leaf1 = leafF(scale(progress) * leaf1UV, 0.27, 0.240, progress);
+            float leaf1 = leafF(scale(progress) * leaf1UV, 0.29, 0.250, progress);
             col = mix(col, petalColors[petalIdx], smoothstep(0.0, 1.0, leaf1));
         }
     }
@@ -243,15 +247,17 @@ float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, float pro
     return col;
 }
 
-float4 stemF(float2 uv, float progress) {
-    // TEST
-    progress = 1.00;
-    float budsAndPetalsProgress = lerp(progress, 0, 1, 0.4, 1.); // don't start from zero
-//    budsAndPetalsProgress = 1.0;
-    float stemProgress = lerp(progress, 0, 1, 0.6, 1.); // don't start from zero
-//    stemProgress = 1;
+float4 flower(float2 uv, float yOverX, StampUniforms uniforms) {
+    uv.x /= yOverX;
 
-    float4 col = 0;
+    float4 bg = {0.46, 0.51, 0.47, 1};
+
+    float4 col = bg;
+
+    float progress = uniforms.progress;
+    float stemProgress = lerp(progress, 0, 1, 0.6, 1.); // don't start from zero
+                                                        //    stemProgress = 1;
+
     float4 stemCol = float4(0.18,0.3, 0.11, 1);
 
     // Stem and the whole flower, is laid out on a giant circle's arc
@@ -260,7 +266,7 @@ float4 stemF(float2 uv, float progress) {
     float a2Variant = lerp(stemProgress, 0, 1, 0.25, 0.8);
     // a1 and a2 are start/end of the arc
     float a1 = 0.0;
-//    a2Variant = 0;
+    //    a2Variant = 0;
     float a2 = M_PI_F/2.01 * a2Variant;
     // The arc is offset way to the left of the screen
     float2 arcCenterOffset = {-2.35,-.3};
@@ -275,25 +281,13 @@ float4 stemF(float2 uv, float progress) {
     col = mix(col, stemCol, tStem);
 
     // bud
-    float4 budCol = budAndPetals(uv, a2, stemArcR, stemTH, budsAndPetalsProgress);
+    float4 budCol = budAndPetals(uv, a2, stemArcR, stemTH, uniforms);
     col = mix(col, budCol, budCol.a);
 
     // leaves
-    a2 -= 0.2;
-    float4 leafCol = leaves(uv, a2, stemArcR, stemTH, budsAndPetalsProgress);
+    a2 -= 0.23;
+    float4 leafCol = leaves(uv, a2, stemArcR, stemTH, uniforms);
     col = mix(col, leafCol, leafCol.a);
-
-    return col;
-}
-
-float4 flower(float2 uv, float yOverX, float progress) {
-    uv.x /= yOverX;
-    float4 bg = {0.8, 0.4, 0.51, 1};
-
-    float4 col = bg;
-    float4 stem = stemF(uv, progress);
-    col = mix(col, stem, stem.a);
-
 
     return col;
 }
@@ -311,9 +305,7 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     // TODO: adding a smoothstep to circle() will give borders
 
     if (stampUniforms.kind == StampKindFlower) {
-        float progress = stampUniforms.progress;
-
-        float4 flowerCol = flower(st, yOverX, progress);
+        float4 flowerCol = flower(st, yOverX, stampUniforms);
         color = mix(color, flowerCol, flowerCol.a);
 
         float4 frameCol = frame(st);

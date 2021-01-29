@@ -238,8 +238,10 @@
             filePath = "MetalPlayground/Scenes/LiveCode/LiveCode.metal"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "320"
-            endingLineNumber = "320">
+            startingLineNumber = "312"
+            endingLineNumber = "312"
+            landmarkName = "liveCodeFragmentShader(VertexOut interpolated [[stage_in]], constant FragmentUniforms &amp;uniforms [[buffer(0)]], constant StampUniforms &amp;stampUniforms [[buffer(1)]])"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

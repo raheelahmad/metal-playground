@@ -38,7 +38,6 @@ extension Scene {
         ]
     }
 
-
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
         let pipeline = (try? device.makeRenderPipelineState(descriptor: descriptor))!
