@@ -7,6 +7,21 @@
 //
 
 import MetalKit
+import SwiftUI
+
+fileprivate class Config: ObservableObject {
+    @Published var fullDurationMinutes: Float = 15
+    @Published var startTime: Float = 0
+
+    init() {
+        regenerate()
+    }
+
+    func regenerate() {
+        let timeInterval = Date().addingTimeInterval(Double.random(in: -10000..<10000)).timeIntervalSince1970
+        startTime = Float(timeInterval)
+    }
+}
 
 
 final class LiveCodeScene: Scene {
@@ -38,10 +53,12 @@ final class LiveCodeScene: Scene {
     private var pixelFormat: MTLPixelFormat?
 
     private var built: Built?
+    private var config = Config()
+
     private var uniforms = Uniforms(
         stamp: Float(StampKind.flower.rawValue),
         startTime: Float(Date().timeIntervalSince1970),
-        fullDuration: Float(15 * 60 ),
+        fullDuration: Float(25 * 60 ),
         progress: 0.0
     )
 
@@ -58,7 +75,13 @@ final class LiveCodeScene: Scene {
         compileQueue.async {
             self.compile()
         }
-        uniforms.progress = simd_fract(time/10)
+
+        uniforms = Uniforms(
+            stamp: Float(StampKind.flower.rawValue),
+            startTime: config.startTime,
+            fullDuration: config.fullDurationMinutes * 60,
+            progress: simd_fract(time/10)
+        )
     }
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
@@ -120,4 +143,33 @@ final class LiveCodeScene: Scene {
         }
     }
 
+    struct ConfigView: View {
+        @EnvironmentObject private var config: Config
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 19) {
+                TitledSlider(title: "Full Duration", value: $config.fullDurationMinutes, in: 10...60, step: 1) {
+                    self.config.fullDurationMinutes = 15
+                }
+                VStack {
+                    Button(action: { config.regenerate() }) {
+                        Text("Regenerate Start Time")
+                    }
+
+                    Text(config.startTime.str)
+                }
+
+//                TitledSlider(title: "Polygons", value: $config.numPolygons, in: 1...10, step: 1) {
+//                    self.config.numPolygons = 1
+//                }
+//                TitledSlider(title: "Scale", value: $config.scale, in: 0.1...4.0) {
+//                    self.config.scale = 1
+//                }
+            }
+        }
+    }
+
+    var view: NSView? {
+        NSHostingView(rootView: ConfigView().environmentObject(config))
+    }
 }
