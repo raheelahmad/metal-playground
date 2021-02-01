@@ -91,6 +91,37 @@ float noiseSmoothToSharpAnimated(float2 uv, float time) {
 
 // -END- NOISE experiments
 
+struct Palette {
+    float3 topPetal;
+    float3 bottomPetal;
+    float3 ovary;
+    float3 stem;
+    float3 leaf;
+    float stemTH;
+    int numLeafPairs;
+};
+
+constant int palettesCount = 2;
+constant Palette palettes[palettesCount] = {
+    Palette {
+        .topPetal =  float3(0.2,0.7,0.4),
+        .bottomPetal =  float3(0.1,0.4,0.3),
+        .ovary =  float3(0.6,0.2,0.34),
+        .stem =  float3(0.3,0.4,0.14),
+        .leaf =  float3(0.32,0.5,0.34),
+        .stemTH = 0.015,
+        .numLeafPairs = 4,
+    },
+    Palette {
+        .topPetal =  float3(0.2,0.1,0.9),
+        .bottomPetal =  float3(0.4,0.3,0.9),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 3,
+    }
+};
 
 float sdArc( float2 p, float2 sca, float2 scb, float ra, float rb ) {
     p *= float2x2(sca.x,sca.y,-sca.y,sca.x);
@@ -135,7 +166,7 @@ float4 stamp(float2 uv, float yOverX) {
     float4 insets = {-1,1,1.,-1};
 
     float t = rectangle(uv, insets);
-    //    uv = scale(0.99) * uv;
+//        uv = scale(0.99) * uv;
 
     t -= stampSide(uv, yOverX);
     t -= stampSide(scale(1.0) * rotate(-M_PI_F/2.) * uv, 1/yOverX);
@@ -143,6 +174,10 @@ float4 stamp(float2 uv, float yOverX) {
     float4 col = {0.2, 0.1, 0.25, t};
 
     return col;
+}
+
+Palette palette_for_uniform(StampUniforms uniforms) {
+    return palettes[1];
 }
 
 float4 frame(float2 st) {
@@ -180,23 +215,26 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms u
 
     float4 col = 0;
 
-    float4 leafColor = {0.3, 0.7, 0.2, 1.};
+    Palette palette = palette_for_uniform(uniforms);
+    float4 leafColor = float4(palette.leaf, 1.);
 
     typedef struct {
         float offset;
         float rotation;
     } LeafVals;
 
-    const LeafVals vals[6] = {
+    const LeafVals vals[8] = {
         LeafVals{.offset = 0,.rotation = M_PI_F/1.9},
         LeafVals{.offset = 0.03,.rotation = 0.17},
         LeafVals{.offset = 0.06,.rotation = M_PI_F/2.0},
         LeafVals{.offset = 0.01,.rotation = 0.0},
         LeafVals{.offset = 0.08,.rotation = M_PI_F/1.7},
         LeafVals{.offset = 0.02,.rotation = 0.5},
+        LeafVals{.offset = 0.04,.rotation = M_PI_F/1.7},
+        LeafVals{.offset = 0.01,.rotation = 0.5},
     };
 
-    for(int i=0; i<6; i++) {
+    for(int i=0; i<2*palette.numLeafPairs; i++) {
         LeafVals val = vals[i];
         a2 -= val.offset;
         float2 leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
@@ -212,7 +250,8 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms u
 float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms uniforms) {
     float progress = lerp(uniforms.progress, 0, 1, 0.4, 1.2);
 
-    float4 budCenterCol = float4(0.9, 0.4, 0.02, 1);
+    Palette palette = palette_for_uniform(uniforms);
+    float4 budCenterCol = float4(palette.ovary, 1);
     float4 col = 0;
     float circleR = 0.16;
     float2 budCenterUV = uv;
@@ -226,10 +265,7 @@ float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, StampUnif
     float leafOffsetAngle = (M_PI_F*2)/count;
 
     float petalColorsCount = 2;
-    float4 petalColors[2] = {
-        {0.2,0.4, 0.3, 1.},
-        {0.2,0.3, 0.2, 1.}
-    };
+    float4 petalColors[2] = {float4(palette.topPetal,1.), float4(palette.bottomPetal, 1.)};
 
     for(int petalIdx=0; petalIdx<petalColorsCount; petalIdx++) {
         for (float i=leafOffsetAngle*petalIdx; i <= M_PI_F*2.0; i+=leafOffsetAngle*petalColorsCount) {
@@ -250,15 +286,16 @@ float4 budAndPetals(float2 uv, float a2, float stemArcR, float stemTH, StampUnif
 float4 flower(float2 uv, float yOverX, StampUniforms uniforms) {
     uv.x /= yOverX;
 
-    float4 bg = {0.46, 0.51, 0.47, 1};
-
+    float4 bg = {0.46, 0.61, 0.47, 1};
     float4 col = bg;
-
     float progress = uniforms.progress;
     float stemProgress = lerp(progress, 0, 1, 0.6, 1.); // don't start from zero
-                                                        //    stemProgress = 1;
-
+    stemProgress = 1.0; // Always full grown stem
     float4 stemCol = float4(0.18,0.3, 0.11, 1);
+
+    if (progress <= 0.) {
+        return col;
+    }
 
     // Stem and the whole flower, is laid out on a giant circle's arc
     float stemArcR = 2.4;
@@ -276,7 +313,8 @@ float4 flower(float2 uv, float yOverX, StampUniforms uniforms) {
     uv = rotate(-M_PI_F/3.0) * uv;
 
     // stem
-    float stemTH = 0.013*stemProgress;
+    Palette palette = palette_for_uniform(uniforms);
+    float stemTH = palette.stemTH*progress;
     float tStem = arc(uv, stemArcR, a1, a2, stemTH);
     col = mix(col, stemCol, tStem);
 
