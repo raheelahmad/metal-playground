@@ -20,8 +20,8 @@ typedef enum {
 
 struct StampUniforms {
     float kind;
-    float startTime;
-    float fullDuration;
+    float hourOfDay;
+    float fullDurationMinutes;
     float progress;
 };
 
@@ -101,25 +101,97 @@ struct Palette {
     int numLeafPairs;
 };
 
-constant int palettesCount = 2;
+constant int palettesCount = 10;
 constant Palette palettes[palettesCount] = {
     Palette {
-        .topPetal =  float3(0.2,0.7,0.4),
-        .bottomPetal =  float3(0.1,0.4,0.3),
+        .topPetal =  float3(0.2,0.5,0.23),
+        .bottomPetal =  float3(0.1,0.3,0.13),
         .ovary =  float3(0.6,0.2,0.34),
         .stem =  float3(0.3,0.4,0.14),
         .leaf =  float3(0.32,0.5,0.34),
         .stemTH = 0.015,
-        .numLeafPairs = 4,
+        .numLeafPairs = 1,
     },
     Palette {
-        .topPetal =  float3(0.2,0.1,0.9),
-        .bottomPetal =  float3(0.4,0.3,0.9),
+        .topPetal =  float3(0.2,0.1,0.31),
+        .bottomPetal =  float3(0.13,0.29,0.39),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 2,
+    },
+    Palette {
+        .topPetal =  float3(0.29,0.38,0.41),
+        .bottomPetal =  float3(0.4,0.3,0.54),
         .ovary =  float3(0.4,0.8,0.34),
         .stem =  float3(0.8,0.8,0.54),
         .leaf =  float3(0.3,0.3,0.34),
         .stemTH = 0.02,
         .numLeafPairs = 3,
+    },
+    Palette {
+        .topPetal =  float3(0.214,0.16,0.412),
+        .bottomPetal =  float3(0.213,0.183,0.344),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 4,
+    },
+    Palette {
+        .topPetal =  float3(0.29,0.18,0.4),
+        .bottomPetal =  float3(0.344,0.3,0.53),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 5,
+    },
+    Palette {
+        .topPetal =  float3(0.2,0.2,0.1),
+        .bottomPetal =  float3(0.33,0.3,0.43),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 6,
+    },
+    Palette {
+        .topPetal =  float3(0.4,0.54,0.43),
+        .bottomPetal =  float3(0.4,0.63,0.54),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 7,
+    },
+    Palette {
+        .topPetal =  float3(0.2,0.623,0.1),
+        .bottomPetal =  float3(0.4,0.53,0.3),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 8,
+    },
+    Palette {
+        .topPetal =  float3(0.10,0.401,0.21),
+        .bottomPetal =  float3(0.39,0.33,0.211),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.34),
+        .stemTH = 0.02,
+        .numLeafPairs = 9,
+    },
+    Palette {
+        .topPetal =  float3(0.1,0.64,0.454),
+        .bottomPetal =  float3(0.4,0.43,0.321),
+        .ovary =  float3(0.4,0.8,0.34),
+        .stem =  float3(0.8,0.8,0.54),
+        .leaf =  float3(0.3,0.3,0.14),
+        .stemTH = 0.02,
+        .numLeafPairs = 10,
     }
 };
 
@@ -177,7 +249,19 @@ float4 stamp(float2 uv, float yOverX) {
 }
 
 Palette palette_for_uniform(StampUniforms uniforms) {
-    return palettes[1];
+    float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes)  * 10;
+    int idx = floor(randIndexBase);
+
+    Palette palette = palettes[idx];
+
+    float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
+    randBase = clamp(randBase, 0.7, 0.9);
+    palette.bottomPetal /= randBase;
+    palette.topPetal /= randBase;
+    palette.ovary /= randBase;
+    palette.leaf /= randBase;
+
+    return palette;
 }
 
 float4 frame(float2 st) {
@@ -223,21 +307,15 @@ float4 leaves(float2 uv, float a2, float stemArcR, float stemTH, StampUniforms u
         float rotation;
     } LeafVals;
 
-    const LeafVals vals[8] = {
+    const LeafVals vals[2] = {
         LeafVals{.offset = 0,.rotation = M_PI_F/1.9},
-        LeafVals{.offset = 0.03,.rotation = 0.17},
-        LeafVals{.offset = 0.06,.rotation = M_PI_F/2.0},
-        LeafVals{.offset = 0.01,.rotation = 0.0},
-        LeafVals{.offset = 0.08,.rotation = M_PI_F/1.7},
-        LeafVals{.offset = 0.02,.rotation = 0.5},
-        LeafVals{.offset = 0.04,.rotation = M_PI_F/1.7},
-        LeafVals{.offset = 0.01,.rotation = 0.5},
+        LeafVals{.offset = 0.01,.rotation = 0.17},
     };
 
     for(int i=0; i<2*palette.numLeafPairs; i++) {
-        LeafVals val = vals[i];
-        a2 -= val.offset;
-        float2 leafUV = uv-float2(stemArcR*cos(a2), stemArcR*sin(a2));
+        LeafVals val = vals[i%2];
+        float leafA2 = a2 - (val.offset + (i/2)*0.04);
+        float2 leafUV = uv-float2(stemArcR*cos(leafA2), stemArcR*sin(leafA2));
         leafUV = rotate(val.rotation) * leafUV;
         leafUV.y -= a/2.;
         float leafT = leafF(leafUV, R, r, progress);
@@ -323,7 +401,7 @@ float4 flower(float2 uv, float yOverX, StampUniforms uniforms) {
     col = mix(col, budCol, budCol.a);
 
     // leaves
-    a2 -= 0.23;
+    a2 -= 0.13;
     float4 leafCol = leaves(uv, a2, stemArcR, stemTH, uniforms);
     col = mix(col, leafCol, leafCol.a);
 

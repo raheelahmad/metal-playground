@@ -10,17 +10,8 @@ import MetalKit
 import SwiftUI
 
 fileprivate class Config: ObservableObject {
-    @Published var fullDurationMinutes: Float = 15
-    @Published var startTime: Float = 0
-
-    init() {
-        regenerate()
-    }
-
-    func regenerate() {
-        let timeInterval = Date().addingTimeInterval(Double.random(in: -10000..<10000)).timeIntervalSince1970
-        startTime = Float(timeInterval)
-    }
+    @Published var fullDurationMinutes: Int = 15
+    @Published var hourOfDay: Int = 0
 }
 
 
@@ -32,8 +23,8 @@ final class LiveCodeScene: Scene {
     // Uniforms for the stamp
     struct Uniforms {
         var stamp: Float
-        var startTime: Float
-        var fullDuration: Float
+        var hourOfDay: Float
+        var fullDurationMinutes: Float
         var progress: Float
     }
 
@@ -57,8 +48,8 @@ final class LiveCodeScene: Scene {
 
     private var uniforms = Uniforms(
         stamp: Float(StampKind.flower.rawValue),
-        startTime: Float(Date().timeIntervalSince1970),
-        fullDuration: Float(25 * 60 ),
+        hourOfDay: 2,
+        fullDurationMinutes: Float(25),
         progress: 0.0
     )
 
@@ -78,8 +69,8 @@ final class LiveCodeScene: Scene {
 
         uniforms = Uniforms(
             stamp: Float(StampKind.flower.rawValue),
-            startTime: config.startTime,
-            fullDuration: config.fullDurationMinutes * 60,
+            hourOfDay: Float(config.hourOfDay),
+            fullDurationMinutes: Float(config.fullDurationMinutes),
             progress: simd_fract(time/10)
         )
     }
@@ -148,23 +139,18 @@ final class LiveCodeScene: Scene {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 19) {
-                TitledSlider(title: "Full Duration", value: $config.fullDurationMinutes, in: 10...60, step: 1) {
-                    self.config.fullDurationMinutes = 15
+                Picker(selection: $config.fullDurationMinutes, label: Text("Full Duration")) {
+                    Text("15").tag(15)
+                    Text("30").tag(30)
+                    Text("45").tag(45)
+                    Text("60").tag(60)
                 }
-                VStack {
-                    Button(action: { config.regenerate() }) {
-                        Text("Regenerate Start Time")
+                .pickerStyle(RadioGroupPickerStyle())
+                Picker(selection: $config.hourOfDay, label: Text("Hour of Day")) {
+                    ForEach(0..<24) {  fl in
+                        Text("\(fl)").tag(fl)
                     }
-
-                    Text(config.startTime.str)
                 }
-
-//                TitledSlider(title: "Polygons", value: $config.numPolygons, in: 1...10, step: 1) {
-//                    self.config.numPolygons = 1
-//                }
-//                TitledSlider(title: "Scale", value: $config.scale, in: 0.1...4.0) {
-//                    self.config.scale = 1
-//                }
             }
         }
     }
