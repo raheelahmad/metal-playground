@@ -12,6 +12,7 @@ import SwiftUI
 fileprivate class Config: ObservableObject {
     @Published var fullDurationMinutes: Int = 15
     @Published var hourOfDay: Int = 0
+    @Published var speed: Float = 1
 }
 
 
@@ -71,7 +72,7 @@ final class LiveCodeScene: Scene {
             stamp: Float(StampKind.flower.rawValue),
             hourOfDay: Float(config.hourOfDay),
             fullDurationMinutes: Float(config.fullDurationMinutes),
-            progress: simd_fract(time/10)
+            progress: simd_fract(time/config.speed)
         )
     }
 
@@ -146,6 +147,12 @@ final class LiveCodeScene: Scene {
                     Text("60").tag(60)
                 }
                 .pickerStyle(RadioGroupPickerStyle())
+                Slider(
+                    value: $config.speed, in: 1...10.0,
+                    onEditingChanged: { _ in },
+                    label: {
+                        Text("Speed")
+                    })
                 Picker(selection: $config.hourOfDay, label: Text("Hour of Day")) {
                     ForEach(0..<24) {  fl in
                         Text("\(fl)").tag(fl)
