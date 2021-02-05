@@ -71,6 +71,7 @@ extension Scene {
 
 enum SceneKind: Int, CaseIterable, Identifiable {
     case liveCode
+    case curvyFlowerStamp
     case leftRightTiler
     case futuristicUI
     case happyJumping
@@ -90,6 +91,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
+        case .curvyFlowerStamp:
+            return "Curvy Flower"
         case .liveCode:
             return "Live Code"
         case .leftRightTiler:
@@ -121,6 +124,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Scene {
         switch self {
+        case .curvyFlowerStamp: return CurvyFlowerScene()
         case .liveCode: return LiveCodeScene()
         case .leftRightTiler: return BoSLeftRightTiler()
         case .futuristicUI: return FuturisticUI()

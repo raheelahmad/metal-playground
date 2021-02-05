@@ -23,6 +23,8 @@
 		592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */; };
 		5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5933FB11256F5B6D002D854A /* HappyJumping.metal */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
+		59426A2C25CB15F800B60E8F /* Curvy Flower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59426A2A25CB125F00B60E8F /* Curvy Flower.swift */; };
+		59426A2D25CB15FD00B60E8F /* CurvyFlower.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59426A2B25CB125F00B60E8F /* CurvyFlower.metal */; };
 		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
 		59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59438CA3252A5B8600713DB9 /* Passthrough.metal */; };
 		594651E0251B198E009947C2 /* Starfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594651DF251B198E009947C2 /* Starfield.swift */; };
@@ -92,6 +94,8 @@
 		592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 08LeftRightTiler.metal; sourceTree = "<group>"; };
 		5933FB11256F5B6D002D854A /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
+		59426A2A25CB125F00B60E8F /* Curvy Flower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Curvy Flower.swift"; sourceTree = "<group>"; };
+		59426A2B25CB125F00B60E8F /* CurvyFlower.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CurvyFlower.metal; sourceTree = "<group>"; };
 		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
 		59438CA3252A5B8600713DB9 /* Passthrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Passthrough.metal; sourceTree = "<group>"; };
 		594651DF251B198E009947C2 /* Starfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starfield.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 		590BE6152500C4C200E9B573 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				59426A2925CB125600B60E8F /* Curvy Flower */,
 				595FA20125AB88C400316062 /* MattCourse */,
 				59E5BC6925AAC6B50061154A /* Helpers.metal */,
 				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
@@ -235,6 +240,15 @@
 				595D7285246DE28600FC8054 /* Noise.metal */,
 			);
 			path = Explorations;
+			sourceTree = "<group>";
+		};
+		59426A2925CB125600B60E8F /* Curvy Flower */ = {
+			isa = PBXGroup;
+			children = (
+				59426A2A25CB125F00B60E8F /* Curvy Flower.swift */,
+				59426A2B25CB125F00B60E8F /* CurvyFlower.metal */,
+			);
+			path = "Curvy Flower";
 			sourceTree = "<group>";
 		};
 		595FA20125AB88C400316062 /* MattCourse */ = {
@@ -441,11 +455,13 @@
 				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
 				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
+				59426A2C25CB15F800B60E8F /* Curvy Flower.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
 				59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */,
 				597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
+				59426A2D25CB15FD00B60E8F /* CurvyFlower.metal in Sources */,
 				592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */,
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
 				59A312632517F48900F6ACA2 /* RootView.swift in Sources */,
