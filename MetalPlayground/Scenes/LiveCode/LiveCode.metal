@@ -118,49 +118,58 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float stalkTH = 0.02;
     float2 stalkSt = petalSt-float2(0,-petalR);
+
+    // thorns
+    int thornsCount = 10*progress;
+    float thornsSeparation = 0.1;
+    for(int i=0; i<thornsCount; i++) {
+        float thornY = thornsSeparation + thornsSeparation*i;
+        float mod = 1. - fmod(float(i), 2);
+        float rotation =  M_PI_F*2.5-mod;
+        float thornX = mod == 0 ? stalkTH : -stalkTH;
+        float2 thornSt = rotate(rotation) * scale(0.015)*(stalkSt + float2(thornX*progress, thornY));
+        color = mix(color, float4(green, 1), 1. - step(0.24, sdEquilateralTriangle(thornSt)));
+    }
+
+    float r1 = 0.11;
+    float r2 = 0.07;
+    float rotateSmallLeaf = 1.5 * M_PI_F/2;
+
+    // --- Small leaves on top
+    float2 smallLeafSt = stalkSt;
+    // leaf 1
+    float2 leafSt = rotate(rotateSmallLeaf) * smallLeafSt; // position it down and rotate
+    float4 leftSmallLeafCol = leaf(leafSt, r1, r2, green, black, 1);
+    color = mix(color, leftSmallLeafCol, leftSmallLeafCol.a);
+    // leaf 2
+    float4 rightSmallLeafCol = leaf(rotate(-rotateSmallLeaf) * smallLeafSt, r1, r2, green, black, 1);
+    color = mix(color, rightSmallLeafCol, rightSmallLeafCol.a);
+
+    float bigR1 = r1 * 2.1;
+    float bigR2 =  0.16;
+    float rotateBigLeaf = M_PI_F/4;
+    float2 bigLeafSt = stalkSt + float2(0, 0.6);
+    // leaf 1
+    float4 leftBigLeafCol = leaf(rotate(rotateBigLeaf) * bigLeafSt, bigR1, bigR2, green, 0, 0);
+    color = mix(color, leftBigLeafCol, leftBigLeafCol.a);
+    // leaf 2
+    float4 rightBigLeafCol = leaf(rotate(-rotateBigLeaf) * bigLeafSt, bigR1, bigR2, black, 0, 0);
+    color = mix(color, rightBigLeafCol, rightBigLeafCol.a);
+
     // stalk
     t = rectangle(stalkSt, {-stalkTH/2,0,stalkTH/2,-1.});
     color = mix(color, float4(0.1,0.1,0.1,1), step(1., t));
 
-    float r1 = 0.11;
-    float r2 = 0.07;
-    float rotateLeaf = 1.5 * M_PI_F/2;
-
-    // --- Small leaves on top
-    // leaf 1
-    float2 leafSt = rotate(rotateLeaf) * stalkSt; // position it down and rotate
-    float4 leftSmallLeafCol = leaf(leafSt, r1, r2, green, black, 1);
-    color = mix(color, leftSmallLeafCol, leftSmallLeafCol.a);
-    // leaf 2
-    float4 rightSmallLeafCol = leaf(rotate(-rotateLeaf) * stalkSt, r1, r2, green, black, 1);
-    color = mix(color, rightSmallLeafCol, rightSmallLeafCol.a);
-
-    r1 *= 2.1;
-    r2 = 0.16;
-    rotateLeaf -= M_PI_F/2;
-    stalkSt += float2(0, 0.6);
-    // leaf 1
-    leafSt = rotate(rotateLeaf) * stalkSt; // position it down and rotate
-    leafSt -= float2(0.,sqrt(r1*r1 - r2*r2)); // position in the center-x of stem
-    t = petal(leafSt, r1, r2);
-    color = mix(color, float4(green, 1), step(1., t));
-    // leaf 2
-    leafSt = rotate(-rotateLeaf) * stalkSt;
-    leafSt -= float2(0.,sqrt(r1*r1 - r2*r2)); // position in the center-x of stem
-    t = petal(leafSt, r1, r2);
-    color = mix(color, float4(black, 1), step(1., t));
 
     // squiggly lines
-//    leafSt = rotate(-rotateLeaf+M_PI_F/2) * stalkSt;
+//    leafSt = rotate(-rotateLeaf+M_PI_F*1.5) * stalkSt;
 //    leafSt.x += sin(leafSt.y*310)/330;
 //    float4 lineBox = {-0.003,0.,0.003,-0.166*progress};
 //    color = mix(color, float4(black, 1), rectangle(leafSt, lineBox));
 //
-//    leafSt = rotate(rotateLeaf-M_PI_F/2) * stalkSt;
+//    leafSt = rotate(rotateLeaf-M_PI_F*1.5) * stalkSt;
 //    leafSt.x += sin(leafSt.y*310)/330;
 //    color = mix(color, float4(green, 1), rectangle(leafSt, lineBox));
-
-//    color = step(0.001, sdEquilateralTriangle(rotate(M_PI_F/2) * scale(0.02)*stalkSt));
 
     return color;
 }
