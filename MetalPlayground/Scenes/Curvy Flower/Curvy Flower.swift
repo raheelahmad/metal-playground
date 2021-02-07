@@ -16,10 +16,11 @@ fileprivate class Config: ObservableObject {
 }
 
 
+enum StampKind: Int {
+    case flower = 1
+}
+
 final class CurvyFlowerScene: Scene {
-    enum StampKind: Int {
-        case flower = 1
-    }
 
     // Uniforms for the stamp
     struct Uniforms {

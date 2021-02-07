@@ -14,6 +14,9 @@ struct FragmentUniforms {
 };
 
 struct StampUniforms {
+    float kind;
+    float hourOfDay;
+    float fullDurationMinutes;
     float progress;
 };
 
@@ -26,6 +29,81 @@ vertex VertexOut liveCodeVertexShader(const device VertexIn *vertices [[buffer(0
     VertexOut in;
     in.pos = {vertices[vid].pos.x, vertices[vid].pos.y, 0, 1};
     return in;
+}
+
+typedef struct {
+    float3 bgCols[2];
+    float3 petalCols[2];
+    float petalR;
+} Palette;
+
+constant int palettesCount = 10;
+constant Palette palettes[palettesCount] = {
+    Palette {
+        .bgCols = {float3(0.7,0.7,0.8), float3(0.7,0.8,0.5)},
+        .petalCols = {float3(0.92,90./255., 60/255), float3(167./255.,130./255., 151./255.)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.72,0.10,0.34), float3(0.12,0.5,0.34)},
+        .petalCols = {float3(0.62,0.5,0.34), float3(0.43,0.5,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.24,0.14), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.42,0.5,0.34), float3(0.83,0.5,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.31,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.92,0.5,0.34), float3(0.83,0.5,0.54)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.29,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.012,0.5,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.91,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.41,0.5,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.82,0.31,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.62,0.51,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.54,0.24), float3(0.32,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.92,0.5,0.34)},
+        .petalR = 0.3,
+    },
+    Palette {
+        .bgCols = {float3(0.42,0.29,0.24), float3(0.12,0.5,0.34)},
+        .petalCols = {float3(0.32,0.5,0.34), float3(0.22,0.5,0.34)},
+        .petalR = 0.3,
+    },
+};
+
+// --
+
+Palette palette_for_stamp_uniform(StampUniforms uniforms) {
+    float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes)  * 10;
+    int idx = floor(randIndexBase);
+
+    Palette palette = palettes[0];
+
+    float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
+    randBase = lerp(randBase, 0, 1, 0.5, 1.0);
+    palette.petalR *= randBase*1.5;
+
+    return palette;
 }
 
 // ---
@@ -82,16 +160,21 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     float2 st = uv;
 
-    float4 color = mix({0.7,0.7, 0.8,1.0}, {0.7,0.8, 0.5,1.0}, pow(st.y, .5));
+
+    float progress = fract(uniforms.time/4);
+    // TEST
+    progress = clamp(lerp(progress, 0, 1, 0, 1.9), 0., 1.);
+    Palette palette = palette_for_stamp_uniform(stampUniforms);
+
+    float4 color = mix(float4(palette.bgCols[0], 1), float4(palette.bgCols[1], 1), pow(st.y, .5));
 
     st -= 0.5;
     st *= 2;
     st.x /= yOverX;
 
-    float progress = fract(uniforms.time/4);
     float t = 0;
 
-    float petalR = 0.24;
+    float petalR = palette.petalR;
 
     // TEST circle
     color = mix(color, float4(0.7,0.9,0.8,1), 1.-step(0.015, length(st)));
@@ -109,9 +192,9 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     // petals
     t = tulipPetal(petalSt + float2(petalR,-0.0), petalR, 0, progress);
-    color = mix(color, float4(0.92,90./255., 60/255., 1), t);
+    color = mix(color, float4(palette.petalCols[0], 1), t);
     t = tulipPetal(petalSt - float2(petalR,-0.0), petalR, 1, progress);
-    color = mix(color, float4(247/255,150./255., 181/255., 1), t);
+    color = mix(color, float4(palette.petalCols[1], 1), t);
 
     float3 green = {0.23, 0.39, 0.11};
     float3 black = {0.02, 0.09, 0.00};
@@ -158,18 +241,19 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     // stalk
     t = rectangle(stalkSt, {-stalkTH/2,0,stalkTH/2,-1.});
-    color = mix(color, float4(0.1,0.1,0.1,1), step(1., t));
+    color = mix(color, float4(0.12,0.24,0.1,1), step(1., t));
 
 
-    // squiggly lines
-//    leafSt = rotate(-rotateLeaf+M_PI_F*1.5) * stalkSt;
-//    leafSt.x += sin(leafSt.y*310)/330;
-//    float4 lineBox = {-0.003,0.,0.003,-0.166*progress};
-//    color = mix(color, float4(black, 1), rectangle(leafSt, lineBox));
-//
-//    leafSt = rotate(rotateLeaf-M_PI_F*1.5) * stalkSt;
-//    leafSt.x += sin(leafSt.y*310)/330;
-//    color = mix(color, float4(green, 1), rectangle(leafSt, lineBox));
+    // vein lines
+    float veinTH = 0.002;
+    float4 lineBox = {-veinTH,0.,veinTH,-0.33*progress};
+    float2 veinSt = rotate(-rotateBigLeaf+M_PI_F*1.5) * bigLeafSt;
+//    veinSt.x += sin(veinSt.y*310)/330;
+    color = mix(color, float4(black, 1), rectangle(veinSt, lineBox));
+
+    veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
+//    veinSt.x += sin(veinSt.y*310)/330;
+    color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
 
     return color;
 }

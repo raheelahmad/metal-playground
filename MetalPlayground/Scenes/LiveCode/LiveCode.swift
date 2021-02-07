@@ -10,6 +10,8 @@ import MetalKit
 import SwiftUI
 
 fileprivate class Config: ObservableObject {
+    @Published var fullDurationMinutes: Int = 15
+    @Published var hourOfDay: Int = 0
     @Published var speed: Float = 1
 }
 
@@ -17,6 +19,9 @@ fileprivate class Config: ObservableObject {
 final class LiveCodeScene: Scene {
     // Uniforms for the stamp
     struct Uniforms {
+        var stamp: Float
+        var hourOfDay: Float
+        var fullDurationMinutes: Float
         var progress: Float
     }
 
@@ -39,6 +44,9 @@ final class LiveCodeScene: Scene {
     private var config = Config()
 
     private var uniforms = Uniforms(
+        stamp: Float(StampKind.flower.rawValue),
+        hourOfDay: 2,
+        fullDurationMinutes: Float(25),
         progress: 0.0
     )
 
@@ -57,6 +65,9 @@ final class LiveCodeScene: Scene {
         }
 
         uniforms = Uniforms(
+            stamp: Float(StampKind.flower.rawValue),
+            hourOfDay: Float(config.hourOfDay),
+            fullDurationMinutes: Float(config.fullDurationMinutes),
             progress: simd_fract(time/config.speed)
         )
     }
@@ -126,12 +137,26 @@ final class LiveCodeScene: Scene {
         @EnvironmentObject private var config: Config
 
         var body: some View {
-            Slider(
-                value: $config.speed, in: 1...10.0,
-                onEditingChanged: { _ in },
-                label: {
-                    Text("Speed")
-                })
+            VStack(alignment: .leading, spacing: 19) {
+                Picker(selection: $config.fullDurationMinutes, label: Text("Full Duration")) {
+                    Text("15").tag(15)
+                    Text("30").tag(30)
+                    Text("45").tag(45)
+                    Text("60").tag(60)
+                }
+                .pickerStyle(RadioGroupPickerStyle())
+                Slider(
+                    value: $config.speed, in: 1...10.0,
+                    onEditingChanged: { _ in },
+                    label: {
+                        Text("Speed")
+                    })
+                Picker(selection: $config.hourOfDay, label: Text("Hour of Day")) {
+                    ForEach(0..<24) {  fl in
+                        Text("\(fl)").tag(fl)
+                    }
+                }
+            }
         }
     }
 
