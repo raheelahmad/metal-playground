@@ -42,7 +42,7 @@ constant int palettesCount = 10;
 constant Palette palettes[palettesCount] = {
     Palette {
         .bgCols = {float3(0.7,0.7,0.8), float3(0.7,0.8,0.5)},
-        .petalCols = {float3(0.92,90./255., 60/255), float3(167./255.,130./255., 151./255.)},
+        .petalCols = {float3(0.92,90./255., 60/255), float3(67./255.,100./255., 131./255.)},
         .petalR = 0.3,
     },
     Palette {
@@ -101,7 +101,7 @@ Palette palette_for_stamp_uniform(StampUniforms uniforms) {
     Palette palette = palettes[idx];
 
     float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
-    palette.petalCount = floor(randBase * 20);
+    palette.petalCount = ceil(randBase * 8)+1;
     randBase = lerp(randBase, 0, 1, 0.5, 1.0);
     palette.petalR *= randBase*1.5;
 
@@ -177,17 +177,21 @@ float4 hemiSpheresFlower(float2 st, float progress, StampUniforms stampUniforms)
     color = mix(color, float4(float3(0.1), 1.), t);
 
 
+    // TEST:
+    palette.petalCount = 6;
+
     // petals
-    t = tulipPetal(scale(1)*rotate(0.92)*petalSt + float2(petalR,-0.0), petalR, 0, progress);
-    color = mix(color, float4(palette.petalCols[0]/1.1, 1), t);
-    t = tulipPetal(scale(1)*rotate(0.5)*petalSt + float2(petalR,-0.0), petalR, 0, progress);
-    color = mix(color, float4(palette.petalCols[1]/1.1, 1), t);
-    t = tulipPetal(rotate(-0.4)*petalSt - float2(petalR,-0.0), petalR, 1, progress);
-    color = mix(color, float4(palette.petalCols[0], 1), t);
-    t = tulipPetal(petalSt + float2(petalR,-0.0), petalR, 0, progress);
-    color = mix(color, float4(palette.petalCols[0], 1), t);
-    t = tulipPetal(petalSt - float2(petalR,-0.0), petalR, 1, progress);
-    color = mix(color, float4(palette.petalCols[1], 1), t);
+    float maxRotation = palette.petalCount * M_PI_F/18;
+    for (int petalIdx=0; petalIdx < palette.petalCount; petalIdx++) {
+        float rotation = 1.0 - float(petalIdx) / (float(palette.petalCount) - 1);
+        rotation *= maxRotation * progress;
+        t = tulipPetal(rotate(rotation) * petalSt + float2(petalR,-0.0), petalR, 0, progress);
+        float colVar = float(petalIdx+0.1)/float(palette.petalCount);
+        colVar = lerp(colVar, 0, 1, 0.5, 0.7);
+        color = mix(color, float4(palette.petalCols[0]/colVar, 1), t);
+        t = tulipPetal(rotate(-rotation) * petalSt - float2(petalR,-0.0), petalR, 1, progress);
+        color = mix(color, float4(palette.petalCols[1]/colVar, 1), t);
+    }
 
     float3 green = {0.23, 0.39, 0.11};
     float3 black = {0.02, 0.09, 0.00};
@@ -245,7 +249,6 @@ float4 hemiSpheresFlower(float2 st, float progress, StampUniforms stampUniforms)
     color = mix(color, float4(black, 1), rectangle(veinSt, lineBox));
 
     veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
-    //    veinSt.x += sin(veinSt.y*310)/330;
     color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
     return color;
 }
@@ -265,6 +268,9 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float4 color = mix(float4(palette.bgCols[0], 1), float4(palette.bgCols[1], 1), pow(st.y, .5));
 
+//    st *= palette.petalCount;
+//    st = fract(st);
+//
     st -= 0.5;
     st *= 2;
     st.x /= yOverX;
