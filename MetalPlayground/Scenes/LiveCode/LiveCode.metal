@@ -35,6 +35,7 @@ typedef struct {
     float3 bgCols[2];
     float3 petalCols[2];
     float petalR;
+    int petalCount;
 } Palette;
 
 constant int palettesCount = 10;
@@ -97,9 +98,10 @@ Palette palette_for_stamp_uniform(StampUniforms uniforms) {
     float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes)  * 10;
     int idx = floor(randIndexBase);
 
-    Palette palette = palettes[0];
+    Palette palette = palettes[idx];
 
     float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
+    palette.petalCount = floor(randBase * 20);
     randBase = lerp(randBase, 0, 1, 0.5, 1.0);
     palette.petalR *= randBase*1.5;
 
@@ -153,26 +155,11 @@ float4 leaf(float2 leafSt, float r1, float r2, float3 topCol, float3 bottomCol, 
     return color;
 }
 
-// ---
-
-fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]], constant StampUniforms &stampUniforms [[buffer(1)]]) {
-    float yOverX = uniforms.screen_height / uniforms.screen_width;
-    float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
-    float2 st = uv;
-
-
-    float progress = fract(uniforms.time/4);
-    // TEST
-    progress = clamp(lerp(progress, 0, 1, 0, 1.9), 0., 1.);
+float4 hemiSpheresFlower(float2 st, float progress, StampUniforms stampUniforms) {
     Palette palette = palette_for_stamp_uniform(stampUniforms);
-
-    float4 color = mix(float4(palette.bgCols[0], 1), float4(palette.bgCols[1], 1), pow(st.y, .5));
-
-    st -= 0.5;
-    st *= 2;
-    st.x /= yOverX;
-
     float t = 0;
+
+    float4 color = 0;
 
     float petalR = palette.petalR;
 
@@ -191,6 +178,12 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
 
     // petals
+    t = tulipPetal(scale(1)*rotate(0.92)*petalSt + float2(petalR,-0.0), petalR, 0, progress);
+    color = mix(color, float4(palette.petalCols[0]/1.1, 1), t);
+    t = tulipPetal(scale(1)*rotate(0.5)*petalSt + float2(petalR,-0.0), petalR, 0, progress);
+    color = mix(color, float4(palette.petalCols[1]/1.1, 1), t);
+    t = tulipPetal(rotate(-0.4)*petalSt - float2(petalR,-0.0), petalR, 1, progress);
+    color = mix(color, float4(palette.petalCols[0], 1), t);
     t = tulipPetal(petalSt + float2(petalR,-0.0), petalR, 0, progress);
     color = mix(color, float4(palette.petalCols[0], 1), t);
     t = tulipPetal(petalSt - float2(petalR,-0.0), petalR, 1, progress);
@@ -203,15 +196,15 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     float2 stalkSt = petalSt-float2(0,-petalR);
 
     // thorns
-    int thornsCount = 10*progress;
-    float thornsSeparation = 0.1;
+    int thornsCount = 12*progress;
+    float thornsSeparation = 0.08;
     for(int i=0; i<thornsCount; i++) {
         float thornY = thornsSeparation + thornsSeparation*i;
         float mod = 1. - fmod(float(i), 2);
         float rotation =  M_PI_F*2.5-mod;
         float thornX = mod == 0 ? stalkTH : -stalkTH;
-        float2 thornSt = rotate(rotation) * scale(0.015)*(stalkSt + float2(thornX*progress, thornY));
-        color = mix(color, float4(green, 1), 1. - step(0.24, sdEquilateralTriangle(thornSt)));
+        float2 thornSt = rotate(rotation) * scale(0.014)*(stalkSt + float2(thornX, thornY));
+        color = mix(color, float4(green, 1), 1. - step(0.2, sdEquilateralTriangle(thornSt)));
     }
 
     float r1 = 0.11;
@@ -248,12 +241,36 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     float veinTH = 0.002;
     float4 lineBox = {-veinTH,0.,veinTH,-0.33*progress};
     float2 veinSt = rotate(-rotateBigLeaf+M_PI_F*1.5) * bigLeafSt;
-//    veinSt.x += sin(veinSt.y*310)/330;
+    //    veinSt.x += sin(veinSt.y*310)/330;
     color = mix(color, float4(black, 1), rectangle(veinSt, lineBox));
 
     veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
-//    veinSt.x += sin(veinSt.y*310)/330;
+    //    veinSt.x += sin(veinSt.y*310)/330;
     color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
+    return color;
+}
+
+// ---
+
+fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]], constant StampUniforms &stampUniforms [[buffer(1)]]) {
+    float yOverX = uniforms.screen_height / uniforms.screen_width;
+    float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
+    float2 st = uv;
+
+    Palette palette = palette_for_stamp_uniform(stampUniforms);
+
+    float progress = fract(uniforms.time/4);
+    // TEST
+    progress = clamp(lerp(progress, 0, 1, 0, 1.9), 0., 1.);
+
+    float4 color = mix(float4(palette.bgCols[0], 1), float4(palette.bgCols[1], 1), pow(st.y, .5));
+
+    st -= 0.5;
+    st *= 2;
+    st.x /= yOverX;
+
+    float4 flower2 = hemiSpheresFlower(st, progress, stampUniforms);
+    color = mix(color, flower2, flower2.a);
 
     return color;
 }
