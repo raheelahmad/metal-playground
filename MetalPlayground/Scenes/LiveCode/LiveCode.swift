@@ -146,7 +146,7 @@ final class LiveCodeScene: Scene {
                 }
                 .pickerStyle(RadioGroupPickerStyle())
                 Slider(
-                    value: $config.speed, in: 1...10.0,
+                    value: $config.speed, in: 1...100.0,
                     onEditingChanged: { _ in },
                     label: {
                         Text("Speed")
