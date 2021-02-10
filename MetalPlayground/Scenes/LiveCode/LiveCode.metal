@@ -36,6 +36,7 @@ typedef struct {
     float3 petalCols[2];
     float petalR;
     int petalCount;
+
 } Palette;
 
 constant int palettesCount = 10;
@@ -43,52 +44,42 @@ constant Palette palettes[palettesCount] = {
     Palette {
         .bgCols = {float3(0.7,0.7,0.8), float3(0.7,0.8,0.5)},
         .petalCols = {float3(0.92,90./255., 60/255), float3(67./255.,100./255., 131./255.)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.72,0.10,0.34), float3(0.12,0.5,0.34)},
         .petalCols = {float3(0.62,0.5,0.34), float3(0.43,0.5,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.24,0.14), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.42,0.5,0.34), float3(0.83,0.5,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.31,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.92,0.5,0.34), float3(0.83,0.5,0.54)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.29,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.012,0.5,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.91,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.41,0.5,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.82,0.31,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.62,0.51,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.54,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.92,0.5,0.34)},
-        .petalR = 0.3,
     },
     Palette {
         .bgCols = {float3(0.42,0.29,0.24), float3(0.12,0.5,0.34)},
         .petalCols = {float3(0.32,0.5,0.34), float3(0.22,0.5,0.34)},
-        .petalR = 0.3,
     },
 };
 
@@ -101,9 +92,9 @@ Palette palette_for_stamp_uniform(StampUniforms uniforms) {
     Palette palette = palettes[idx];
 
     float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
-    palette.petalCount = ceil(randBase * 8)+1;
+    palette.petalCount = ceil(randBase * 9)+1;
     randBase = lerp(randBase, 0, 1, 0.5, 1.0);
-    palette.petalR *= randBase*1.5;
+    palette.petalR = randBase*.45;
 
     return palette;
 }
@@ -122,7 +113,7 @@ float halfPetal(float2 st, float r1, float r2) {
     return t;
 }
 
-float progressDF(float2 p, float progress) {
+float posNoise(float2 p, float progress) {
     float2 st = p * (100 + noise(progress)*1000);
     st = rotate(progress*2) * st;
     float df = noise(st) * (1.-progress);
@@ -132,7 +123,7 @@ float progressDF(float2 p, float progress) {
 float tulipPetal(float2 p, float r, int flipped, float progress) {
     float t = 0;
 
-    r += progressDF(p, progress)*2.5;
+    r += posNoise(p, progress)*2.5;
 
     float2 semi1P = p;
     float semi1Angle1 = flipped ? M_PI_F/2 : 0;
@@ -157,7 +148,7 @@ float tulipPetal(float2 p, float r, int flipped, float progress) {
 }
 
 float4 leaf(float2 leafSt, float r1, float r2, float3 topCol, float3 bottomCol, int useBottom, float progress)  {
-    r1 += progressDF(leafSt, progress)/4;
+    r1 += posNoise(leafSt, progress)/4;
     leafSt -= float2(0.,sqrt(r1*r1 - r2*r2)); // position in the center-x of stem
     float t = petal(leafSt, r1, r2);
     float4 color = 0;
@@ -186,12 +177,10 @@ float4 hemiSpheresFlower(float2 st, float progress, StampUniforms stampUniforms)
 
     // triangle above petals
     t = sdTriangleIsosceles(petalSt-float2(0,0.3), {0.22,-0.3});
-    t = 1.-smoothstep(0., 0.001, t+progressDF(petalSt, progress));
+    t = 1.-smoothstep(0., 0.001, t+posNoise(petalSt, progress));
     color = mix(color, float4(float3(0.1), 1.), t);
 
 
-    // TEST:
-//    palette.petalCount = 2;
     float petalCount = palette.petalCount;
 
     // petals
@@ -253,7 +242,7 @@ float4 hemiSpheresFlower(float2 st, float progress, StampUniforms stampUniforms)
     color = mix(color, rightBigLeafCol, rightBigLeafCol.a);
 
     // stalk
-    t = rectangle(stalkSt, {-stalkTH/2+progressDF(stalkSt, progress)/4,0,stalkTH/2+progressDF(stalkSt, progress)/4,-1.});
+    t = rectangle(stalkSt, {-stalkTH/2+posNoise(stalkSt, progress)/4,0,stalkTH/2+posNoise(stalkSt, progress)/4,-1.});
     color = mix(color, float4(0.12,0.24,0.1,1), step(1., t));
 
 
@@ -284,12 +273,10 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
 
     float progress = fract(uniforms.time/10);
     progress = clamp(lerp(progress, 0, 1, 0, 1.2), 0., 1.);
-    // TEST
-//    progress = clamp(lerp(progress, 0, 1, 0, 1.9), 0., 1.);
 
     float4 color = mix(float4(palette.bgCols[0], 1), float4(palette.bgCols[1], 1), pow(st.y, .5));
 
-//    st *= 10;
+//    st *= 3;
 //    st = fract(st);
     st -= 0.5;
     st *= 2;
