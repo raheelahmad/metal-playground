@@ -152,7 +152,7 @@ float tulipPetal(float2 p, float r, int flipped, float noise) {
 }
 
 float4 leaf(float2 leafSt, float r1, float r2, float3 topCol, float3 bottomCol, int useBottom, float noise)  {
-    r1 += noise*5;
+    r1 += noise*abs(leafSt.x)*5;
     r2 += noise*5;
 
     leafSt -= float2(0.,sqrt(r1*r1 - r2*r2)); // position in the center-x of stem
@@ -214,16 +214,16 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
     float2 stalkSt = petalSt-float2(0,-petalR);
 
     // thorns
-    int thornsCount = 12*progress;
-    float thornsSeparation = 0.08;
-    for(int i=0; i<thornsCount; i++) {
-        float thornY = thornsSeparation + thornsSeparation*i;
-        float mod = 1. - fmod(float(i), 2);
-        float rotation =  M_PI_F*2.5-mod;
-        float thornX = mod == 0 ? stalkTH : -stalkTH;
-        float2 thornSt = rotate(rotation) * scale(0.014)*(stalkSt + float2(thornX, thornY));
-        color = mix(color, float4(green, 1), 1. - step(0.2, sdEquilateralTriangle(thornSt)));
-    }
+//    int thornsCount = 12*progress;
+//    float thornsSeparation = 0.08;
+//    for(int i=0; i<thornsCount; i++) {
+//        float thornY = thornsSeparation + thornsSeparation*i;
+//        float mod = 1. - fmod(float(i), 2);
+//        float rotation =  M_PI_F*2.5-mod;
+//        float thornX = mod == 0 ? stalkTH : -stalkTH;
+//        float2 thornSt = rotate(rotation) * scale(0.014)*(stalkSt + float2(thornX, thornY));
+//        color = mix(color, float4(green, 1), 1. - step(0.2, sdEquilateralTriangle(thornSt)));
+//    }
 
     float r1 = 0.11;
     float r2 = 0.07;
@@ -251,8 +251,8 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
     color = mix(color, rightBigLeafCol, rightBigLeafCol.a);
 
     // stalk
-//    t = rectangle(stalkSt, {-stalkTH/2+posNoise(stalkSt, uniforms)/4,0,stalkTH/2+posNoise(stalkSt, uniforms)/4,-1.});
-//    color = mix(color, float4(0.12,0.24,0.1,1), step(1., t));
+    t = rectangle(stalkSt, {-stalkTH/2+noise,0,stalkTH/2+noise,-1.});
+    color = mix(color, float4(0.12,0.24,0.1,1), step(1., t));
 
 
     // vein lines
@@ -264,6 +264,7 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
 
     veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
     color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
+
     return color*progress;
 }
 

@@ -12,7 +12,7 @@ import SwiftUI
 fileprivate class Config: ObservableObject {
     @Published var fullDurationMinutes: Int = 15
     @Published var hourOfDay: Int = 0
-    @Published var speed: Float = 1
+    @Published var speed: Float = 20
 }
 
 
@@ -47,7 +47,7 @@ final class LiveCodeScene: Scene {
         stamp: Float(StampKind.flower.rawValue),
         hourOfDay: 2,
         fullDurationMinutes: Float(25),
-        progress: 0.0
+        progress: 100
     )
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping (MTLRenderPipelineState, MTLBuffer) -> ()) {
