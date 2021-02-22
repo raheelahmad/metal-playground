@@ -48,6 +48,7 @@ final class Renderer: NSObject, MTKViewDelegate {
         view.colorPixelFormat = pixelFormat
         view.delegate = self
         uniforms.screen_scale = 2
+        view.preferredFramesPerSecond = 10
         setupPipeline()
     }
 

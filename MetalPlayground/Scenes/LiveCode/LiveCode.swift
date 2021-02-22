@@ -59,6 +59,7 @@ final class LiveCodeScene: Scene {
         compile()
     }
 
+    var progresses: [Float] = []
     func tick(time: Float) {
         compileQueue.async {
             self.compile()
@@ -70,6 +71,13 @@ final class LiveCodeScene: Scene {
             fullDurationMinutes: Float(config.fullDurationMinutes),
             progress: simd_fract(time/config.speed)
         )
+
+        progresses.append(uniforms.progress)
+
+        if progresses.count % 50 == 0 {
+            for p in progresses { print(p) }
+            progresses.removeAll()
+        }
     }
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
