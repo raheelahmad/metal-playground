@@ -57,30 +57,6 @@ constant Palette palettes[palettesCount] = {
         .bgCols = {float3(0.42,0.31,0.24), float3(0.32,0.5,0.34)},
         .petalCols = {float3(0.92,0.5,0.34), float3(0.83,0.5,0.54)},
     },
-//    Palette {
-//        .bgCols = {float3(0.42,0.29,0.24), float3(0.32,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.012,0.5,0.34)},
-//    },
-//    Palette {
-//        .bgCols = {float3(0.42,0.91,0.24), float3(0.32,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.41,0.5,0.34)},
-//    },
-//    Palette {
-//        .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.82,0.31,0.34)},
-//    },
-//    Palette {
-//        .bgCols = {float3(0.42,0.84,0.24), float3(0.32,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.62,0.51,0.34)},
-//    },
-//    Palette {
-//        .bgCols = {float3(0.42,0.54,0.24), float3(0.32,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.92,0.5,0.34)},
-//    },
-//    Palette {
-//        .bgCols = {float3(0.42,0.29,0.24), float3(0.12,0.5,0.34)},
-//        .petalCols = {float3(0.32,0.5,0.34), float3(0.22,0.5,0.34)},
-//    },
 };
 
 // --
@@ -92,7 +68,7 @@ Palette palette_for_stamp_uniform(StampUniforms uniforms) {
     Palette palette = palettes[idx];
 
     float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
-    palette.petalCount = ceil(randBase * 5)+1;
+    palette.petalCount = ceil(randBase * 3)+1;
     randBase = lerp(randBase, 0, 1, 0.5, 1.0);
     palette.petalR = randBase*.49;
 
@@ -168,8 +144,8 @@ float4 leaf(float2 leafSt, float r1, float r2, float3 topCol, float3 bottomCol, 
 
 float4 openingFlower(float2 st, StampUniforms uniforms) {
     float progress = uniforms.progress;
-    progress = 1.; // TODO; remove
-    uniforms.progress = 1.; // TODO; remove
+//    progress = 1.; // TODO; remove
+//    uniforms.progress = 1.; // TODO; remove
     Palette palette = palette_for_stamp_uniform(uniforms);
     float t = 0;
 
@@ -177,44 +153,40 @@ float4 openingFlower(float2 st, StampUniforms uniforms) {
 
     float petalR = palette.petalR;
 
-    // TEST circle
-    color = mix(color, float4(0.7,0.9,0.8,1), 1.-step(0.015, length(st)));
-
     // move up
     float2 petalSt = st;
     petalSt.y -= petalR;
 
-
     float noise = posNoise(st, uniforms);
 
     // triangle above petals
-    t = sdTriangleIsosceles(petalSt-float2(0,0.3), {0.22,-0.3});
+    t = sdTriangleIsosceles(petalSt*scale(1-noise*2)-float2(0,0.15), {0.28,-0.3});
     t = 1.-smoothstep(0., 0.001, t+noise);
     color = mix(color, float4(float3(0.1), 1.), t);
 
 
-    float petalCount = 2;
+    float petalCount = 1;
 
     // petals
-    float maxRotation = petalCount * M_PI_F/9;
-    for (int petalIdx=0; petalIdx < petalCount; petalIdx++) {
-        float rotation = (petalIdx+1)*maxRotation;
-        rotation *= maxRotation * progress;
-        float colVar = float(petalIdx+0.1)/float(petalCount);
-        colVar = lerp(colVar, 0, 1, 0.6, 0.8);
+    float rotation = M_PI_F/3;
+    float colVar = 1.;
+    float petalTH = 0.2;
+    float petalL = 0.35;
+    float2 displace = float2(petalTH/2.1,petalL/1.45);
+    float2 topPetalSt = rotate(0.9 - noise) * (petalSt + displace) - displace;
+    float leftSmallLeafCol = petal(topPetalSt, petalL, petalTH);
+    color = mix(color, float4(palette.petalCols[0]/colVar, 1), step(1., leftSmallLeafCol));
 
-        float leftSmallLeafCol = petal(rotate(rotation) * (petalSt + float2(0.3/2, 0)) + float2(0.0,-0.0), 0.3, 0.2);
-        color = mix(color, float4(palette.petalCols[0]/colVar, 1), leftSmallLeafCol);
-
-        float rightSmallLeafCol = petal(rotate(-rotation) * (petalSt + float2(0.3/2, 0)) + float2(0.0,-0.0), 0.3, 0.2);
-        color = mix(color, float4(palette.petalCols[1]/colVar, 1), rightSmallLeafCol);
-    }
+    displace = float2(-petalTH/2.1,petalL/1.45);
+    topPetalSt = rotate(-0.9 + noise) * (petalSt + displace) - displace;
+    float rightSmallLeafCol = petal(topPetalSt, petalL, petalTH);
+    color = mix(color, float4(palette.petalCols[1]/colVar, 1), step(1, rightSmallLeafCol));
 
     float3 green = {0.23, 0.39, 0.11};
     float3 black = {0.02, 0.09, 0.00};
 
     float stalkTH = 0.02;
-    float2 stalkSt = petalSt-float2(0,-petalR);
+    float2 stalkSt = petalSt-float2(0,-petalL/1.8);
 
     float r1 = 0.11;
     float r2 = 0.07;
@@ -223,12 +195,12 @@ float4 openingFlower(float2 st, StampUniforms uniforms) {
     // --- Small leaves on top
     float2 smallLeafSt = stalkSt;
     // leaf 1
-    float2 leafSt = rotate(rotateSmallLeaf) * smallLeafSt; // position it down and rotate
-    float4 leftSmallLeafCol = leaf(leafSt, r1, r2, green, black, 1, noise);
-    color = mix(color, leftSmallLeafCol, leftSmallLeafCol.a);
-    // leaf 2
-    float4 rightSmallLeafCol = leaf(rotate(-rotateSmallLeaf) * smallLeafSt, r1, r2, green, black, 1, noise);
-    color = mix(color, rightSmallLeafCol, rightSmallLeafCol.a);
+//    float2 leafSt = rotate(rotateSmallLeaf) * smallLeafSt; // position it down and rotate
+//    float4 leftSmallLeafCol = leaf(leafSt, r1, r2, green, black, 1, noise);
+//    color = mix(color, leftSmallLeafCol, leftSmallLeafCol.a);
+//    // leaf 2
+//    float4 rightSmallLeafCol = leaf(rotate(-rotateSmallLeaf) * smallLeafSt, r1, r2, green, black, 1, noise);
+//    color = mix(color, rightSmallLeafCol, rightSmallLeafCol.a);
 
     float bigR1 = r1 * 2.1;
     float bigR2 =  0.16;
@@ -244,7 +216,6 @@ float4 openingFlower(float2 st, StampUniforms uniforms) {
     // stalk
     t = rectangle(stalkSt, {-stalkTH/2+noise/2,0,stalkTH/2-noise/2,-1.});
     color = mix(color, float4(0.12,0.24,0.1,1), step(1., t));
-
 
     // vein lines
     float veinTH = 0.002;
@@ -306,18 +277,6 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
 
     float stalkTH = 0.02;
     float2 stalkSt = petalSt-float2(0,-petalR);
-
-    // thorns
-//    int thornsCount = 12*progress;
-//    float thornsSeparation = 0.08;
-//    for(int i=0; i<thornsCount; i++) {
-//        float thornY = thornsSeparation + thornsSeparation*i;
-//        float mod = 1. - fmod(float(i), 2);
-//        float rotation =  M_PI_F*2.5-mod;
-//        float thornX = mod == 0 ? stalkTH : -stalkTH;
-//        float2 thornSt = rotate(rotation) * scale(0.014)*(stalkSt + float2(thornX, thornY));
-//        color = mix(color, float4(green, 1), 1. - step(0.2, sdEquilateralTriangle(thornSt)));
-//    }
 
     float r1 = 0.11;
     float r2 = 0.07;
@@ -388,6 +347,7 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     st.x /= yOverX;
 
     float randomFlowerIndex = hash(redidUniforms.fullDurationMinutes + redidUniforms.hourOfDay);
+    randomFlowerIndex = 0.2;
     if (randomFlowerIndex > 0.5) {
         float4 flower2 = hemiSpheresFlower(st, redidUniforms);
         color = mix(color, flower2, flower2.a);
