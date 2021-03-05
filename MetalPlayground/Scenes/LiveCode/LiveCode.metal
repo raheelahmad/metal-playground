@@ -39,7 +39,7 @@ typedef struct {
     float noise;
 } Palette;
 
-constant int palettesCount = 4;
+constant int palettesCount = 10;
 constant Palette palettes[palettesCount] = {
     Palette {
         .bgCols = {float3(0.7,0.7,0.8), float3(0.7,0.8,0.5)},
@@ -57,6 +57,30 @@ constant Palette palettes[palettesCount] = {
         .bgCols = {float3(0.33,0.30,0.46), float3(0.50,0.498,0.52)},
         .petalCols = {float3(0.92,0.5,0.34), float3(0.83,0.5,0.54)},
     },
+    Palette {
+        .bgCols = {float3(0.2,0.47,0.40), float3(0.54,0.61,0.51)},
+        .petalCols = {float3(0.57,0.29,0.26), float3(0.71,0.61,0.36)},
+    },
+    Palette {
+        .bgCols = {float3(0.91,0.58,0.52), float3(0.93,0.48,0.72)},
+        .petalCols = {float3(0.44,0.47,0.25), float3(0.61,0.78,0.61)},
+    },
+    Palette {
+        .bgCols = {float3(0.71,0.91,0.51), float3(0.33,0.501,0.32)},
+        .petalCols = {float3(0.78,0.08,0.08), float3(0.37,0.38,0.46)},
+    },
+    Palette {
+        .bgCols = {float3(0.58,0.78,0.91), float3(0.51,0.71,0.48)},
+        .petalCols = {float3(0.38,0.41,0.18), float3(0.1,0.2,0.44)},
+    },
+    Palette {
+        .bgCols = {float3(0.21,0.62,0.19), float3(0.71,0.73,0.70)},
+        .petalCols = {float3(0.18,0.21,0.18), float3(0.3,0.31,0.24)},
+    },
+    Palette {
+        .bgCols = {float3(0.43,0.23,0.21), float3(0.32,0.46,0.47)},
+        .petalCols = {float3(0.58,0.31,0.18), float3(0.42,0.62,0.34)},
+    },
 };
 
 // --
@@ -65,7 +89,7 @@ Palette palette_for_stamp_uniform(StampUniforms uniforms) {
     float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes)  * palettesCount;
     int idx = floor(randIndexBase);
 
-    idx = 2;
+    idx = 9;
     Palette palette = palettes[idx];
 
     float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
