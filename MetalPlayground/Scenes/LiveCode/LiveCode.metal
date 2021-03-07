@@ -274,7 +274,7 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
         float rotation = petalCount > 1 ? 1.0 - float(petalIdx) / (petalCount - 1) : 0;
         rotation *= maxRotation * progress;
         float colVar = float(petalIdx+0.1)/float(palette.petalCount);
-        colVar = lerp(colVar, 0, 1, 0.5, 0.9);
+        colVar = lerp(colVar, 0, 1, 0.6, 0.9);
 
         t = tulipPetal(rotate(rotation) * petalSt + float2(petalR,-0.0), petalR, 0, noise);
         color = mix(color, float4(palette.petalCols[0]/colVar, 1), t);
@@ -358,7 +358,7 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     st.x /= yOverX;
 
     float randomFlowerIndex = hash(redidUniforms.fullDurationMinutes + redidUniforms.hourOfDay);
-//    randomFlowerIndex = 0.9;
+    randomFlowerIndex = 0.9;
     if (randomFlowerIndex > 0.5) {
         float4 flower2 = hemiSpheresFlower(st, redidUniforms);
         color = mix(color, flower2, flower2.a);
