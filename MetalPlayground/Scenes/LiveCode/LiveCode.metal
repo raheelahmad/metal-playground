@@ -16,6 +16,7 @@ struct FragmentUniforms {
 struct StampUniforms {
     float kind;
     float hourOfDay;
+    float minuteOfHour;
     float fullDurationMinutes;
     float progress;
 };
@@ -86,16 +87,15 @@ constant Palette palettes[palettesCount] = {
 // --
 
 Palette palette_for_stamp_uniform(StampUniforms uniforms) {
-    float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes)  * palettesCount;
+    float randIndexBase = random(uniforms.hourOfDay * uniforms.fullDurationMinutes + uniforms.minuteOfHour)  * palettesCount;
     int idx = floor(randIndexBase);
 
-    idx = 9;
     Palette palette = palettes[idx];
 
-    float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes);
-    palette.petalCount = ceil(randBase * 3)+1;
+    float randBase = random(uniforms.hourOfDay + uniforms.fullDurationMinutes/10 + uniforms.minuteOfHour);
+    palette.petalCount = ceil(randBase * 2)+1;
     randBase = lerp(randBase, 0, 1, 0.5, 1.0);
-    palette.petalR = randBase*.49;
+    palette.petalR = randBase*.4;
 
     return palette;
 }
@@ -169,8 +169,8 @@ float4 leaf(float2 leafSt, float r1, float r2, float3 topCol, float3 bottomCol, 
 
 float4 openingFlower(float2 st, StampUniforms uniforms) {
     float progress = uniforms.progress;
-    progress = 1.; // TODO; remove
-    uniforms.progress = 1.; // TODO; remove
+//    progress = 1.; // TODO; remove
+//    uniforms.progress = 1.; // TODO; remove
     Palette palette = palette_for_stamp_uniform(uniforms);
     float t = 0;
 
@@ -274,7 +274,7 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
         float rotation = petalCount > 1 ? 1.0 - float(petalIdx) / (petalCount - 1) : 0;
         rotation *= maxRotation * progress;
         float colVar = float(petalIdx+0.1)/float(palette.petalCount);
-        colVar = lerp(colVar, 0, 1, 0.6, 0.8);
+        colVar = lerp(colVar, 0, 1, 0.5, 0.9);
 
         t = tulipPetal(rotate(rotation) * petalSt + float2(petalR,-0.0), petalR, 0, noise);
         color = mix(color, float4(palette.petalCols[0]/colVar, 1), t);
@@ -320,14 +320,14 @@ float4 hemiSpheresFlower(float2 st, StampUniforms uniforms) {
 
 
     // vein lines
-    float veinTH = 0.002;
-    float4 lineBox = {-veinTH,0.,veinTH,-0.33*progress};
-    float2 veinSt = rotate(-rotateBigLeaf+M_PI_F*1.5) * bigLeafSt;
-    //    veinSt.x += sin(veinSt.y*310)/330;
-    color = mix(color, float4(black, 1), rectangle(veinSt, lineBox));
-
-    veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
-    color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
+//    float veinTH = 0.002;
+//    float4 lineBox = {-veinTH,0.,veinTH,-0.33*progress};
+//    float2 veinSt = rotate(-rotateBigLeaf+M_PI_F*1.5) * bigLeafSt;
+//    //    veinSt.x += sin(veinSt.y*310)/330;
+//    color = mix(color, float4(black, 1), rectangle(veinSt, lineBox));
+//
+//    veinSt = rotate(rotateBigLeaf-M_PI_F*1.5) * bigLeafSt;
+//    color = mix(color, float4(green, 1), rectangle(veinSt, lineBox));
 
     return color*progress;
 }
@@ -358,7 +358,7 @@ fragment float4 liveCodeFragmentShader(VertexOut interpolated [[stage_in]], cons
     st.x /= yOverX;
 
     float randomFlowerIndex = hash(redidUniforms.fullDurationMinutes + redidUniforms.hourOfDay);
-    randomFlowerIndex = 0.2;
+//    randomFlowerIndex = 0.9;
     if (randomFlowerIndex > 0.5) {
         float4 flower2 = hemiSpheresFlower(st, redidUniforms);
         color = mix(color, flower2, flower2.a);

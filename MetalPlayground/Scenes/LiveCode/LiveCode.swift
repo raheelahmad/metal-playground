@@ -12,6 +12,7 @@ import SwiftUI
 fileprivate class Config: ObservableObject {
     @Published var fullDurationMinutes: Int = 15
     @Published var hourOfDay: Int = 0
+    @Published var minuteOfHour: Float = 0
     @Published var speed: Float = 20
 }
 
@@ -21,6 +22,7 @@ final class LiveCodeScene: Scene {
     struct Uniforms {
         var stamp: Float
         var hourOfDay: Float
+        var minuteOfHour: Float
         var fullDurationMinutes: Float
         var progress: Float
     }
@@ -46,6 +48,7 @@ final class LiveCodeScene: Scene {
     private var uniforms = Uniforms(
         stamp: Float(StampKind.flower.rawValue),
         hourOfDay: 2,
+        minuteOfHour: 35,
         fullDurationMinutes: Float(25),
         progress: 100
     )
@@ -68,6 +71,7 @@ final class LiveCodeScene: Scene {
         uniforms = Uniforms(
             stamp: Float(StampKind.flower.rawValue),
             hourOfDay: Float(config.hourOfDay),
+            minuteOfHour: Float(config.minuteOfHour),
             fullDurationMinutes: Float(config.fullDurationMinutes),
             progress: simd_fract(time/config.speed)
         )
@@ -158,6 +162,12 @@ final class LiveCodeScene: Scene {
                     onEditingChanged: { _ in },
                     label: {
                         Text("Speed")
+                    })
+                Slider(
+                    value: $config.minuteOfHour, in: 1...60.0,
+                    onEditingChanged: { _ in },
+                    label: {
+                        Text("Minute of hour")
                     })
                 Picker(selection: $config.hourOfDay, label: Text("Hour of Day")) {
                     ForEach(0..<24) {  fl in
