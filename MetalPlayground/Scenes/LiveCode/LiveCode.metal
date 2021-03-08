@@ -64,7 +64,7 @@ constant Palette palettes[palettesCount] = {
     },
     Palette {
         .bgCols = {float3(0.91,0.58,0.52), float3(0.93,0.48,0.72)},
-        .petalCols = {float3(0.44,0.47,0.25), float3(0.61,0.78,0.61)},
+        .petalCols = {float3(0.44,0.47,0.25), float3(0.41,0.68,0.51)},
     },
     Palette {
         .bgCols = {float3(0.71,0.91,0.51), float3(0.33,0.501,0.32)},
@@ -76,11 +76,11 @@ constant Palette palettes[palettesCount] = {
     },
     Palette {
         .bgCols = {float3(0.21,0.62,0.19), float3(0.71,0.73,0.70)},
-        .petalCols = {float3(0.18,0.21,0.18), float3(0.3,0.31,0.24)},
+        .petalCols = {float3(0.28,0.31,0.28), float3(0.4,0.31,0.24)},
     },
     Palette {
         .bgCols = {float3(0.43,0.23,0.21), float3(0.32,0.46,0.47)},
-        .petalCols = {float3(0.58,0.31,0.18), float3(0.42,0.62,0.34)},
+        .petalCols = {float3(0.58,0.31,0.18), float3(0.42,0.54,0.34)},
     },
 };
 
