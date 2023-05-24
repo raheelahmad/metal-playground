@@ -43,6 +43,7 @@
 		59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */; };
 		59A312632517F48900F6ACA2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A312622517F48900F6ACA2 /* RootView.swift */; };
 		59A312652517F72E00F6ACA2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A312642517F72E00F6ACA2 /* ViewModel.swift */; };
+		59B25E4E2A1D581400F1AF4A /* raga.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 59B25E4D2A1D581400F1AF4A /* raga.mp3 */; };
 		59BCCB4624BD261300595132 /* ShaderToy01.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59BCCB4524BD261300595132 /* ShaderToy01.metal */; };
 		59C2BD25246A709D00335E59 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C2BD24246A709D00335E59 /* AppDelegate.swift */; };
 		59C2BD29246A709F00335E59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 59C2BD28246A709F00335E59 /* Assets.xcassets */; };
@@ -113,6 +114,7 @@
 		59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSlider.swift; sourceTree = "<group>"; };
 		59A312622517F48900F6ACA2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		59A312642517F72E00F6ACA2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		59B25E4D2A1D581400F1AF4A /* raga.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = raga.mp3; sourceTree = "<group>"; };
 		59BCCB4524BD261300595132 /* ShaderToy01.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToy01.metal; sourceTree = "<group>"; };
 		59C2BD21246A709D00335E59 /* MetalPlayground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalPlayground.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		59C2BD24246A709D00335E59 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				59A3125C2517EFF300F6ACA2 /* UI */,
 				590BE6152500C4C200E9B573 /* Scenes */,
 				59C2BD24246A709D00335E59 /* AppDelegate.swift */,
+				59B25E4D2A1D581400F1AF4A /* raga.mp3 */,
 				59C2BD28246A709F00335E59 /* Assets.xcassets */,
 				59C2BD2A246A709F00335E59 /* Main.storyboard */,
 				59C2BD2D246A709F00335E59 /* Info.plist */,
@@ -391,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				59C2BD29246A709F00335E59 /* Assets.xcassets in Resources */,
+				59B25E4E2A1D581400F1AF4A /* raga.mp3 in Resources */,
 				59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */,
 				59C2BD2C246A709F00335E59 /* Main.storyboard in Resources */,
 				59CF2B1D24DB5E8500606BB2 /* train.obj in Resources */,
@@ -596,6 +600,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sakunlabs.MetalPlayground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -617,6 +622,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sakunlabs.MetalPlayground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

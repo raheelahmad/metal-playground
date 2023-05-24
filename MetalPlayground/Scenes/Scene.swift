@@ -22,10 +22,12 @@ protocol Scene {
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built)
     func draw(encoder: MTLRenderCommandEncoder)
+    var isPaused: Bool { get }
 }
 
 extension Scene {
     func tick(time: Float) { }
+    var isPaused: Bool { false }
     var basicVertices: [Vertex] {
         [
             Vertex(position: [-1, -1]),
@@ -71,8 +73,8 @@ extension Scene {
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
-    case mattCourse
     case liveCode
+    case mattCourse
     case leftRightTiler
     case futuristicUI
     case happyJumping

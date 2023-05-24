@@ -228,5 +228,101 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3096070D-084C-4B21-A594-8C6158961846"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
+            landmarkName = "setUniforms(device:encoder:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "3096070D-084C-4B21-A594-8C6158961846 - e2f4e258a9c6028f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MetalPlayground.LiveCodeScene.setUniforms(device: __C.MTLDevice, encoder: __C.MTLRenderCommandEncoder) -&gt; ()"
+                  moduleName = "MetalPlayground"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raheel/Projects/etc/metal/metal-playground/MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "339"
+                  endingLineNumber = "339"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "3096070D-084C-4B21-A594-8C6158961846 - e2f4e258a9c60349"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MetalPlayground.LiveCodeScene.setUniforms(device: __C.MTLDevice, encoder: __C.MTLRenderCommandEncoder) -&gt; ()"
+                  moduleName = "MetalPlayground"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raheel/Projects/etc/metal/metal-playground/MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "345"
+                  endingLineNumber = "345"
+                  offsetFromSymbolStart = "56">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FD528642-E74F-4469-82B3-2F0C57EF142D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "227"
+            endingLineNumber = "227"
+            landmarkName = "processAudioData(buffer:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "FD528642-E74F-4469-82B3-2F0C57EF142D - 9a804625ce0dd505"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MetalPlayground.LiveCodeScene.processAudioData(buffer: __C.AVAudioPCMBuffer) -&gt; ()"
+                  moduleName = "MetalPlayground"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raheel/Projects/etc/metal/metal-playground/MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "592">
+               </Location>
+               <Location
+                  uuid = "FD528642-E74F-4469-82B3-2F0C57EF142D - 9a804625ce0dd505"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MetalPlayground.LiveCodeScene.processAudioData(buffer: __C.AVAudioPCMBuffer) -&gt; ()"
+                  moduleName = "MetalPlayground"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/raheel/Projects/etc/metal/metal-playground/MetalPlayground/Scenes/LiveCode/LiveCode.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "226"
+                  endingLineNumber = "226"
+                  offsetFromSymbolStart = "420">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

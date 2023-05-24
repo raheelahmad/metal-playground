@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-final class MetalSwiftView: NSViewRepresentable {
+struct MetalSwiftView: NSViewRepresentable {
     let metalView: MetalView
 
     init(metalView: MetalView) {

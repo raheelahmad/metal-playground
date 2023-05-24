@@ -28,21 +28,26 @@ final class ViewModel: ObservableObject {
     @Published var scene: Scene
     @Published var hasConfig: Bool
     private var cancellables: [AnyCancellable] = []
+    private let view: MetalView
 
     init(view: MetalView, renderer: Renderer) {
         self.renderer = renderer
+        self.view = view
         view.delegate = renderer
         let sceneKind = SceneKind.allCases.first!
         self.sceneKind = sceneKind
         self.scene = sceneKind.scene
         self.hasConfig = sceneKind.scene.view != nil
-        updateSceneSelection(kind: sceneKind)
 
+        updateSceneSelection(kind: sceneKind)
     }
 
     private func updateSceneSelection(kind: SceneKind) {
         scene = kind.scene
         renderer.scene = scene
         self.hasConfig = sceneKind.scene.view != nil
+
+        view.enableSetNeedsDisplay = !scene.isPaused
+        view.isPaused = scene.isPaused
     }
 }
