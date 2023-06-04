@@ -55,17 +55,40 @@ fragment float4 liveCodeFragmentShader(
                                        const constant float *loudnessBuffer [[buffer(1)]],
                                        const constant float *frequenciesBuffer [[buffer(2)]]
 ) {
+    float loudness = loudnessBuffer[0];
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
+    uv = 2 * (uv - 0.5);
 
-//    float2 st = 2 * (uv - 0.5);
+    float p = length(uv);
+    float pa = atan2(uv.y, uv.x);
 
-    float3 color = float3(0);
-    int index = int(lerp(uv.x, 0.0, 1.0, 0, 360));
+    // Frequency:
+   // map -1 → 1 to 0 → 361
+    // int index = int(lerp(uv.x, -1.0, 1.0, 0, 361));
+    float indexRad = (pa / 3.1415 + 1) / 2.0; // 0 → 1
+
+    int index = lerp(indexRad, 0, 1, 0, 361);
+
     float freq = frequenciesBuffer[index];
-    float p = freq;
+    freq = sin(indexRad * 3.1415) * freq;
+    float o = 0;
+    float inc = 0;
+    for (float i = 0; i < 8; i += 1.0) {
+        float baseR = 0.5 * (0.3 + (0.5 + 0.5 * sin(freq + uniforms.time * 0.1)));
+        float r = baseR + inc;
 
-    color = float3(p, 0, p/2);
+        r += 0.01 * (0.5 + 0.5 * sin(pa * i + uniforms.time * (i - 0.0)));
+        r += loudness/3;
+        o += drawCircle(r, p, 0.008 * (1.0 + freq * (i - 1.0)));
 
-    return float4(color, 1);
+        inc += 0.008;
+    }
+
+//    p = 1.0 - length(uv)*freq;
+//    p = step(0.0, p);
+    float3 bcol = float3(1.0, 0.22, 0.5 - 0.4 * uv.y) * (1.0 - 0.1 * p * freq/2);
+    float3 col = mix(bcol, float3(1, 1, 0.7), o);
+
+    return float4(col, 1);
 }
 
