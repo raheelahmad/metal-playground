@@ -74,6 +74,7 @@ extension Scene {
 
 enum SceneKind: Int, CaseIterable, Identifiable {
     case liveCode
+    case rayMarch
     case mattCourse
     case leftRightTiler
     case futuristicUI
@@ -94,10 +95,12 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .mattCourse:
-            return "Matt DesLauriers' Course"
         case .liveCode:
             return "Live Code"
+        case .mattCourse:
+            return "Matt DesLauriers' Course"
+        case .rayMarch:
+            return "Ray Marching"
         case .leftRightTiler:
             return "Book of Shaders - Left/Right Tiler"
         case .happyJumping:
@@ -127,6 +130,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Scene {
         switch self {
+            case .rayMarch: return RayMarch()
         case .mattCourse: return MattCourseScene()
         case .liveCode: return LiveCodeScene()
         case .leftRightTiler: return BoSLeftRightTiler()

@@ -192,24 +192,6 @@ final class LiveCodeScene: Scene {
         } catch {
             print(error.localizedDescription)
         }
-
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            let file = Bundle.main.url(forResource: "raga", withExtension: "mp3")!
-//            let file = Bundle.main.url(forResource: "who", withExtension: "mp3")!
-//            let file = Bundle.main.url(forResource: "laila", withExtension: "m4a")!
-//            let file = Bundle.main.url(forResource: "malabar", withExtension: "mp3")!
-            let audio = try! AVAudioFile(forReading: file)
-            let format = audio.processingFormat
-            let player = AVAudioPlayerNode()
-            self.engine.mainMixerNode.installTap(onBus: 0, bufferSize: 1024, format: nil) { [weak self] buffer, time in
-                self?.processAudioData(buffer: buffer)
-            }
-            self.engine.attach(player)
-            self.engine.connect(player, to: self.engine.mainMixerNode, format: format)
-            player.scheduleFile(audio, at: nil)
-            player.play()
-        }
     }
 
     func processAudioData(buffer: AVAudioPCMBuffer) {
@@ -353,8 +335,6 @@ final class LiveCodeScene: Scene {
     }
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
-        encoder.setFragmentBuffer(loudnessBuffer, offset: 0, index: 1)
-        encoder.setFragmentBuffer(freqeuencyBuffer, offset: 0, index: 2)
     }
 
     private func compile() {
