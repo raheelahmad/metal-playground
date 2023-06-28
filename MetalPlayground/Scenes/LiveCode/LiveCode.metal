@@ -65,39 +65,74 @@ float getDistanceToTorus(float3 point) {
 }
 
 float getDistanceToBox(float3 point) {
-    float3 boxPosition = float3(-1, 1.3, 1);
-    float3 boxSize = float3(0.3);
-    point = point - boxPosition;
+    float3 boxSize = float3(1);
     float3 q = abs(point) - boxSize;
     return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
 }
 
-float getDistance(float3 point) {
-    float3 spherePosition = float3(-1, 0.6, 0);
-    float sphereRadius = 0.2;
-    float planeY = -0.2;
-    float distanceToSphere = length(spherePosition - point) - sphereRadius;
-    float distanceToPlane = point.y - planeY;
-    float distanceToCapsule = getDistanceToCapsule(point);
-    float distanceToTorus = getDistanceToTorus(point);
-    float distanceToBox = getDistanceToBox(point);
-    float distanceToCylinder = getDistanceToCylinder(point);
+float2x2 rotateBy(float a) {
+    float s = sin(a);
+    float c = cos(a);
+    return float2x2(c, -s, s, c);
+}
 
-    float d = min(distanceToPlane, distanceToSphere);
-    d = min(d, distanceToCapsule);
-    d = min(d, distanceToTorus);
-    d = min(d, distanceToBox);
-    d = min(d, distanceToCylinder);
+float subtractSDFs(float a, float b) {
+    return max(-a, b);
+}
+
+float intersectSDFs(float a, float b) {
+    return max(a, b);
+}
+float unionSDFs(float a, float b) {
+    return min(a, b);
+}
+
+float blendSDFs(float a, float b, float t) {
+    return mix(a, b, t);
+}
+
+float smoothUnionSDFs( float a, float b, float k) {
+    float h = clamp( 0.5+0.5* (b-a)/k, 0., 1. );
+    return mix( b, a, h) - k*h* (1.0-h);
+}
+
+float getDistance(float3 point, float time) {
+    float3 spherePosition = float3(0);
+    float sphereRadius = 1.2;
+    float planeY = -1.2;
+    float distanceToPlane = point.y - planeY;
+//    float distanceToSphere = length(spherePosition - point) - sphereRadius;
+//    float distanceToCapsule = getDistanceToCapsule(point);
+//    float distanceToTorus = getDistanceToTorus(point);
+
+    // Box
+    float3 boxPoint = point;
+    boxPoint.xz = boxPoint.xz * rotateBy(time);
+    float distanceToBox = getDistanceToBox(boxPoint);
+
+    // Sphere
+    float3 spherePoint = point;
+    spherePoint = point - float3(0.0);
+    float secondDistanceToSphere = length(spherePoint) - sphereRadius;
+
+    float shapeD = blendSDFs(distanceToBox, secondDistanceToSphere, (0.5 + sin(time)/2));
+
+    float d = distanceToPlane;
+    d = min(d, shapeD);
+    //    d = min(d, distanceToSphere);
+//    d = min(d, distanceToTorus);
+//    d = min(d, distanceToBox);
+//    d = min(d, distanceToCylinder);
     return d;
 }
 
-float3 getNormal(float3 point) {
-    float dist = getDistance(point);
+float3 getNormal(float3 point, float time) {
+    float dist = getDistance(point, time);
     float2 e = float2(0.01, 0);
     float3 normal = dist - float3(
-                                      getDistance(point - e.xyy),
-                                      getDistance(point - e.yxy),
-                                      getDistance(point - e.yyx)
+                                      getDistance(point - e.xyy, time),
+                                      getDistance(point - e.yxy, time),
+                                      getDistance(point - e.yyx, time)
                                       );
     return normalize(normal);
 }
@@ -110,7 +145,7 @@ float rayMarch(float3 rayOrigin, float3 rayDirection, float time) {
 
     for (int i = 0; i < MAX_STEPS; i++) {
         float3 marchPointToNextDistance = rayOrigin + rayDirection * distance;
-        float nextDistanceFromMarchPoint = getDistance(marchPointToNextDistance);
+        float nextDistanceFromMarchPoint = getDistance(marchPointToNextDistance, time);
         distance += nextDistanceFromMarchPoint;
         if (distance > MAX_DISTANCE || nextDistanceFromMarchPoint < MIN_SURFACE_DISTANCE) { break; }
     }
@@ -120,10 +155,10 @@ float rayMarch(float3 rayOrigin, float3 rayDirection, float time) {
 
 
 float getLight(float3 point, float time) {
-    float3 lightPosition = float3(0, 5, 6); // above the sphere
-    lightPosition.xz = float2(3 * cos(time), 6 * sin(time));
+    float3 lightPosition = float3(2, 5, -4); // above the sphere
+//    lightPosition.xz = float2(3 * cos(time), 6 * sin(time));
     float3 lightVector = normalize(lightPosition - point);
-    float3 normalAtPoint = getNormal(point);
+    float3 normalAtPoint = getNormal(point, time);
     float diffuse = dot(normalAtPoint, lightVector);
     diffuse = clamp(diffuse, 0., 1.);
 
@@ -144,7 +179,7 @@ fragment float4 liveCodeFragmentShader(
        1 - interpolated.pos.y / uniforms.screen_height
     ) - 0.5);
 
-    float3 rayOrigin = float3(0, 2.0, -3);
+    float3 rayOrigin = float3(0, 1.5, -8);
     float3 rayDirection = normalize(float3(uv.x, uv.y, 1.2));
     float d = rayMarch(rayOrigin, rayDirection, uniforms.time);
     float3 pointAtD = rayOrigin + rayDirection * d;
