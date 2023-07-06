@@ -78,6 +78,13 @@ float getDistanceToBox(float3 point) {
     return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
 }
 
+float getDistanceToPlane(float3 point) {
+    float p = dot(point, normalize(float3(0, 1, 0)));
+    return p;
+}
+
+// MARK: Operations
+
 float2x2 rotateBy(float a) {
     float s = sin(a);
     float c = cos(a);
@@ -104,19 +111,9 @@ float smoothUnionSDFs( float a, float b, float k) {
     return mix( b, a, h) - k*h* (1.0-h);
 }
 
-float getDistanceToPlane(float3 point) {
-    float p = dot(point, normalize(float3(0, 1, 0)));
-    return p;
-}
+// MARK: Ray Marching
 
 float getDistance(float3 point, float time) {
-    float3 spherePosition = float3(0);
-    float sphereRadius = 1.2;
-    float planeY = -1.2;
-
-    // Torus
-    float distanceToTorus = getDistanceToTorus(point);
-
     // Box
     float3 boxPoint = point;
     boxPoint -= float3(0.0, 1.8, -2);
@@ -142,17 +139,6 @@ float getDistance(float3 point, float time) {
     return d;
 }
 
-float3 getNormal(float3 point, float time) {
-    float dist = getDistance(point, time);
-    float2 e = float2(0.01, 0);
-    float3 normal = dist - float3(
-                                      getDistance(point - e.xyy, time),
-                                      getDistance(point - e.yxy, time),
-                                      getDistance(point - e.yyx, time)
-                                      );
-    return normalize(normal);
-}
-
 float rayMarch(float3 rayOrigin, float3 rayDirection, float time) {
     int MAX_STEPS = 200;
     float MAX_DISTANCE = 400.0;
@@ -170,6 +156,18 @@ float rayMarch(float3 rayOrigin, float3 rayDirection, float time) {
     return distance;
 }
 
+// MARK: Lighting
+
+float3 getNormal(float3 point, float time) {
+    float dist = getDistance(point, time);
+    float2 e = float2(0.01, 0);
+    float3 normal = dist - float3(
+                                      getDistance(point - e.xyy, time),
+                                      getDistance(point - e.yxy, time),
+                                      getDistance(point - e.yyx, time)
+                                      );
+    return normalize(normal);
+}
 
 float getLight(float3 point, float time) {
     float3 lightPosition = float3(2, 5, -4); // above the sphere
