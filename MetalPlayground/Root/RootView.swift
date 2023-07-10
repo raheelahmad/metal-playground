@@ -15,13 +15,12 @@ struct RootView: View {
     let metalView: MetalSwiftView
 
     private var sidebar: some View {
-        List(selection: viewModel.sceneSelection) {
+        List(selection: $viewModel.sceneKind) {
             ForEach(SceneKind.allCases) {
                 Text($0.name)
                     .tag($0)
             }
         }.listStyle(.sidebar)
-            .frame(maxWidth: 120)
     }
 
     @ViewBuilder
@@ -56,9 +55,9 @@ struct RootView: View {
     }
 
     var body: some View {
-        HSplitView {
+        NavigationSplitView {
             sidebar
-
+        } detail: {
             ZStack(alignment: .topTrailing) {
                 metalView
                     .onTapGesture {
@@ -74,5 +73,6 @@ struct RootView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .navigationTitle(viewModel.sceneKind.name)
     }
 }

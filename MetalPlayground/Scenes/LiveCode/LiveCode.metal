@@ -109,6 +109,7 @@ fragment float4 liveCodeFragmentShader(
        interpolated.pos.x / uniforms.screen_width,
        1 - interpolated.pos.y / uniforms.screen_height
     ) - 0.5);
+    uv.x *= uniforms.screen_width / uniforms.screen_height;
 
     float time = uniforms.time;
     float2 mouseXY = uniforms.mousePos / float2(5);

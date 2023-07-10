@@ -18,7 +18,6 @@
 		5920719925106CBC006E579F /* Girih.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5920719825106CBC006E579F /* Girih.swift */; };
 		592B960B251AD71000549407 /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B960A251AD71000549407 /* ConfigView.swift */; };
 		592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B960C251AD74C00549407 /* MetalSwiftUIView.swift */; };
-		592B9611251ADFDE00549407 /* ModelsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B9610251ADFDE00549407 /* ModelsScene.swift */; };
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
 		592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */; };
 		5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5933FB11256F5B6D002D854A /* HappyJumping.metal */; };
@@ -35,8 +34,6 @@
 		595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595FBBE124708BEE00222613 /* CellularNoise.metal */; };
 		5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */; };
 		597743E624B82CC500AAB07C /* 06Colors.metal in Sources */ = {isa = PBXBuildFile; fileRef = 597743E524B82CC500AAB07C /* 06Colors.metal */; };
-		597EC6C5255B92650035AD88 /* Sierpinski.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC6C4255B92650035AD88 /* Sierpinski.swift */; };
-		597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */; };
 		5981BA97246B22EB00E39E86 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5981BA96246B22EB00E39E86 /* Shaders.metal */; };
 		599B22A12504778C007EB419 /* RaysConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B22A02504778C007EB419 /* RaysConfig.swift */; };
 		599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */ = {isa = PBXBuildFile; fileRef = 599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */; };
@@ -90,7 +87,6 @@
 		5920719825106CBC006E579F /* Girih.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Girih.swift; sourceTree = "<group>"; };
 		592B960A251AD71000549407 /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
 		592B960C251AD74C00549407 /* MetalSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalSwiftUIView.swift; sourceTree = "<group>"; };
-		592B9610251ADFDE00549407 /* ModelsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelsScene.swift; sourceTree = "<group>"; };
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
 		592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 08LeftRightTiler.metal; sourceTree = "<group>"; };
 		5933FB11256F5B6D002D854A /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
@@ -108,8 +104,6 @@
 		5973D19E24BA9A55006AFC50 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07ShapePrimitives.metal; sourceTree = "<group>"; };
 		597743E524B82CC500AAB07C /* 06Colors.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 06Colors.metal; sourceTree = "<group>"; };
-		597EC6C4255B92650035AD88 /* Sierpinski.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sierpinski.swift; sourceTree = "<group>"; };
-		597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotatingSquare.swift; sourceTree = "<group>"; };
 		5981BA96246B22EB00E39E86 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		599B22A02504778C007EB419 /* RaysConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaysConfig.swift; sourceTree = "<group>"; };
 		599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToySmiley.metal; sourceTree = "<group>"; };
@@ -163,21 +157,12 @@
 				59E5BC6425AAA2940061154A /* LiveCode */,
 				592B960F251ADFC600549407 /* Model Scene */,
 				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
-				597EC6C3255B92550035AD88 /* ICGraphicsBook */,
-				590BE6162500C53E00E9B573 /* Other Shaders */,
 				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
 				5941236A24D79E1B0027B0DC /* Explorations */,
 				59BCCB4424BD260300595132 /* ShaderToy */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
 			);
 			path = Scenes;
-			sourceTree = "<group>";
-		};
-		590BE6162500C53E00E9B573 /* Other Shaders */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Other Shaders";
 			sourceTree = "<group>";
 		};
 		591226BA24B40BDA00AF7663 /* BookShaders */ = {
@@ -205,7 +190,6 @@
 			isa = PBXGroup;
 			children = (
 				59CF2B1A24DB46A300606BB2 /* ModelsScene.metal */,
-				592B9610251ADFDE00549407 /* ModelsScene.swift */,
 			);
 			path = "Model Scene";
 			sourceTree = "<group>";
@@ -252,15 +236,6 @@
 				595FA20425AB88DE00316062 /* MattCourse.metal */,
 			);
 			path = MattCourse;
-			sourceTree = "<group>";
-		};
-		597EC6C3255B92550035AD88 /* ICGraphicsBook */ = {
-			isa = PBXGroup;
-			children = (
-				597EC6C4255B92650035AD88 /* Sierpinski.swift */,
-				597EC6C6255BBC0C0035AD88 /* RotatingSquare.swift */,
-			);
-			path = ICGraphicsBook;
 			sourceTree = "<group>";
 		};
 		59A3125C2517EFF300F6ACA2 /* UI */ = {
@@ -432,7 +407,6 @@
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
 				59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */,
-				592B9611251ADFDE00549407 /* ModelsScene.swift in Sources */,
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
 				595FA20525AB88DE00316062 /* MattCourse.metal in Sources */,
 				59E7D05D2A46081000976268 /* RayMarch.swift in Sources */,
@@ -455,13 +429,11 @@
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
 				59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */,
-				597EC6C7255BBC0C0035AD88 /* RotatingSquare.swift in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
 				592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */,
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
 				59A312632517F48900F6ACA2 /* RootView.swift in Sources */,
-				597EC6C5255B92650035AD88 /* Sierpinski.swift in Sources */,
 				59C2BD25246A709D00335E59 /* AppDelegate.swift in Sources */,
 				590BE61A2500C66D00E9B573 /* Rays.metal in Sources */,
 				590BE6182500C55C00E9B573 /* Rays.swift in Sources */,

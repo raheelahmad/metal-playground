@@ -30,7 +30,7 @@ class StarField: Scene {
     var fileName: String {
         "Explorations/ShaderToyStarField"
     }
-    var vertexFuncName: String { "shape_vertex" }
+    var vertexFuncName: String { "shadertoy_starfield_vertex" }
     var fragmentFuncName: String { "shaderToyStarfield" }
     var starFieldUniforms: Uniforms {
         Uniforms(rotating: starfieldConfig.rotating, flying: starfieldConfig.flying, numDepthLayers: Float(starfieldConfig.numDepthLayers), numDensityLayers: Float(starfieldConfig.numDensityLayers))

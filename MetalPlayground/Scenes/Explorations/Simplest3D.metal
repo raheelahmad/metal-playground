@@ -54,6 +54,7 @@ fragment float4 simplest_3d_fragment(VertexOut interpolated [[stage_in]], consta
         1 - interpolated.pos.y / uniforms.screen_height
     };
     st -= 0.5;
+    st.x *= uniforms.screen_width / uniforms.screen_height;
 
     float3 rayOrigin = {2,0,-4}; // camera pos
 

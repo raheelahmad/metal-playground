@@ -257,9 +257,11 @@ fragment float4 girih_fragment(
                            VertexOut interpolated [[stage_in]],
                            constant FragmentUniforms &uniforms [[buffer(0)]],
                            constant GirihUniforms &repeating_uniforms [[buffer(1)]]
-                                           ) {
+                               )
+{
     float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
+    st.x *= uniforms.screen_width / uniforms.screen_height;
 
     float3 color = 0;
     if (repeating_uniforms.kind == GirihPatternFirstThingsFirst) {

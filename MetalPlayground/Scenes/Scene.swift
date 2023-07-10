@@ -18,6 +18,9 @@ protocol Scene {
     var vertexFuncName: String { get }
     var fragmentFuncName: String { get }
 
+    // For mostly fragment-based
+    var liveReloads: Bool { get }
+
     init()
 
     var view: NSView? { get }
@@ -32,6 +35,7 @@ extension Scene {
     var filePath: String { #filePath }
     func tick(time: Float) {}
     var isPaused: Bool { false }
+    var liveReloads: Bool { true }
     var basicVertices: [Vertex] {
         [
             Vertex(position: [-1, -1]),
@@ -84,9 +88,6 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case futuristicUI
     case happyJumping
     case smiley
-    case rotatingSquare
-    case sierpinski
-    case modelsScene
     case girihPattern
     case starfield
     case simplest3D
@@ -111,12 +112,6 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             return "Happy Jumping"
         case .smiley:
             return "Smiley"
-        case .rotatingSquare:
-            return "Rotating Square"
-        case .sierpinski:
-            return "Sierpinski"
-        case .modelsScene:
-            return "Loading Models"
         case .girihPattern:
             return "Girih"
         case .starfield:
@@ -139,8 +134,6 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .liveCode: return LiveCodeScene()
         case .leftRightTiler: return BoSLeftRightTiler()
         case .futuristicUI: return FuturisticUI()
-        case .rotatingSquare: return RotatingSquare()
-        case .sierpinski: return Sierpinski()
         case .happyJumping: return HappyJumping()
         case .girihPattern: return Girih()
         case .starfield: return StarField()
@@ -148,7 +141,6 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .simplest3D: return Simplest3D()
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
-        case .modelsScene: return ModelsScene()
         }
     }
 }

@@ -33,12 +33,6 @@ struct VertexOut {
     float4 pos [[position]];
 };
 
-vertex VertexOut passthrough_vertex(VertexIn vin [[stage_in]]) {
-    VertexOut out;
-    out.pos = float4(vin.pos, 1);
-    return out;
-}
-
 vertex VertexOut rotate_vertex(VertexIn vin [[stage_in]], constant VertexUniforms &uniforms [[buffer(1)]]) {
     VertexOut out;
     float4 pos = float4(vin.pos, 1);

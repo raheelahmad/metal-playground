@@ -115,8 +115,8 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     var shaderContents = ""
     func compileScenePipeline() {
+        guard scene.liveReloads else { return }
         let fm = FileManager()
-        // TODO: check if correct:
         let filePath = scene.filePath as NSString
         let shaderPath: String = filePath.deletingLastPathComponent.appending("/\(scene.fileName).metal")
         let helpersPath = (filePath.deletingLastPathComponent) + "/Helpers.metal"

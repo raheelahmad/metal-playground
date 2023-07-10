@@ -10,18 +10,11 @@ import SwiftUI
 import Combine
 
 final class ViewModel: ObservableObject {
-    private var sceneKind: SceneKind {
+    @Published var sceneKind: SceneKind {
         didSet {
             updateSceneSelection(kind: sceneKind)
         }
     }
-
-    lazy var sceneSelection: Binding<SceneKind> = .init(
-        get: { () -> SceneKind in
-            self.sceneKind
-        }) { kind in
-            self.sceneKind = kind
-        }
 
     private let renderer: Renderer
 

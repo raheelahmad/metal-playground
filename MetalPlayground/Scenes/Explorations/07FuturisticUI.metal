@@ -233,6 +233,7 @@ fragment float4 futuristic_UI_fragment(VertexOut interpolated [[stage_in]], cons
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     uv -= 0.5;
     uv *= 2;
+    uv.x *= uniforms.screen_width / uniforms.screen_height;
     float time = uniforms.time;
     float3 col = scene(uv, time);
     return float4( col, 1.0 );

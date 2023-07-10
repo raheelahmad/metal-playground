@@ -64,6 +64,7 @@ fragment float4 domain_distortion_fragment(VertexOut interpolated [[stage_in]], 
     float t = uniforms.time;
     float2 st = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     st -= 0.5;
+    st.x *= uniforms.screen_width / uniforms.screen_height;
     float3 col = {0.7, 0.5, 0.1};
 
     float x = st.x;

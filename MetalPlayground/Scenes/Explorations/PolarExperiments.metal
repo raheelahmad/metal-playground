@@ -54,6 +54,7 @@ fragment float4 polar_experiments_fragment(VertexOut interpolated [[stage_in]], 
         1 - interpolated.pos.y/uniforms.screen_height
     };
     st -= 0.5;
+    st.x *= uniforms.screen_width / uniforms.screen_height;
     float2 polSt = polar(st);
 //    polSt.x = remaps(-M_PI_F, M_PI_F, 0, 1, polSt.x);
 

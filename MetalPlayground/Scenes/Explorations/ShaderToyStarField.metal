@@ -111,6 +111,14 @@ float3 starField(float2 st) {
     return color;
 }
 
+vertex VertexOut shadertoy_starfield_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+    VertexIn in = vertexArray[vid];
+    VertexOut out;
+    out.pos = float4(in.pos, 0, 1);
+    return out;
+}
+
+
 fragment float4 shaderToyStarfield(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]],
                                    constant StarfieldUniforms &uniforms2 [[buffer(1)]]                                   ) {
     float t = uniforms.time * 0.1;
