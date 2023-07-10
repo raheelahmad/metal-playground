@@ -14,54 +14,65 @@ struct RootView: View {
 
     let metalView: MetalSwiftView
 
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            metalView
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+    private var sidebar: some View {
+        List(selection: viewModel.sceneSelection) {
+            ForEach(SceneKind.allCases) {
+                Text($0.name)
+                    .tag($0)
+            }
+        }.listStyle(.sidebar)
+            .frame(maxWidth: 120)
+    }
+
+    @ViewBuilder
+    private var options: some View {
+        if !viewModel.hasConfig {
+            EmptyView()
+        } else if !isOptionsOpen {
+            Text("Options")
+                .padding(EdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
+                .background(Color(NSColor.windowBackgroundColor))
+                .cornerRadius(14)
+                .padding()
                 .onTapGesture {
                     withAnimation {
-                        if self.isOptionsOpen {
-                            self.isOptionsOpen = false
-                        }
+                        self.isOptionsOpen.toggle()
                     }
-            }.zIndex(0)
-            if !isOptionsOpen {
-                Text("Options")
-                    .padding(EdgeInsets(top: 5, leading: 8, bottom: 5, trailing: 8))
-                    .background(Color(NSColor.windowBackgroundColor))
-                    .cornerRadius(14)
-                    .padding()
+                }.zIndex(1)
+        } else {
+            VStack(spacing: 28) {
+                ConfigView()
+                    .environmentObject(viewModel)
+            }
+            .frame(maxWidth: 210)
+            .padding()
+            .background(Color(NSColor.windowBackgroundColor))
+            .cornerRadius(12)
+            .padding()
+            .transition(.move(edge: .trailing))
+            .zIndex(2)
+            .opacity(0.96)
+        }
+    }
+
+    var body: some View {
+        HSplitView {
+            sidebar
+
+            ZStack(alignment: .topTrailing) {
+                metalView
                     .onTapGesture {
                         withAnimation {
-                            self.isOptionsOpen.toggle()
-                        }
-                }.zIndex(1)
-            }
-            else {
-                VStack(spacing: 28) {
-                    Picker(
-                        selection: viewModel.sceneSelection,
-                        label: Text("Scenes").font(.callout)
-                    ) {
-                        ForEach(SceneKind.allCases) {
-                            Text("\($0.name)").tag($0)
+                            if self.isOptionsOpen {
+                                self.isOptionsOpen = false
+                            }
                         }
                     }
-                    Divider()
-                    if viewModel.hasConfig {
-                        ConfigView()
-                            .environmentObject(viewModel)
-                    }
-                }
-                .frame(maxWidth: 210)
-                .padding()
-                .background(Color(NSColor.windowBackgroundColor))
-                .cornerRadius(12)
-                .padding()
-                .transition(.move(edge: .trailing))
-                .zIndex(2)
-                .opacity(0.96)
+                    .zIndex(0)
+
+                options
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }

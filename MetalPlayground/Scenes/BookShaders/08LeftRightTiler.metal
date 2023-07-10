@@ -71,6 +71,7 @@ vertex VertexOut leftright_vertex(const device VertexIn *vertices [[buffer(0)]],
 
 fragment float4 leftright_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
+    uv.x *= uniforms.screen_width / uniforms.screen_height;
     float time = uniforms.time;
     float3 col = bricks(uv, time);
     return float4( col, 1.0 );
