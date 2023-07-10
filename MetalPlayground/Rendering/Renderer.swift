@@ -24,7 +24,9 @@ struct FragmentUniforms {
 final class Renderer: NSObject, MTKViewDelegate {
     var mouseLocation: vector_float2 = .init(repeating: 0) {
         didSet {
-            uniforms.mouseLocation = vector_float2(mouseLocation.x / uniforms.screen_width, 1 - mouseLocation.y / uniforms.screen_height)
+            let x = mouseLocation.x / uniforms.screen_width * 2 - 0.5
+            let y = (0.5 - 2 * mouseLocation.y / uniforms.screen_height)
+            uniforms.mouseLocation = vector_float2(x, y)
         }
     }
     let device: MTLDevice
