@@ -12,6 +12,9 @@ import SwiftUI
 protocol Scene {
     typealias Built = (MTLRenderPipelineState, MTLBuffer) -> ()
     var name: String { get }
+
+    /// Filename for the Shader
+    var fileName: String { get }
     var vertexFuncName: String { get }
     var fragmentFuncName: String { get }
 
@@ -26,7 +29,8 @@ protocol Scene {
 }
 
 extension Scene {
-    func tick(time: Float) { }
+    var filePath: String { #filePath }
+    func tick(time: Float) {}
     var isPaused: Bool { false }
     var basicVertices: [Vertex] {
         [
@@ -180,7 +184,10 @@ extension MDLVertexDescriptor {
 }
 
 class HappyJumping: Scene {
-    var name: String { "Simplest 3D" }
+    var name: String { "Happy Jumping" }
+    var fileName: String {
+        "Explorations/HappyJumping"
+    }
     var vertexFuncName: String { "happy_jumping_vertex" }
     var fragmentFuncName: String { "happy_jumping_fragment" }
     required init() {}
@@ -188,6 +195,9 @@ class HappyJumping: Scene {
 
 class Simplest3D: Scene {
     var name: String { "Simplest 3D" }
+    var fileName: String {
+        "Explorations/Simplest3D"
+    }
     var vertexFuncName: String { "simplest_3d_vertex" }
     var fragmentFuncName: String { "simplest_3d_fragment" }
     required init() {}
@@ -196,13 +206,19 @@ class Simplest3D: Scene {
 class Smiley: Scene {
     var name: String { "Smiley" }
 
-    var vertexFuncName: String { "shape_vertex" }
+    var fileName: String {
+        "Explorations/ShaderToySmiley"
+    }
+    var vertexFuncName: String { "shaderToySmileyVertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
     required init() {}
 }
 
 class FuturisticUI: Scene {
     var name: String { "Futuristic UI" }
+    var fileName: String {
+        "Explorations/07FuturisticUI"
+    }
 
     var vertexFuncName: String { "futuristic_UI_vertex" }
     var fragmentFuncName: String { "futuristic_UI_fragment" }
@@ -212,6 +228,9 @@ class FuturisticUI: Scene {
 class BoSLeftRightTiler: Scene {
     var name: String { "Book of Shaders - Left/Right Tiler" }
 
+    var fileName: String {
+        "BookShaders/08LeftRightTiler"
+    }
     var vertexFuncName: String { "leftright_vertex" }
     var fragmentFuncName: String { "leftright_fragment" }
     required init() {}
@@ -220,6 +239,10 @@ class BoSLeftRightTiler: Scene {
 class PolarScene: Scene {
     var name: String { "Polar Experiments" }
 
+    var fileName: String {
+
+        "Explorations/PolarExperiments"
+    }
     var vertexFuncName: String { "polar_experiments_vertex" }
     var fragmentFuncName: String { "polar_experiments_fragment" }
     required init() {}
@@ -227,6 +250,9 @@ class PolarScene: Scene {
 
 class DomainDistortion: Scene {
     var name: String { "Domain Distortion" }
+    var fileName: String {
+        "Explorations/ShaderToyDistortions"
+    }
 
     var vertexFuncName: String { "domain_distortion_vertex" }
     var fragmentFuncName: String { "domain_distortion_fragment" }
@@ -236,6 +262,9 @@ class DomainDistortion: Scene {
 class BasicShaderToy: Scene {
     var name: String { "Basic ShaderToy" }
 
+    var fileName: String {
+        "Explorations/ShaderToy01"
+    }
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shadertoy01" }
     required init() {}
@@ -244,6 +273,10 @@ class BasicShaderToy: Scene {
 class BookOfShaders05: Scene {
     var name: String { "Book of Shaders 05 - Algorithmic" }
 
+    var fileName: String {
+        "Explorations/05Algorithmic"
+    }
+
     var vertexFuncName: String { "smoothing_vertex" }
     var fragmentFuncName: String { "smoothing_fragment" }
     required init() {}
@@ -251,6 +284,9 @@ class BookOfShaders05: Scene {
 
 class BookOfShaders06: Scene {
     var name: String { "Book of Shaders 06 - Colors" }
+    var fileName: String {
+        "06Colors"
+    }
 
     var vertexFuncName: String { "color_vertex" }
     var fragmentFuncName: String { "color_fragment" }

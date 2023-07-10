@@ -57,6 +57,9 @@ class Girih: Scene {
     }
 
     var name: String { "Girih" }
+    var fileName: String {
+        "Explorations/Girih"
+    }
     private var config = Config()
 
     var fragmentUniforms: Any? {

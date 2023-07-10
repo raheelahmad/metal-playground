@@ -27,6 +27,9 @@ class StarField: Scene {
     }
 
     var name: String { "Star Field" }
+    var fileName: String {
+        "Explorations/ShaderToyStarField"
+    }
     var vertexFuncName: String { "shape_vertex" }
     var fragmentFuncName: String { "shaderToyStarfield" }
     var starFieldUniforms: Uniforms {

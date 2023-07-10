@@ -35,6 +35,8 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     static var aspectRatio: Float = 1.0
 
+    private let compileQueue = DispatchQueue.init(label: "Shader compile queue")
+
     var pipelineState: MTLRenderPipelineState!
     private var uniforms: FragmentUniforms = .init(time: 0, screen_width: 0, screen_height: 0, screen_scale: 0, mouseLocation: .init(0,0))
 
@@ -92,7 +94,10 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         passDescriptor.colorAttachments[0].clearColor = MTLClearColor(red: 0.3, green: 0.3, blue: 0.4, alpha: 1)
         guard let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: passDescriptor) else { return }
-        scene.tick(time: Float(currentTime))
+
+        compileQueue.async {
+            self.compileScenePipeline()
+        }
 
         encoder.setRenderPipelineState(pipelineState)
 
@@ -106,6 +111,61 @@ final class Renderer: NSObject, MTKViewDelegate {
         encoder.endEncoding()
         commandBuffer.present(view.currentDrawable!)
         commandBuffer.commit()
+    }
+
+    var shaderContents = ""
+    func compileScenePipeline() {
+        let fm = FileManager()
+        // TODO: check if correct:
+        let filePath = scene.filePath as NSString
+        let shaderPath: String = filePath.deletingLastPathComponent.appending("/\(scene.fileName).metal")
+        let helpersPath = (filePath.deletingLastPathComponent) + "/Helpers.metal"
+        guard
+            let shaderContentsData = fm.contents(atPath: shaderPath),
+            let helpersData = fm.contents(atPath: helpersPath),
+            var shaderContents = String(data: shaderContentsData, encoding: .utf8),
+            let helperContents = String(data: helpersData, encoding: .utf8)
+        else {
+//            assertionFailure()
+            return
+        }
+        var shaderContentLines = shaderContents.split(separator: "\n")
+        if let headerIndex = shaderContentLines.firstIndex(where: { $0 == "#include \"../ShaderHeaders.h\"" }) {
+            shaderContentLines.remove(at: headerIndex)
+
+            var headerLines = helperContents.split(separator: "\n")
+            if let helperHeaderIndex = headerLines.firstIndex(where: { String($0) == "#include \"ShaderHeaders.h\"" }) {
+                headerLines.remove(at: helperHeaderIndex)
+            }
+            shaderContentLines.insert(contentsOf: headerLines, at: headerIndex)
+        }
+        shaderContents = shaderContentLines.joined(separator: "\n")
+
+        let oldValue = self.shaderContents
+        self.shaderContents = shaderContents
+
+        guard shaderContents != oldValue else {
+            return
+        }
+
+        do {
+            let pipelineDesc = MTLRenderPipelineDescriptor()
+            let library = try device.makeLibrary(source: shaderContents, options: nil)
+            pipelineDesc.vertexFunction = library.makeFunction(name: scene.vertexFuncName)
+            pipelineDesc.fragmentFunction = library.makeFunction(name: scene.fragmentFuncName)
+            pipelineDesc.colorAttachments[0].pixelFormat = pixelFormat
+
+            let pipeline = (try? device.makeRenderPipelineState(descriptor: pipelineDesc))!
+
+            let vertexBuffer = device.makeBuffer(bytes: scene.basicVertices, length: MemoryLayout<Vertex>.stride * scene.basicVertices.count, options: [])
+            DispatchQueue.main.async {
+                self.pipelineState = pipeline
+                self.vertexBuffer = vertexBuffer
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+
     }
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {

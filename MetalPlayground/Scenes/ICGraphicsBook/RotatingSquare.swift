@@ -14,6 +14,9 @@ private struct VertexUniforms {
 
 final class RotatingSquare: Scene {
     var name: String { "Sierpinski" }
+    var fileName: String {
+        "Explorations/Passthrough"
+    }
     var vertexFuncName: String { "rotate_vertex" }
     var fragmentFuncName: String { "passthrough_fragment" }
 

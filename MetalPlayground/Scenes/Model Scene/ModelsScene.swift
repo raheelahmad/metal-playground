@@ -12,6 +12,9 @@ final class ModelsScene: Scene {
     var name: String { "Models" }
     var vertexFuncName: String { "models_vertex" }
     var fragmentFuncName: String { "models_fragment" }
+    var fileName: String {
+        "Model Scene/ModelsScene"
+    }
 
     var mesh: MTKMesh!
 }

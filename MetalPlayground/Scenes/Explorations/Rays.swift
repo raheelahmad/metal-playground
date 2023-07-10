@@ -16,6 +16,9 @@ struct RaysUniforms {
 }
 struct Rays: Scene {
     var name: String { "Rays" }
+    var fileName: String {
+        "Explorations/Rays"
+    }
     var vertexFuncName: String { "rays_vertex" }
     var fragmentFuncName: String { "rays_fragment" }
     var fragmentUniforms: Any? { nil }

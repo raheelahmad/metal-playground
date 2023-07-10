@@ -10,6 +10,9 @@ import MetalKit
 
 class Sierpinski: Scene {
     var name: String { "Sierpinski" }
+    var fileName: String {
+        "Explorations/Passthrough"
+    }
     var vertexFuncName: String { "passthrough_vertex" }
     var fragmentFuncName: String { "passthrough_fragment" }
 

@@ -148,6 +148,14 @@ float4 Smiley(float2 st) {
     return col;
 }
 
+vertex VertexOut shaderToySmileyVertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+    VertexIn in = vertexArray[vid];
+    VertexOut out;
+    out.pos = float4(in.pos, 0, 1);
+    return out;
+}
+
+
 fragment float4 shaderToySmiley(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
 //    float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, interpolated.pos.y / uniforms.screen_height};

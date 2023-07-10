@@ -12,6 +12,9 @@ import SwiftUI
 
 struct RayMarch: Scene {
     var name: String { "Ray Marching" }
+    var fileName: String {
+        "Explorations/RayMarch"
+    }
 
     var vertexFuncName: String { "rayMarchingSimpleVertex" }
 
