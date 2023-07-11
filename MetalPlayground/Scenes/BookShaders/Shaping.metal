@@ -71,15 +71,17 @@ fragment float4 bos_shaping_fragment(
     st.y = 1 - st.y;
     st.x *= uniforms.screen_width / uniforms.screen_height;
 
-    st.x = fract(st.x * 12 + t);
 
+    float3 color;
     float d = 0;
     if (shapingUniforms.kind == Bezier) {
+        st.x = fract(st.x * 12 + t);
         d = bezier(st, 0.082, 0.89);
         d = step(d, st.y);
+        color = min(d, step(0.5, st.y));
+    } else {
+        color = 0.3;
     }
-    float3 color = d;
-//    color = step(0.1, st.y);
 
     return vector_float4(color, 1.0);
 }

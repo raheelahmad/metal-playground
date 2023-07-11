@@ -84,6 +84,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case liveCode
     case rayMarch
     case mattCourse
+    case bookOfShaders05Shaping
     case leftRightTiler
     case futuristicUI
     case happyJumping
@@ -100,47 +101,50 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .liveCode:
-            return "Live Code"
-        case .mattCourse:
-            return "Matt DesLauriers' Course"
-        case .rayMarch:
-            return "Ray Marching"
-        case .leftRightTiler:
-            return "Book of Shaders - Left/Right Tiler"
-        case .happyJumping:
-            return "Happy Jumping"
-        case .smiley:
-            return "Smiley"
-        case .girihPattern:
-            return "Girih"
-        case .starfield:
-            return "Starfield"
-        case .simplest3D:
-            return "Simplest 3D"
-        case .domainDisortion:
-            return "Domain Distortion"
-        case .polarScene:
-            return "Polar"
-        case .futuristicUI:
-            return "Futuristic UI"
+            case .liveCode:
+                return "Live Code"
+            case .mattCourse:
+                return "Matt DesLauriers' Course"
+            case .rayMarch:
+                return "Ray Marching"
+            case .bookOfShaders05Shaping:
+                return "Book Of Shaders - 05 - Shaping"
+            case .leftRightTiler:
+                return "Book of Shaders - Left/Right Tiler"
+            case .happyJumping:
+                return "Happy Jumping"
+            case .smiley:
+                return "Smiley"
+            case .girihPattern:
+                return "Girih"
+            case .starfield:
+                return "Starfield"
+            case .simplest3D:
+                return "Simplest 3D"
+            case .domainDisortion:
+                return "Domain Distortion"
+            case .polarScene:
+                return "Polar"
+            case .futuristicUI:
+                return "Futuristic UI"
         }
     }
 
     var scene: Scene {
         switch self {
             case .rayMarch: return RayMarch()
-        case .mattCourse: return MattCourseScene()
-        case .liveCode: return LiveCodeScene()
-        case .leftRightTiler: return BoSLeftRightTiler()
-        case .futuristicUI: return FuturisticUI()
-        case .happyJumping: return HappyJumping()
-        case .girihPattern: return Girih()
-        case .starfield: return StarField()
-        case .smiley: return Smiley()
-        case .simplest3D: return Simplest3D()
-        case .polarScene: return PolarScene()
-        case .domainDisortion: return DomainDistortion()
+            case .mattCourse: return MattCourseScene()
+            case .liveCode: return LiveCodeScene()
+            case .leftRightTiler: return BoSLeftRightTiler()
+            case .bookOfShaders05Shaping: return BoSShaping()
+            case .futuristicUI: return FuturisticUI()
+            case .happyJumping: return HappyJumping()
+            case .girihPattern: return Girih()
+            case .starfield: return StarField()
+            case .smiley: return Smiley()
+            case .simplest3D: return Simplest3D()
+            case .polarScene: return PolarScene()
+            case .domainDisortion: return DomainDistortion()
         }
     }
 }
@@ -226,6 +230,70 @@ class BoSLeftRightTiler: Scene {
     var vertexFuncName: String { "leftright_vertex" }
     var fragmentFuncName: String { "leftright_fragment" }
     required init() {}
+}
+
+class BoSShaping: Scene {
+    var name: String { "Book of Shaders - Left/Right Tiler" }
+
+    var fileName: String {
+        "BookShaders/Shaping"
+    }
+    var vertexFuncName: String { "bos_shaping_vertex" }
+    var fragmentFuncName: String { "bos_shaping_fragment" }
+    required init() {}
+
+    enum SketchKind: Int, CaseIterable, Identifiable {
+        case bezierCurve
+
+        var id: Int { rawValue }
+
+        var name: String {
+            switch self {
+                case .bezierCurve:
+                    return "Bezier Curve"
+            }
+        }
+    }
+
+    class Config: ObservableObject {
+        @Published var kind: SketchKind = .bezierCurve
+    }
+
+    struct Uniforms {
+        let kind: Float
+    }
+
+    fileprivate var config: Config = .init()
+    var fragmentUniforms: Uniforms {
+        .init(kind: Float(config.kind.rawValue))
+    }
+
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
+        var uniforms = fragmentUniforms
+        let length = MemoryLayout.stride(ofValue: uniforms)
+        encoder.setFragmentBytes(&uniforms, length: length, index: 1)
+    }
+
+    struct ConfigView: View {
+        @EnvironmentObject private var config: Config
+        @State fileprivate var kind = SketchKind.bezierCurve
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 19) {
+                Picker(selection: $config.kind, label: Text("Kind")) {
+                    ForEach(SketchKind.allCases) {
+                        Text($0.name).tag($0)
+                    }
+                }
+            }
+        }
+    }
+
+    var view: NSView? {
+        NSHostingView(
+            rootView: ConfigView().environmentObject(config)
+        )
+    }
 }
 
 class PolarScene: Scene {
