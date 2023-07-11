@@ -73,6 +73,5 @@ struct RootView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .navigationTitle(viewModel.sceneKind.name)
     }
 }

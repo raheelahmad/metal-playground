@@ -29,6 +29,7 @@ struct FragmentUniforms {
 
 typedef enum {
     Bezier = 0,
+    FlowingCurves = 1,
 } SketchKind;
 
 struct ShapingUniforms {
@@ -68,17 +69,25 @@ fragment float4 bos_shaping_fragment(
 {
     float t = uniforms.time;
     float2 st  = {interpolated.pos.x / uniforms.screen_width, interpolated.pos.y / uniforms.screen_height};
-    st.y = 1 - st.y;
-    st.x *= uniforms.screen_width / uniforms.screen_height;
-
 
     float3 color;
     float d = 0;
     if (shapingUniforms.kind == Bezier) {
+        st.y = 1 - st.y;
+        st.x *= uniforms.screen_width / uniforms.screen_height;
         st.x = fract(st.x * 12 + t);
         d = bezier(st, 0.082, 0.89);
         d = step(d, st.y);
         color = min(d, step(0.5, st.y));
+    } else if (shapingUniforms.kind == FlowingCurves) {
+        float l = 0.3 + 0.2 * (1. + sin(t))/4;
+        for (int i=0; i<3; i++) {
+            float2 uv = st;
+            uv.x *= sin(uv.x + uv.y) + uv.y + sin(t * 1.1) / 15;
+            uv.y *= sin(uv.y) + uv.x + cos(t * 1.4) / 4;
+            l += sin(t * i) + 0.2 * length(uv);
+            color[i] = l;
+        }
     } else {
         color = 0.3;
     }

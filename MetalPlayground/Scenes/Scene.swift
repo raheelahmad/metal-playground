@@ -244,6 +244,7 @@ class BoSShaping: Scene {
 
     enum SketchKind: Int, CaseIterable, Identifiable {
         case bezierCurve
+        case flowingCurves
 
         var id: Int { rawValue }
 
@@ -251,6 +252,8 @@ class BoSShaping: Scene {
             switch self {
                 case .bezierCurve:
                     return "Bezier Curve"
+                case .flowingCurves:
+                    return "Flowing Curves"
             }
         }
     }
