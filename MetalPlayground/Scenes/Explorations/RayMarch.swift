@@ -10,7 +10,7 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-struct RayMarch: Scene {
+struct RayMarch: Playground {
     var name: String { "Ray Marching" }
     var fileName: String {
         "Explorations/RayMarch"

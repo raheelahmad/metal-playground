@@ -30,7 +30,7 @@ fileprivate class Config: ObservableObject {
     @Published var kind: SketchKind = .one
 }
 
-final class MattCourseScene: Scene {
+final class MattCourseScene: Playground {
     struct Uniforms {
         let kind: Float
     }

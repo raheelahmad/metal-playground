@@ -9,7 +9,7 @@
 import MetalKit
 import SwiftUI
 
-class StarField: Scene {
+class StarField: Playground {
     class StarFieldConfig: ObservableObject {
         @Published var rotating: Bool = false
         @Published var flying: Bool = true

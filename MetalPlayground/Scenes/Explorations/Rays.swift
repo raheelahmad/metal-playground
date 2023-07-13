@@ -14,7 +14,7 @@ struct RaysUniforms {
     var view: matrix_float4x4
     var projection: matrix_float4x4
 }
-struct Rays: Scene {
+struct Rays: Playground {
     var name: String { "Rays" }
     var fileName: String {
         "Explorations/Rays"

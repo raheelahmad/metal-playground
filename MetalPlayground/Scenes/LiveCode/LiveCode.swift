@@ -48,7 +48,7 @@ extension Color {
     }
 }
 
-final class LiveCodeScene: Scene {
+final class LiveCodeScene: Playground {
     let name = "Live Code"
     var fileName: String {
         "LiveCode/LiveCode"

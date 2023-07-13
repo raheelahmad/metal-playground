@@ -47,7 +47,7 @@ extension Float {
 }
 
 
-class Girih: Scene {
+class Girih: Playground {
     struct Uniforms {
         var patternKind: Float
         var rotating: Bool

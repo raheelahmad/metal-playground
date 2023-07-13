@@ -54,7 +54,7 @@
 		59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */; };
 		59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */; };
 		59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */; };
-		59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Scene.swift */; };
+		59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Playground.swift */; };
 		59E2A6052A5CB96500216350 /* Shaping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E2A6042A5CB96500216350 /* Shaping.metal */; };
 		59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* LiveCode.metal */; };
 		59E5BC6825AAA9220061154A /* LiveCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6725AAA9220061154A /* LiveCode.swift */; };
@@ -128,7 +128,7 @@
 		59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalByTutorials04.metal; sourceTree = "<group>"; };
 		59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07FuturisticUI.metal; sourceTree = "<group>"; };
 		59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = QuizlesHappyJumping.metal; sourceTree = "<group>"; };
-		59E11CAA24CEAF2700DC1FA7 /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		59E11CAA24CEAF2700DC1FA7 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		59E2A6042A5CB96500216350 /* Shaping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaping.metal; sourceTree = "<group>"; };
 		59E5BC6525AAA2A30061154A /* LiveCode.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = LiveCode.metal; sourceTree = "<group>"; };
 		59E5BC6725AAA9220061154A /* LiveCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCode.swift; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
 				59E5BC6425AAA2940061154A /* LiveCode */,
 				592B960F251ADFC600549407 /* Model Scene */,
-				59E11CAA24CEAF2700DC1FA7 /* Scene.swift */,
+				59E11CAA24CEAF2700DC1FA7 /* Playground.swift */,
 				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
 				5941236A24D79E1B0027B0DC /* Explorations */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
@@ -393,7 +393,7 @@
 				59E7D05F2A46087800976268 /* RayMarch.metal in Sources */,
 				59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */,
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
-				59E11CAB24CEAF2700DC1FA7 /* Scene.swift in Sources */,
+				59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */,
 				590BE6142500A12800E9B573 /* Torus.metal in Sources */,
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* Girih.metal in Sources */,

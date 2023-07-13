@@ -13,11 +13,11 @@ struct RootView: View {
     @State var isOptionsOpen = false
 
     let metalView: MetalSwiftView
-    @State private var sceneGroups = SceneGroup.allCases
+    @State private var sceneGroups = PlaygroundGroup.allCases
 
     private var sidebar: some View {
         List {
-            ForEach(SceneGroup.allCases) { sceneGroup in
+            ForEach(PlaygroundGroup.allCases) { sceneGroup in
                 DisclosureGroup {
                     ForEach(sceneGroup.scenes) { sceneKind in
                         Text(sceneKind.name)

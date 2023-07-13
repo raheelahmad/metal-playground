@@ -18,7 +18,7 @@ final class ViewModel: ObservableObject {
 
     private let renderer: Renderer
 
-    @Published var scene: Scene
+    @Published var scene: Playground
     @Published var hasConfig: Bool
     private var cancellables: [AnyCancellable] = []
     private let view: MetalView

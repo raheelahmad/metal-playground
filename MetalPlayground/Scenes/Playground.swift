@@ -9,7 +9,7 @@
 import MetalKit
 import SwiftUI
 
-protocol Scene {
+protocol Playground {
     typealias Built = (MTLRenderPipelineState, MTLBuffer) -> ()
     var name: String { get }
 
@@ -31,7 +31,7 @@ protocol Scene {
     var isPaused: Bool { get }
 }
 
-extension Scene {
+extension Playground {
     var filePath: String { #filePath }
     func tick(time: Float) {}
     var isPaused: Bool { false }
@@ -80,7 +80,7 @@ extension Scene {
     }
 }
 
-enum SceneGroup: String, CaseIterable, Identifiable {
+enum PlaygroundGroup: String, CaseIterable, Identifiable {
     case bookOfShaders = "Book of Shaders"
     case rayMarching = "Ray Marching"
     case artOfCode = "The Art of Code"
@@ -162,7 +162,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         }
     }
 
-    var scene: Scene {
+    var scene: Playground {
         switch self {
             case .rayMarch: return RayMarch()
             case .mattCourse: return MattCourseScene()
@@ -211,7 +211,7 @@ extension MDLVertexDescriptor {
     }()
 }
 
-class HappyJumping: Scene {
+class HappyJumping: Playground {
     var name: String { "Happy Jumping" }
     var fileName: String {
         "Explorations/HappyJumping"
@@ -221,7 +221,7 @@ class HappyJumping: Scene {
     required init() {}
 }
 
-class Simplest3D: Scene {
+class Simplest3D: Playground {
     var name: String { "Simplest 3D" }
     var fileName: String {
         "Explorations/Simplest3D"
@@ -231,7 +231,7 @@ class Simplest3D: Scene {
     required init() {}
 }
 
-class Smiley: Scene {
+class Smiley: Playground {
     var name: String { "Smiley" }
 
     var fileName: String {
@@ -242,7 +242,7 @@ class Smiley: Scene {
     required init() {}
 }
 
-class FuturisticUI: Scene {
+class FuturisticUI: Playground {
     var name: String { "Futuristic UI" }
     var fileName: String {
         "Explorations/07FuturisticUI"
@@ -253,7 +253,7 @@ class FuturisticUI: Scene {
     required init() {}
 }
 
-class BoSLeftRightTiler: Scene {
+class BoSLeftRightTiler: Playground {
     var name: String { "Book of Shaders - Left/Right Tiler" }
 
     var fileName: String {
@@ -264,7 +264,7 @@ class BoSLeftRightTiler: Scene {
     required init() {}
 }
 
-class BoSShaping: Scene {
+class BoSShaping: Playground {
     var name: String { "Book of Shaders - Left/Right Tiler" }
 
     var fileName: String {
@@ -331,7 +331,7 @@ class BoSShaping: Scene {
     }
 }
 
-class PolarScene: Scene {
+class PolarScene: Playground {
     var name: String { "Polar Experiments" }
 
     var fileName: String {
@@ -343,7 +343,7 @@ class PolarScene: Scene {
     required init() {}
 }
 
-class DomainDistortion: Scene {
+class DomainDistortion: Playground {
     var name: String { "Domain Distortion" }
     var fileName: String {
         "Explorations/ShaderToyDistortions"
@@ -354,7 +354,7 @@ class DomainDistortion: Scene {
     required init() {}
 }
 
-class BasicShaderToy: Scene {
+class BasicShaderToy: Playground {
     var name: String { "Basic ShaderToy" }
 
     var fileName: String {
@@ -365,7 +365,7 @@ class BasicShaderToy: Scene {
     required init() {}
 }
 
-class BookOfShaders05: Scene {
+class BookOfShaders05: Playground {
     var name: String { "Book of Shaders 05 - Algorithmic" }
 
     var fileName: String {
@@ -377,7 +377,7 @@ class BookOfShaders05: Scene {
     required init() {}
 }
 
-class BookOfShaders06: Scene {
+class BookOfShaders06: Playground {
     var name: String { "Book of Shaders 06 - Colors" }
     var fileName: String {
         "06Colors"
