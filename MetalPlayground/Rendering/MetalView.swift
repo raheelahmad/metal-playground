@@ -9,18 +9,16 @@
 import MetalKit
 
 final class MetalView: MTKView {
-    var renderer: Renderer!
+    var renderer: Renderer?
 
     override func viewDidMoveToWindow() {
         super.viewDidMoveToWindow()
-        self.delegate = renderer
-        renderer.setup(self)
     }
 
     override func mouseMoved(with event: NSEvent) {
         let x = Float(event.locationInWindow.x)
         let y = Float(event.locationInWindow.y)
-        renderer.mouseLocation = .init(x,y)
+        renderer?.mouseLocation = .init(x,y)
     }
 
     override func updateTrackingAreas() {

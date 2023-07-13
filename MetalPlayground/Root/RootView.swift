@@ -9,39 +9,46 @@
 import SwiftUI
 
 struct RootView: View {
-    @ObservedObject var viewModel: ViewModel
+    @StateObject var viewModel: ViewModel
     @State var isOptionsOpen = false
 
     let metalView: MetalSwiftView
-    @State private var sceneGroups = PlaygroundGroup.allCases
+
+    init(renderer: Renderer) {
+        let hostedView = MetalView()
+        hostedView.delegate = renderer
+        hostedView.renderer = renderer
+        renderer.setup(hostedView)
+        _viewModel = .init(wrappedValue: ViewModel(view: hostedView, renderer: renderer))
+        metalView = MetalSwiftView(metalView: hostedView)
+    }
 
     private var sidebar: some View {
         List {
             ForEach(PlaygroundGroup.allCases) { sceneGroup in
                 DisclosureGroup {
                     ForEach(sceneGroup.scenes) { sceneKind in
-                        Text(sceneKind.name)
-                            .tag(sceneKind)
-                            .padding(4)
-                            .foregroundColor(
-                                sceneKind == viewModel.sceneKind ? Color.white : Color.primary
-                            )
-                            .background(
-                                RoundedRectangle(cornerRadius: 4, style: .continuous)
-                                    .fill(sceneKind == viewModel.sceneKind ? .blue : .clear)
-                            )
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                viewModel.sceneKind = sceneKind
-                            }
+                        HStack {
+                            Text(sceneKind.name)
+                                .tag(sceneKind)
+                                .foregroundColor(viewModel.sceneKind == sceneKind ? .primary : .secondary)
+                                .bold(viewModel.sceneKind == sceneKind)
+                        }
+                        .onTapGesture {
+                            viewModel.sceneKind = sceneKind
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 } label: {
                     Text(sceneGroup.rawValue)
+                        .font(.headline)
                         .foregroundStyle(.secondary)
                 }
 
             }
-        }.listStyle(.sidebar)
+        }
+        .listStyle(.sidebar)
+        .frame(minWidth: 180)
     }
 
     @ViewBuilder
@@ -94,7 +101,6 @@ struct RootView: View {
 
                 options
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
