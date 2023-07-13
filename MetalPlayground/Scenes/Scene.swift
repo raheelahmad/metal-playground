@@ -80,6 +80,38 @@ extension Scene {
     }
 }
 
+enum SceneGroup: String, CaseIterable, Identifiable {
+    case bookOfShaders = "Book of Shaders"
+    case rayMarching = "Ray Marching"
+    case artOfCode = "The Art of Code"
+    case explorations = "Explorations"
+
+    var id: String { rawValue }
+    var scenes: [SceneKind] {
+        switch self {
+            case .bookOfShaders:
+                return [
+                    .bookOfShaders05Shaping,
+                    .leftRightTiler,
+                    .futuristicUI,
+                    .domainDisortion
+                ]
+            case .rayMarching:
+                return [
+                    .rayMarch
+                ]
+            case .artOfCode:
+                return [
+                    .smiley, .starfield, .simplest3D, .polarScene
+                ]
+            case .explorations:
+                return [
+                    .mattCourse, .happyJumping, .girihPattern,
+                ]
+        }
+    }
+}
+
 enum SceneKind: Int, CaseIterable, Identifiable {
     case liveCode
     case rayMarch

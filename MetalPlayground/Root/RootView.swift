@@ -13,12 +13,33 @@ struct RootView: View {
     @State var isOptionsOpen = false
 
     let metalView: MetalSwiftView
+    @State private var sceneGroups = SceneGroup.allCases
 
     private var sidebar: some View {
-        List(selection: $viewModel.sceneKind) {
-            ForEach(SceneKind.allCases) {
-                Text($0.name)
-                    .tag($0)
+        List {
+            ForEach(SceneGroup.allCases) { sceneGroup in
+                DisclosureGroup {
+                    ForEach(sceneGroup.scenes) { sceneKind in
+                        Text(sceneKind.name)
+                            .tag(sceneKind)
+                            .padding(4)
+                            .foregroundColor(
+                                sceneKind == viewModel.sceneKind ? Color.white : Color.primary
+                            )
+                            .background(
+                                RoundedRectangle(cornerRadius: 4, style: .continuous)
+                                    .fill(sceneKind == viewModel.sceneKind ? .blue : .clear)
+                            )
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                viewModel.sceneKind = sceneKind
+                            }
+                    }
+                } label: {
+                    Text(sceneGroup.rawValue)
+                        .foregroundStyle(.secondary)
+                }
+
             }
         }.listStyle(.sidebar)
     }
@@ -54,8 +75,10 @@ struct RootView: View {
         }
     }
 
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
+
     var body: some View {
-        NavigationSplitView {
+        NavigationSplitView(columnVisibility: $columnVisibility) {
             sidebar
         } detail: {
             ZStack(alignment: .topTrailing) {
