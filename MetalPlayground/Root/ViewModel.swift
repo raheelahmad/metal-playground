@@ -27,7 +27,7 @@ final class ViewModel: ObservableObject {
         self.renderer = renderer
         self.view = view
         view.delegate = renderer
-        let sceneKind = SceneKind.bookOfShaders05Shaping
+        let sceneKind = SceneKind.bookOfShaders06Colors
         self.sceneKind = sceneKind
         self.scene = sceneKind.scene
         self.hasConfig = sceneKind.scene.view != nil

@@ -127,7 +127,7 @@ final class Renderer: NSObject, MTKViewDelegate {
             var shaderContents = String(data: shaderContentsData, encoding: .utf8),
             let helperContents = String(data: helpersData, encoding: .utf8)
         else {
-//            assertionFailure()
+            assertionFailure()
             return
         }
         var shaderContentLines = shaderContents.split(separator: "\n")

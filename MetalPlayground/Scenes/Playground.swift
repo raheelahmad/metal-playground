@@ -94,7 +94,8 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                     .bookOfShaders05Shaping,
                     .leftRightTiler,
                     .futuristicUI,
-                    .domainDisortion
+                    .domainDisortion,
+                    .bookOfShaders06Colors,
                 ]
             case .rayMarching:
                 return [
@@ -116,16 +117,19 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case liveCode
     case rayMarch
     case mattCourse
+
     case bookOfShaders05Shaping
     case leftRightTiler
     case futuristicUI
+    case domainDisortion
+    case bookOfShaders06Colors
+
     case happyJumping
     case smiley
     case girihPattern
     case starfield
     case simplest3D
     case polarScene
-    case domainDisortion
 
     var id: Int {
         rawValue
@@ -159,6 +163,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
                 return "Polar"
             case .futuristicUI:
                 return "Futuristic UI"
+            case .bookOfShaders06Colors:
+                return "Colors Mixing"
         }
     }
 
@@ -169,6 +175,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             case .liveCode: return LiveCodeScene()
             case .leftRightTiler: return BoSLeftRightTiler()
             case .bookOfShaders05Shaping: return BoSShaping()
+            case .bookOfShaders06Colors: return BoSColors06()
             case .futuristicUI: return FuturisticUI()
             case .happyJumping: return HappyJumping()
             case .girihPattern: return Girih()
@@ -262,6 +269,73 @@ class BoSLeftRightTiler: Playground {
     var vertexFuncName: String { "leftright_vertex" }
     var fragmentFuncName: String { "leftright_fragment" }
     required init() {}
+}
+
+class BoSColors06: Playground {
+    var name: String { "Book of Shaders - Colors"}
+
+    var fileName: String {
+        "BookShaders/06Colors"
+    }
+    var vertexFuncName: String { "bos_colors_vertex" }
+    var fragmentFuncName: String { "bos_colors_fragment" }
+    required init() {}
+
+    enum SketchKind: Int, CaseIterable, Identifiable {
+        case bezierCurve
+        case flowingCurves
+
+        var id: Int { rawValue }
+
+        var name: String {
+            switch self {
+                case .bezierCurve:
+                    return "Bezier Curve"
+                case .flowingCurves:
+                    return "Flowing Curves"
+            }
+        }
+    }
+
+    class Config: ObservableObject {
+        @Published var kind: SketchKind = .bezierCurve
+    }
+
+    struct Uniforms {
+        let kind: Float
+    }
+
+    fileprivate var config: Config = .init()
+    var fragmentUniforms: Uniforms {
+        .init(kind: Float(config.kind.rawValue))
+    }
+
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {
+        var uniforms = fragmentUniforms
+        let length = MemoryLayout.stride(ofValue: uniforms)
+        encoder.setFragmentBytes(&uniforms, length: length, index: 1)
+    }
+
+    struct ConfigView: View {
+        @EnvironmentObject private var config: Config
+        @State fileprivate var kind = SketchKind.bezierCurve
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 19) {
+                Picker(selection: $config.kind, label: Text("Kind")) {
+                    ForEach(SketchKind.allCases) {
+                        Text($0.name).tag($0)
+                    }
+                }
+            }
+        }
+    }
+
+    var view: NSView? {
+        NSHostingView(
+            rootView: ConfigView().environmentObject(config)
+        )
+    }
 }
 
 class BoSShaping: Playground {
