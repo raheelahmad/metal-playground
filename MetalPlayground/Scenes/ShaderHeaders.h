@@ -9,6 +9,7 @@
 #ifndef MyDefs
 #define MyDefs
 
+float absSin(float t);
 float lerp(float x, float m, float n, float a, float b);
 float2x2 rotate(float angle);
 float2x2 scale(float2 _scale);

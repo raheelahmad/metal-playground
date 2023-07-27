@@ -92,6 +92,7 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
         switch self {
             case .bookOfShaders:
                 return [
+                    .bookOfShaders07Shapes,
                     .bookOfShaders05Shaping,
                     .leftRightTiler,
                     .futuristicUI,

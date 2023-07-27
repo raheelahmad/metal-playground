@@ -23,6 +23,9 @@ float2x2 scale(float2 sc) {
                     );
 }
 
+float absSin(float t) {
+    return (sin(t) + 1)/2.0;
+}
 
 float lerp(float x, float u, float v, float m, float n) {
     float prog = (x - u) / (v - u);
