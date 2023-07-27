@@ -19,6 +19,7 @@ protocol Playground {
 
     // For mostly fragment-based
     var liveReloads: Bool { get }
+    var ready: Bool { get }
 
     init()
 
@@ -47,6 +48,7 @@ extension Playground {
         ]
     }
 
+    var ready: Bool { true }
 
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built) {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
@@ -106,7 +108,7 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 ]
             case .explorations:
                 return [
-                    .mattCourse, .happyJumping, .girihPattern, .jumpingBalls
+                    .audioVisualizer, .mattCourse, .happyJumping, .girihPattern, .jumpingBalls
                 ]
         }
     }
@@ -175,7 +177,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Playground {
         switch self {
-        case .audioVisualizer: return RayMarch()
+        case .audioVisualizer: return AudioVizScene()
         case .rayMarch: return RayMarch()
         case .mattCourse: return MattCourseScene()
         case .jumpingBalls: return JumpingBalls()

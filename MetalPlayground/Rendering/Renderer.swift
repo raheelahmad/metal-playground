@@ -107,6 +107,8 @@ final class Renderer: NSObject, MTKViewDelegate {
         let uniformsBuffer = device.makeBuffer(bytes: &uniforms, length: MemoryLayout<FragmentUniforms>.size, options: [])
         encoder.setFragmentBuffer(uniformsBuffer, offset: 0, index: 0)
         scene.setUniforms(device: device, encoder: encoder)
+
+        guard scene.ready else { return }
         scene.draw(encoder: encoder)
 
         encoder.endEncoding()
