@@ -11,7 +11,6 @@ import MetalKit
 import SwiftUI
 
 struct RayMarch: Playground {
-    var name: String { "Ray Marching" }
     var fileName: String {
         "Explorations/RayMarch"
     }

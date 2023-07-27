@@ -26,7 +26,7 @@ class StarField: Playground {
         var numDensityLayers: Float
     }
 
-    var name: String { "Star Field" }
+    static var name: String { "Star Field" }
     var fileName: String {
         "Explorations/ShaderToyStarField"
     }

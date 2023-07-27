@@ -41,7 +41,7 @@ final class MattCourseScene: Playground {
     }
 
 
-    let name = "MattCourse"
+    static let name = "MattCourse"
 
     let vertexFuncName = "matt_course_vertex"
     let fragmentFuncName = "matt_course_fragment"

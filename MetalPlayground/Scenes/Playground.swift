@@ -11,7 +11,6 @@ import SwiftUI
 
 protocol Playground {
     typealias Built = (MTLRenderPipelineState, MTLBuffer) -> ()
-    var name: String { get }
 
     /// Filename for the Shader
     var fileName: String { get }
@@ -131,6 +130,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case starfield
     case simplest3D
     case polarScene
+    case audioVisualizer
 
     var id: Int {
         rawValue
@@ -138,8 +138,10 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-            case .jumpingBalls:
-                return "Jumping Balls"
+        case .jumpingBalls:
+            return "Jumping Balls"
+        case .audioVisualizer:
+                return "Audio Visualizer"
             case .mattCourse:
                 return "Matt DesLauriers' Course"
             case .rayMarch:
@@ -173,21 +175,22 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Playground {
         switch self {
-            case .rayMarch: return RayMarch()
-            case .mattCourse: return MattCourseScene()
-            case .jumpingBalls: return JumpingBalls()
-            case .leftRightTiler: return BoSLeftRightTiler()
-            case .bookOfShaders05Shaping: return BoSShaping()
-            case .bookOfShaders06Colors: return BoSColors06()
-            case .bookOfShaders07Shapes: return BoSShapes07()
-            case .futuristicUI: return FuturisticUI()
-            case .happyJumping: return HappyJumping()
-            case .girihPattern: return Girih()
-            case .starfield: return StarField()
-            case .smiley: return Smiley()
-            case .simplest3D: return Simplest3D()
-            case .polarScene: return PolarScene()
-            case .domainDisortion: return DomainDistortion()
+        case .audioVisualizer: return RayMarch()
+        case .rayMarch: return RayMarch()
+        case .mattCourse: return MattCourseScene()
+        case .jumpingBalls: return JumpingBalls()
+        case .leftRightTiler: return BoSLeftRightTiler()
+        case .bookOfShaders05Shaping: return BoSShaping()
+        case .bookOfShaders06Colors: return BoSColors06()
+        case .bookOfShaders07Shapes: return BoSShapes07()
+        case .futuristicUI: return FuturisticUI()
+        case .happyJumping: return HappyJumping()
+        case .girihPattern: return Girih()
+        case .starfield: return StarField()
+        case .smiley: return Smiley()
+        case .simplest3D: return Simplest3D()
+        case .polarScene: return PolarScene()
+        case .domainDisortion: return DomainDistortion()
         }
     }
 }
@@ -223,7 +226,6 @@ extension MDLVertexDescriptor {
 }
 
 class HappyJumping: Playground {
-    var name: String { "Happy Jumping" }
     var fileName: String {
         "Explorations/HappyJumping"
     }
@@ -233,7 +235,6 @@ class HappyJumping: Playground {
 }
 
 class Simplest3D: Playground {
-    var name: String { "Simplest 3D" }
     var fileName: String {
         "Explorations/Simplest3D"
     }
@@ -243,7 +244,6 @@ class Simplest3D: Playground {
 }
 
 class Smiley: Playground {
-    var name: String { "Smiley" }
 
     var fileName: String {
         "Explorations/ShaderToySmiley"
@@ -254,7 +254,6 @@ class Smiley: Playground {
 }
 
 class FuturisticUI: Playground {
-    var name: String { "Futuristic UI" }
     var fileName: String {
         "Explorations/07FuturisticUI"
     }
@@ -265,8 +264,6 @@ class FuturisticUI: Playground {
 }
 
 class BoSLeftRightTiler: Playground {
-    var name: String { "Book of Shaders - Left/Right Tiler" }
-
     var fileName: String {
         "BookShaders/08LeftRightTiler"
     }
@@ -276,8 +273,6 @@ class BoSLeftRightTiler: Playground {
 }
 
 class BoSColors06: Playground {
-    var name: String { "Book of Shaders - Colors"}
-
     var fileName: String {
         "BookShaders/06Colors"
     }
@@ -343,8 +338,6 @@ class BoSColors06: Playground {
 }
 
 class BoSShaping: Playground {
-    var name: String { "Book of Shaders - Left/Right Tiler" }
-
     var fileName: String {
         "BookShaders/Shaping"
     }
@@ -410,8 +403,6 @@ class BoSShaping: Playground {
 }
 
 class PolarScene: Playground {
-    var name: String { "Polar Experiments" }
-
     var fileName: String {
 
         "Explorations/PolarExperiments"
@@ -422,7 +413,6 @@ class PolarScene: Playground {
 }
 
 class DomainDistortion: Playground {
-    var name: String { "Domain Distortion" }
     var fileName: String {
         "Explorations/ShaderToyDistortions"
     }
@@ -433,8 +423,6 @@ class DomainDistortion: Playground {
 }
 
 class BasicShaderToy: Playground {
-    var name: String { "Basic ShaderToy" }
-
     var fileName: String {
         "Explorations/ShaderToy01"
     }
@@ -444,8 +432,6 @@ class BasicShaderToy: Playground {
 }
 
 class BookOfShaders05: Playground {
-    var name: String { "Book of Shaders 05 - Algorithmic" }
-
     var fileName: String {
         "Explorations/05Algorithmic"
     }
@@ -456,7 +442,6 @@ class BookOfShaders05: Playground {
 }
 
 class BookOfShaders06: Playground {
-    var name: String { "Book of Shaders 06 - Colors" }
     var fileName: String {
         "06Colors"
     }

@@ -56,7 +56,6 @@ class Girih: Playground {
         var scale: Float
     }
 
-    var name: String { "Girih" }
     var fileName: String {
         "Explorations/Girih"
     }

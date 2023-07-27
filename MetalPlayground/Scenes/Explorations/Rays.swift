@@ -15,7 +15,6 @@ struct RaysUniforms {
     var projection: matrix_float4x4
 }
 struct Rays: Playground {
-    var name: String { "Rays" }
     var fileName: String {
         "Explorations/Rays"
     }

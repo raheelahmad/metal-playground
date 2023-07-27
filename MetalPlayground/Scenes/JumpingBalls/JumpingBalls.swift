@@ -49,7 +49,7 @@ extension Color {
 }
 
 final class JumpingBalls: Playground {
-    let name = "Jumping Balls"
+    static let name = "Jumping Balls"
     var fileName: String {
         "JumpingBalls/JumpingBalls"
     }

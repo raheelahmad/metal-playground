@@ -11,8 +11,6 @@ import MetalKit
 import SwiftUI
 
 class BoSShapes07: Playground {
-    var name: String { "Book of Shaders - Shapes"}
-
     var fileName: String {
         "BookShaders/07Shapes"
     }
