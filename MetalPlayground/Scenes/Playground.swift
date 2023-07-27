@@ -107,14 +107,14 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 ]
             case .explorations:
                 return [
-                    .mattCourse, .happyJumping, .girihPattern,
+                    .mattCourse, .happyJumping, .girihPattern, .jumpingBalls
                 ]
         }
     }
 }
 
 enum SceneKind: Int, CaseIterable, Identifiable {
-    case liveCode
+    case jumpingBalls
     case rayMarch
     case mattCourse
 
@@ -138,8 +138,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-            case .liveCode:
-                return "Live Code"
+            case .jumpingBalls:
+                return "Jumping Balls"
             case .mattCourse:
                 return "Matt DesLauriers' Course"
             case .rayMarch:
@@ -175,7 +175,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         switch self {
             case .rayMarch: return RayMarch()
             case .mattCourse: return MattCourseScene()
-            case .liveCode: return LiveCodeScene()
+            case .jumpingBalls: return JumpingBalls()
             case .leftRightTiler: return BoSLeftRightTiler()
             case .bookOfShaders05Shaping: return BoSShaping()
             case .bookOfShaders06Colors: return BoSColors06()

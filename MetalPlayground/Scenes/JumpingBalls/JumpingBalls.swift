@@ -48,14 +48,14 @@ extension Color {
     }
 }
 
-final class LiveCodeScene: Playground {
-    let name = "Live Code"
+final class JumpingBalls: Playground {
+    let name = "Jumping Balls"
     var fileName: String {
-        "LiveCode/LiveCode"
+        "JumpingBalls/JumpingBalls"
     }
 
-    let vertexFuncName = "liveCodeVertexShader"
-    let fragmentFuncName = "liveCodeFragmentShader"
+    let vertexFuncName = "jumpingVertexShader"
+    let fragmentFuncName = "jumpingFragmentShader"
 
     init() {}
 

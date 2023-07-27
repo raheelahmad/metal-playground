@@ -19,7 +19,7 @@ struct VertexOut {
     float4 color;
 };
 
-vertex VertexOut liveCodeVertexShader(const device VertexIn *vertices [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+vertex VertexOut jumpingVertexShader(const device VertexIn *vertices [[buffer(0)]], unsigned int vid [[vertex_id]]) {
     VertexOut in;
     in.pos = {vertices[vid].pos.x, vertices[vid].pos.y, 0, 1};
     return in;
@@ -101,7 +101,7 @@ float3 getNormal(float3 rayHitPosition, float smoothness, float time) {
 
 // MARK: - Fragment Shader
 
-fragment float4 liveCodeFragmentShader(
+fragment float4 jumpingFragmentShader(
                                        VertexOut interpolated [[stage_in]],
                                        constant FragmentUniforms &uniforms [[buffer(0)]]
 ) {

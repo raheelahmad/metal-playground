@@ -57,8 +57,8 @@
 		59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */; };
 		59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Playground.swift */; };
 		59E2A6052A5CB96500216350 /* Shaping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E2A6042A5CB96500216350 /* Shaping.metal */; };
-		59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* LiveCode.metal */; };
-		59E5BC6825AAA9220061154A /* LiveCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6725AAA9220061154A /* LiveCode.swift */; };
+		59E5BC6625AAA2A30061154A /* JumpingBalls.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* JumpingBalls.metal */; };
+		59E5BC6825AAA9220061154A /* JumpingBalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6725AAA9220061154A /* JumpingBalls.swift */; };
 		59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6925AAC6B50061154A /* Helpers.metal */; };
 		59E7D05D2A46081000976268 /* RayMarch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E7D05C2A46081000976268 /* RayMarch.swift */; };
 		59E7D05F2A46087800976268 /* RayMarch.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E7D05E2A46087800976268 /* RayMarch.metal */; };
@@ -132,8 +132,8 @@
 		59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = QuizlesHappyJumping.metal; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		59E2A6042A5CB96500216350 /* Shaping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaping.metal; sourceTree = "<group>"; };
-		59E5BC6525AAA2A30061154A /* LiveCode.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = LiveCode.metal; sourceTree = "<group>"; };
-		59E5BC6725AAA9220061154A /* LiveCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCode.swift; sourceTree = "<group>"; };
+		59E5BC6525AAA2A30061154A /* JumpingBalls.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = JumpingBalls.metal; sourceTree = "<group>"; };
+		59E5BC6725AAA9220061154A /* JumpingBalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingBalls.swift; sourceTree = "<group>"; };
 		59E5BC6925AAC6B50061154A /* Helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Helpers.metal; sourceTree = "<group>"; };
 		59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderHeaders.h; sourceTree = "<group>"; };
 		59E7D05C2A46081000976268 /* RayMarch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RayMarch.swift; sourceTree = "<group>"; };
@@ -158,7 +158,7 @@
 				59E5BC6925AAC6B50061154A /* Helpers.metal */,
 				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
-				59E5BC6425AAA2940061154A /* LiveCode */,
+				59E5BC6425AAA2940061154A /* JumpingBalls */,
 				592B960F251ADFC600549407 /* Model Scene */,
 				59E11CAA24CEAF2700DC1FA7 /* Playground.swift */,
 				593725822A65CA2200E4BBD6 /* BoSShapes.swift */,
@@ -304,13 +304,13 @@
 			path = MetalByTutorials;
 			sourceTree = "<group>";
 		};
-		59E5BC6425AAA2940061154A /* LiveCode */ = {
+		59E5BC6425AAA2940061154A /* JumpingBalls */ = {
 			isa = PBXGroup;
 			children = (
-				59E5BC6725AAA9220061154A /* LiveCode.swift */,
-				59E5BC6525AAA2A30061154A /* LiveCode.metal */,
+				59E5BC6725AAA9220061154A /* JumpingBalls.swift */,
+				59E5BC6525AAA2A30061154A /* JumpingBalls.metal */,
 			);
-			path = LiveCode;
+			path = JumpingBalls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -418,7 +418,7 @@
 				59A312652517F72E00F6ACA2 /* ViewModel.swift in Sources */,
 				5920719925106CBC006E579F /* Girih.swift in Sources */,
 				59CF2B0C24D7CE0C00606BB2 /* ShaderToyDistortions.metal in Sources */,
-				59E5BC6825AAA9220061154A /* LiveCode.swift in Sources */,
+				59E5BC6825AAA9220061154A /* JumpingBalls.swift in Sources */,
 				59CF2B1B24DB46A300606BB2 /* ModelsScene.metal in Sources */,
 				59CF2B1824DA738D00606BB2 /* PolarExperiments.metal in Sources */,
 				594651E0251B198E009947C2 /* Starfield.swift in Sources */,
@@ -428,7 +428,7 @@
 				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
-				59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */,
+				59E5BC6625AAA2A30061154A /* JumpingBalls.metal in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				59E2A6052A5CB96500216350 /* Shaping.metal in Sources */,
 				592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */,
