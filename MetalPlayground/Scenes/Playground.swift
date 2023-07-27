@@ -118,11 +118,12 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case rayMarch
     case mattCourse
 
-    case bookOfShaders05Shaping
     case leftRightTiler
     case futuristicUI
     case domainDisortion
+    case bookOfShaders05Shaping
     case bookOfShaders06Colors
+    case bookOfShaders07Shapes
 
     case happyJumping
     case smiley
@@ -145,6 +146,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
                 return "Ray Marching"
             case .bookOfShaders05Shaping:
                 return "Book Of Shaders - 05 - Shaping"
+            case .bookOfShaders07Shapes:
+                return "Book Of Shaders - 07 - Shapes"
             case .leftRightTiler:
                 return "Book of Shaders - Left/Right Tiler"
             case .happyJumping:
@@ -176,6 +179,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             case .leftRightTiler: return BoSLeftRightTiler()
             case .bookOfShaders05Shaping: return BoSShaping()
             case .bookOfShaders06Colors: return BoSColors06()
+            case .bookOfShaders07Shapes: return BoSShapes07()
             case .futuristicUI: return FuturisticUI()
             case .happyJumping: return HappyJumping()
             case .girihPattern: return Girih()

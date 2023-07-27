@@ -21,8 +21,9 @@
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
 		592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */; };
 		5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5933FB11256F5B6D002D854A /* HappyJumping.metal */; };
+		593725812A65C9B100E4BBD6 /* 07Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 593725802A65C9B100E4BBD6 /* 07Shapes.metal */; };
+		593725832A65CA2200E4BBD6 /* BoSShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593725822A65CA2200E4BBD6 /* BoSShapes.swift */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
-		5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5942A33724BA28DD00993BD7 /* 07Shape.metal */; };
 		59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59438CA3252A5B8600713DB9 /* Passthrough.metal */; };
 		594651E0251B198E009947C2 /* Starfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594651DF251B198E009947C2 /* Starfield.swift */; };
 		595D7282246CFD4000FC8054 /* Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595D7281246CFD4000FC8054 /* Shapes.metal */; };
@@ -91,8 +92,9 @@
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
 		592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 08LeftRightTiler.metal; sourceTree = "<group>"; };
 		5933FB11256F5B6D002D854A /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
+		593725802A65C9B100E4BBD6 /* 07Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shapes.metal; sourceTree = "<group>"; };
+		593725822A65CA2200E4BBD6 /* BoSShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoSShapes.swift; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
-		5942A33724BA28DD00993BD7 /* 07Shape.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shape.metal; sourceTree = "<group>"; };
 		59438CA3252A5B8600713DB9 /* Passthrough.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Passthrough.metal; sourceTree = "<group>"; };
 		594651DF251B198E009947C2 /* Starfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starfield.swift; sourceTree = "<group>"; };
 		595D7281246CFD4000FC8054 /* Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shapes.metal; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				59E5BC6425AAA2940061154A /* LiveCode */,
 				592B960F251ADFC600549407 /* Model Scene */,
 				59E11CAA24CEAF2700DC1FA7 /* Playground.swift */,
+				593725822A65CA2200E4BBD6 /* BoSShapes.swift */,
 				59CF2B1924DB3EFB00606BB2 /* MetalByTutorials */,
 				5941236A24D79E1B0027B0DC /* Explorations */,
 				591226BA24B40BDA00AF7663 /* BookShaders */,
@@ -171,8 +174,8 @@
 			children = (
 				5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */,
 				597743E524B82CC500AAB07C /* 06Colors.metal */,
+				593725802A65C9B100E4BBD6 /* 07Shapes.metal */,
 				592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */,
-				5942A33724BA28DD00993BD7 /* 07Shape.metal */,
 				59E2A6042A5CB96500216350 /* Shaping.metal */,
 			);
 			path = BookShaders;
@@ -398,6 +401,7 @@
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* Girih.metal in Sources */,
 				590D1E6A2513E5F900B0C04A /* Simplest3D.metal in Sources */,
+				593725812A65C9B100E4BBD6 /* 07Shapes.metal in Sources */,
 				592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */,
 				595D7284246D23F500FC8054 /* Random.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
@@ -419,6 +423,7 @@
 				59CF2B1824DA738D00606BB2 /* PolarExperiments.metal in Sources */,
 				594651E0251B198E009947C2 /* Starfield.swift in Sources */,
 				591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */,
+				593725832A65CA2200E4BBD6 /* BoSShapes.swift in Sources */,
 				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
 				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
@@ -426,7 +431,6 @@
 				59E5BC6625AAA2A30061154A /* LiveCode.metal in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
 				59E2A6052A5CB96500216350 /* Shaping.metal in Sources */,
-				5942A33824BA28DD00993BD7 /* 07Shape.metal in Sources */,
 				592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */,
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
 				59A312632517F48900F6ACA2 /* RootView.swift in Sources */,
