@@ -105,7 +105,7 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 ]
             case .artOfCode:
                 return [
-                    .smiley, .starfield, .simplest3D, .polarScene
+                    .smiley, .starfield, .simplest3D, .polarScene, .truchet
                 ]
             case .explorations:
                 return [
@@ -126,6 +126,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case bookOfShaders05Shaping
     case bookOfShaders06Colors
     case bookOfShaders07Shapes
+    case truchet
 
     case happyJumping
     case smiley
@@ -141,9 +142,11 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-        case .jumpingBalls:
-            return "Jumping Balls"
-        case .audioVisualizer:
+            case .jumpingBalls:
+                return "Jumping Balls"
+            case .truchet:
+                return "Truchet"
+            case .audioVisualizer:
                 return "Audio Visualizer"
             case .mattCourse:
                 return "Matt DesLauriers' Course"
@@ -178,7 +181,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var scene: Playground {
         switch self {
-        case .audioVisualizer: return AudioVizScene()
+            case .truchet: return Truchet()
+            case .audioVisualizer: return AudioVizScene()
         case .rayMarch: return RayMarch()
         case .mattCourse: return MattCourseScene()
         case .jumpingBalls: return JumpingBalls()

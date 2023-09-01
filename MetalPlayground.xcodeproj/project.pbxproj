@@ -21,6 +21,8 @@
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
 		592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */; };
 		5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5933FB11256F5B6D002D854A /* HappyJumping.metal */; };
+		5936566F2A745C4200E2FE60 /* Truchet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5936566E2A745C4200E2FE60 /* Truchet.swift */; };
+		593656712A745C7700E2FE60 /* Truchet.metal in Sources */ = {isa = PBXBuildFile; fileRef = 593656702A745C7700E2FE60 /* Truchet.metal */; };
 		593725812A65C9B100E4BBD6 /* 07Shapes.metal in Sources */ = {isa = PBXBuildFile; fileRef = 593725802A65C9B100E4BBD6 /* 07Shapes.metal */; };
 		593725832A65CA2200E4BBD6 /* BoSShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593725822A65CA2200E4BBD6 /* BoSShapes.swift */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
@@ -94,6 +96,8 @@
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
 		592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 08LeftRightTiler.metal; sourceTree = "<group>"; };
 		5933FB11256F5B6D002D854A /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
+		5936566E2A745C4200E2FE60 /* Truchet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Truchet.swift; sourceTree = "<group>"; };
+		593656702A745C7700E2FE60 /* Truchet.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Truchet.metal; sourceTree = "<group>"; };
 		593725802A65C9B100E4BBD6 /* 07Shapes.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07Shapes.metal; sourceTree = "<group>"; };
 		593725822A65CA2200E4BBD6 /* BoSShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoSShapes.swift; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
@@ -232,9 +236,11 @@
 				5981BA96246B22EB00E39E86 /* Shaders.metal */,
 				591226B624B3A24E00AF7663 /* Book-Uniforms.metal */,
 				595D7281246CFD4000FC8054 /* Shapes.metal */,
+				593656702A745C7700E2FE60 /* Truchet.metal */,
 				595D7283246D23F500FC8054 /* Random.metal */,
 				595D7285246DE28600FC8054 /* Noise.metal */,
 				59E7D05C2A46081000976268 /* RayMarch.swift */,
+				5936566E2A745C4200E2FE60 /* Truchet.swift */,
 				59E7D05E2A46087800976268 /* RayMarch.metal */,
 			);
 			path = Explorations;
@@ -407,6 +413,7 @@
 				590BE6142500A12800E9B573 /* Torus.metal in Sources */,
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* Girih.metal in Sources */,
+				5936566F2A745C4200E2FE60 /* Truchet.swift in Sources */,
 				590D1E6A2513E5F900B0C04A /* Simplest3D.metal in Sources */,
 				593725812A65C9B100E4BBD6 /* 07Shapes.metal in Sources */,
 				592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */,
@@ -417,6 +424,7 @@
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
 				595FA20525AB88DE00316062 /* MattCourse.metal in Sources */,
 				59E7D05D2A46081000976268 /* RayMarch.swift in Sources */,
+				593656712A745C7700E2FE60 /* Truchet.metal in Sources */,
 				595D7288246DFF9300FC8054 /* MoreNoise.metal in Sources */,
 				59BCCB4624BD261300595132 /* ShaderToy01.metal in Sources */,
 				5981BA97246B22EB00E39E86 /* Shaders.metal in Sources */,
