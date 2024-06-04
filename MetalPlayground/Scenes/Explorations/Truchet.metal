@@ -30,24 +30,72 @@ vertex VertexOut truchetVertex(const device VertexIn *vertexArray [[buffer(0)]],
     return out;
 }
 
+// is the point on the screen going to hit something in the scenery:
+float map(float3 pos) {
+    // sphere equation: distance from sampling point (pos) to
+    // the center of the sphere, minus the radius. Distance of 0 == hit
+    float radius = 0.25;
+    float d = length(pos) - radius;
+    return d;
+}
+
+float3 calcNormal(float3 pos) {
+    // the orientation (ie. the normal in this case) is an orientation
+    // which we can approximate via a derivative
+
+    // evaluate the SDF at different points which will give us the orientation.
+    // e.g. if on my right the distance is large vs. my left ⇒ object is to my left
+    // ⇒ the object is facing me
+
+    float2 e = float2(0.0001, 0.0);
+    return normalize(float3(map(pos + e.xyy) - map(pos - e.xyy),
+                           map(pos + e.yxy) - map(pos - e.yxy),
+                           map(pos + e.yyx) - map(pos - e.yyx)
+                           ));
+}
+
 fragment float4 truchetFragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    float2 st = (interpolated.pos.xy - 0.5 * float2(uniforms.screen_width, uniforms.screen_height)) / uniforms.screen_height;
-    vector_float3 col = float3(0);
+    // p is (0,0) in the middle of the screen
+    float2 p = (2.0 * interpolated.pos.xy - float2(uniforms.screen_width, uniforms.screen_height))/uniforms.screen_height;
+    p.y = -p.y;
 
-//    st += (cos(uniforms.time) + sin(uniforms.time))/12.0;
+    float3 col = 0;
 
-    st *= 8.0;
-    float2 gv = fract(st) - 0.5;
-    float2 id = floor(st);
+    // +z is out of the screen
+    
+    // camera on z axis:
+    float3 r0 = float3(0, 0, 1);
+    // rd is the direction to the pixel
+    // the z is the FoV of the camera lens
+    float3 rd = normalize(float3(p, -1.5));
 
-    float n = Hash21(id); // random between 0 and 1.
-    gv.x *= mix(-1, 1, step(0.5, n));
+    // Ray marching algorithm
+    float t = 0;
+    for(int i = 0; i < 100; i++) {
+        // position along the ray.
+        float3 pos = r0 + t * rd;
+        float h = map(pos);
+        // we are inside the shape, don't go in.
+        if (h < 0.001) break;
+        t += h;
+        // we are too far, break
+        if (t > 20.0) break;
+    }
 
-//    col = (step(0.48, gv.x) + step(0.48, gv.y))  * float3(1,0,0);
-    float d = abs(gv.x) - gv.y;
-    col += 1 - step(0.082, abs(d) - 0.25);
+    // we hit something:
+    if (t < 20.0) {
+        // position of hit:
+        float3 pos = r0 + t * rd;
+        float3 norm = calcNormal(pos);
+        // to the sun:
+        float3 sun_dir = normalize(float3(0.8, 0.4, 0.2));
+        float diffusion = clamp(dot(norm, sun_dir), 0.0, 1.0);
+        float3 diffColor = float3(1.0, 0.7, 0.5);
+        col = diffusion * diffColor;
+    }
 
-//    col.rg += n;
+//    col = step(0.5, p.y);
+
 
     return vector_float4(col, 1);
 }
