@@ -35,7 +35,12 @@ float map(float3 pos) {
     // sphere equation: distance from sampling point (pos) to
     // the center of the sphere, minus the radius. Distance of 0 == hit
     float radius = 0.25;
-    float d = length(pos) - radius;
+    float sphereD = length(pos) - radius;
+
+    float planeD = pos.y - (-radius); // plane at -0.1
+
+    float d = min(sphereD, planeD);
+
     return d;
 }
 
@@ -54,22 +59,7 @@ float3 calcNormal(float3 pos) {
                            ));
 }
 
-fragment float4 truchetFragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    // p is (0,0) in the middle of the screen
-    float2 p = (2.0 * interpolated.pos.xy - float2(uniforms.screen_width, uniforms.screen_height))/uniforms.screen_height;
-    p.y = -p.y;
-
-    float3 col = 0;
-
-    // +z is out of the screen
-    
-    // camera on z axis:
-    float3 r0 = float3(0, 0, 1);
-    // rd is the direction to the pixel
-    // the z is the FoV of the camera lens
-    float3 rd = normalize(float3(p, -1.5));
-
-    // Ray marching algorithm
+float castRay(float3 r0, float3 rd) {
     float t = 0;
     for(int i = 0; i < 100; i++) {
         // position along the ray.
@@ -82,19 +72,68 @@ fragment float4 truchetFragment(VertexOut interpolated [[stage_in]], constant Fr
         if (t > 20.0) break;
     }
 
+    if (t > 20.0) return -1.0;
+    return t;
+}
+
+fragment float4 truchetFragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+    // p is (0,0) in the middle of the screen
+    float2 p = (2.0 * interpolated.pos.xy - float2(uniforms.screen_width, uniforms.screen_height))/uniforms.screen_height;
+    p.y = -p.y;
+
+    float3 col = 0;
+
+    // +z is out of the screen
+    
+    // camera on z axis:
+    float3 r0 = float3(0, 0, 1);
+    
+    // rd is the direction to the pixel
+    // the z is the FoV of the camera lens
+    float3 rd = normalize(float3(p, -1.5));
+
+    // Ray marching algorithm
+    float t = castRay(r0, rd);
+
     // we hit something:
-    if (t < 20.0) {
+    if (t > 0) {
         // position of hit:
         float3 pos = r0 + t * rd;
         float3 norm = calcNormal(pos);
-        // to the sun:
+
+        // general material color:
+        float3 material = float3(0.18);
+
+        // sun:
         float3 sun_dir = normalize(float3(0.8, 0.4, 0.2));
-        float diffusion = clamp(dot(norm, sun_dir), 0.0, 1.0);
-        float3 diffColor = float3(1.0, 0.7, 0.5);
-        col = diffusion * diffColor;
+        float sun_diffusion = clamp(dot(norm, sun_dir), 0.0, 1.0);
+        float sun_shadow = castRay(pos + norm * 0.001, sun_dir);
+        // same as 1 - step(sun_shadow, 0). That is, if shadow is negative, then count as 1.
+        // otherwise 0. So, for places where we do get a shadow above, sun's diffusion below will be 0.
+        sun_shadow = step(sun_shadow, 0.0);
+
+        float3 diffColor = float3(7.0, 4.5, 3.0);
+        col = sun_diffusion * diffColor * sun_shadow * material;
+
+        // sky:
+        float3 sky_dir = normalize(float3(0, 1, 0));
+        float sky_diffusion = clamp(0.5 + 0.5 * dot(norm, sky_dir), 0.0, 1.0);
+        float3 skyColor = float3(0.5, 0.8, 0.9);
+        col += sky_diffusion * skyColor * material;
+
+        // bounce:
+        float3 bounceColor = float3(0.7, 0.3, 0.2); // this is what the floor color is going to be
+        // light that comes from below. so if the dot > 0 we are facing down and will get some floor color.
+        float bounce_diffusion = clamp(0.5 + 0.5*dot(norm, float3(0, -1, 0)), 0.0, 1.0);
+        col += material * bounce_diffusion * bounceColor;
+    } else {
+        col = float3(0.65, 0.75, 0.9) - 0.7 * rd.y; // bias the blue color with y, so it darknes on top
     }
 
-//    col = step(0.5, p.y);
+    // gamma correction
+    col = pow(col, float3(0.4545));
+
+//    col = step(0.0, p.x);
 
 
     return vector_float4(col, 1);
