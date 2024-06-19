@@ -58,7 +58,7 @@
 		59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */ = {isa = PBXBuildFile; fileRef = 59CF2B1E24DB826A00606BB2 /* mushroom.obj */; };
 		59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */; };
 		59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */; };
-		59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */; };
+		59DFEBAF2511A09600050718 /* Kishimisu.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59DFEBAE2511A09600050718 /* Kishimisu.metal */; };
 		59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E11CAA24CEAF2700DC1FA7 /* Playground.swift */; };
 		59E2A6052A5CB96500216350 /* Shaping.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E2A6042A5CB96500216350 /* Shaping.metal */; };
 		59E5BC6625AAA2A30061154A /* JumpingBalls.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* JumpingBalls.metal */; };
@@ -137,7 +137,7 @@
 		59CF2B1E24DB826A00606BB2 /* mushroom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mushroom.obj; sourceTree = "<group>"; };
 		59CF2B2024DF113E00606BB2 /* MetalByTutorials04.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MetalByTutorials04.metal; sourceTree = "<group>"; };
 		59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07FuturisticUI.metal; sourceTree = "<group>"; };
-		59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = QuizlesHappyJumping.metal; sourceTree = "<group>"; };
+		59DFEBAE2511A09600050718 /* Kishimisu.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Kishimisu.metal; sourceTree = "<group>"; };
 		59E11CAA24CEAF2700DC1FA7 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
 		59E2A6042A5CB96500216350 /* Shaping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaping.metal; sourceTree = "<group>"; };
 		59E5BC6525AAA2A30061154A /* JumpingBalls.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = JumpingBalls.metal; sourceTree = "<group>"; };
@@ -230,7 +230,7 @@
 				590BE6132500A12800E9B573 /* Torus.metal */,
 				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
 				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
-				59DFEBAE2511A09600050718 /* QuizlesHappyJumping.metal */,
+				59DFEBAE2511A09600050718 /* Kishimisu.metal */,
 				5933FB11256F5B6D002D854A /* HappyJumping.metal */,
 				595FBBE124708BEE00222613 /* CellularNoise.metal */,
 				5981BA96246B22EB00E39E86 /* Shaders.metal */,
@@ -407,7 +407,7 @@
 				59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */,
 				59CF2B2124DF113E00606BB2 /* MetalByTutorials04.metal in Sources */,
 				59E7D05F2A46087800976268 /* RayMarch.metal in Sources */,
-				59DFEBAF2511A09600050718 /* QuizlesHappyJumping.metal in Sources */,
+				59DFEBAF2511A09600050718 /* Kishimisu.metal in Sources */,
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
 				59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */,
 				590BE6142500A12800E9B573 /* Torus.metal in Sources */,

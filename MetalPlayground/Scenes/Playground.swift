@@ -127,6 +127,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case bookOfShaders06Colors
     case bookOfShaders07Shapes
     case truchet
+    case kishimisu
 
     case happyJumping
     case smiley
@@ -160,6 +161,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
                 return "Book of Shaders - Left/Right Tiler"
             case .happyJumping:
                 return "Happy Jumping"
+            case .kishimisu:
+                return "Kishimisu"
             case .smiley:
                 return "Smiley"
             case .girihPattern:
@@ -189,6 +192,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .leftRightTiler: return BoSLeftRightTiler()
         case .bookOfShaders05Shaping: return BoSShaping()
         case .bookOfShaders06Colors: return BoSColors06()
+            case .kishimisu: return Kishimisu()
         case .bookOfShaders07Shapes: return BoSShapes07()
         case .futuristicUI: return FuturisticUI()
         case .happyJumping: return HappyJumping()
@@ -241,6 +245,15 @@ class HappyJumping: Playground {
     required init() {}
 }
 
+class Kishimisu: Playground {
+    var fileName: String {
+        "Explorations/Kishimisu"
+    }
+    var vertexFuncName: String { "kishimisu_vertex" }
+    var fragmentFuncName: String { "kishimisu_fragment" }
+    var liveReloads: Bool { true }
+    required init() {}
+}
 class Simplest3D: Playground {
     var fileName: String {
         "Explorations/Simplest3D"

@@ -9,8 +9,6 @@
 #include <metal_stdlib>
 using namespace metal;
 
-/*
-
 struct VertexOut {
     float4 pos [[position]];
     float4 color;
@@ -79,76 +77,47 @@ struct FragmentUniforms {
     float2 mousePos;
 };
 
-vertex VertexOut happy_jumping_vertex_old(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
+vertex VertexOut kishimisu_vertex(const device VertexIn *vertexArray [[buffer(0)]], unsigned int vid [[vertex_id]]) {
     VertexIn in = vertexArray[vid];
     VertexOut out;
     out.pos = float4(in.pos, 0, 1);
     return out;
 }
 
-
-fragment float4 happy_jumping_fragment_old( VertexOut in [[stage_in]],
-                               constant FragmentUniforms &uniforms [[buffer( 0 )]] )
-{
-//    float2 uv = in.pos.xy;
-     float2 uv  = {in.pos.x / uniforms.screen_width, in.pos.y / uniforms.screen_height};
-    uv.x -= 0.5;
-    uv.y -= 0.5;
-    uv.y = 0.5 - uv.y - 0.5;
-
-    // uv.x *= 2;
-
-//    uv.x *= uniforms.appResolution.z;
-
-    float an = 10 * uniforms.mousePos.x;
-
-    float3 ro = float3(4.0 * sin(an),2.0,4.0 * cos(an));
-
-    // build camera
-    float3 ta = float3(0,0,0);
-    float3 ww = normalize(ta - ro);
-    float3 uu = normalize(cross(ww, float3(0,1,0)));
-    float3 vv = normalize(cross(uu, ww));
-
-    float3 rd = normalize(uv.x*uu + uv.y*vv + 1.5*ww); // without camera
-//    float3 rd = normalize(float3(uv, -1.5)); // without camera
-
-    // did we hit something
-    float t = castRay(ro, rd);
-
-    float3 sky_color = float3(0.1, 0.75, 1.0);
-    sky_color -= 0.7 * rd.y; // lighter at the bottom of sky (could also use uv.y)
-    float3 col = sky_color;
-    if (t > 0.0) { // if we did hit
-        float3 pos = ro + t * rd;
-        float3 norm = calcNormal(pos);
-
-        float3 material = float3(0.2,0.2,0.2); // 0.2 albedo is the value in reality
-
-        // Sun contribution
-        float3 sun_dir = normalize(float3(0.9,0.4,0.2)); // position
-        float sun_diffuse = clamp(dot(norm, sun_dir), 0.0, 1.0);
-        // shadow: cast ray from this position to sun
-        float sun_shadow = castRay(pos + norm * 0.001, sun_dir);
-        // make sure we are between 0 and 1;
-        sun_shadow = step(sun_shadow, 0.0);
-        col = material * float3(7.0,4.5,3.0) * sun_diffuse * sun_shadow;
-
-        // Sky contribution
-        float3 sky_dir = float3(0.0,1.0,0.0);
-        float sky_diffuse = clamp(0.5 + 0.5 * dot(norm, sky_dir), 0.0, 1.0);
-        col += material * float3(0.5,0.8,0.9) * sky_diffuse;
-
-        // Bounce contribution (so that bottoms are not pure black)
-        float3 bounce_dir = float3(0,-1,0);
-        float bounce_diffuse = clamp(0.5 + 0.5 * dot(norm, bounce_dir), 0.0, 1.0);
-        col += material * float3(0.7,0.3,0.2) * bounce_diffuse;
-    }
-
-    // Apply gamma correction
-    col = pow(col, float3(0.4545));
-
-    return float4( col, 1.0 );
+float3 palette( float t ) {
+    float3 a = float3(0.5, 0.5, 0.5);
+    float3 b = float3(0.5, 0.5, 0.5);
+    float3 d = float3(0.263,0.416,0.557);
+    float3 c = float3(1,1,1);
+    return a + b*cos( 6.28318*(c*t+d) );
 }
 
- */
+
+fragment float4 kishimisu_fragment( VertexOut in [[stage_in]],
+                               constant FragmentUniforms &uniforms [[buffer( 0 )]] )
+{
+    float3 finalCol = float3(0);
+    float time = uniforms.time;
+    float2 resolution = float2(uniforms.screen_width, uniforms.screen_height);
+    float2 uv  = in.pos.xy / resolution * 2.0 - 1.0;
+    float2 uv0 = uv;
+
+    for (float i =0; i < 3; i++) {
+        uv.x *= resolution.x / resolution.y;
+
+        float3 col = palette(length(uv0) + i*0.9 + time);
+
+        uv = fract(uv * 1.5) - 0.5;
+
+        float d = length(uv) * exp(-length(uv0));
+        float wave = 8;
+        d = sin(d * wave + time) / wave;
+        d = abs(d);
+
+        d = 0.01/d;
+
+        finalCol += col * d;
+    }
+
+    return float4(finalCol, 1.0 );
+}

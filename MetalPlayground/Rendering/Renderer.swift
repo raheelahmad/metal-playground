@@ -50,7 +50,7 @@ final class Renderer: NSObject, MTKViewDelegate {
     func setup(_ view: MTKView) {
         view.device = device
         view.colorPixelFormat = pixelFormat
-        view.preferredFramesPerSecond = 30
+        view.preferredFramesPerSecond = 60
         view.delegate = self
         uniforms.screen_scale = 2
         setupPipeline()
