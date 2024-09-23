@@ -8,9 +8,42 @@
 
 import SwiftUI
 
+struct PlaygroundListItemView: View {
+    let group: PlaygroundGroup
+    var viewModel: ViewModel
+    @State private var isExpanded = false
+
+
+    var body: some View {
+        DisclosureGroup(isExpanded: $isExpanded) {
+            ForEach(group.scenes) { sceneKind in
+                HStack {
+                    Text(sceneKind.name)
+                        .tag(sceneKind)
+                        .foregroundColor(viewModel.sceneKind == sceneKind ? .primary : .secondary)
+                }
+                .onTapGesture {
+                    viewModel.sceneKind = sceneKind
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        } label: {
+            Text(group.rawValue)
+                .font(.headline)
+                .foregroundStyle(.secondary)
+                .contentShape(.rect)
+        }.onAppear {
+            isExpanded = group.scenes.contains(viewModel.sceneKind)
+        }.onChange(of: viewModel.sceneKind) { (_, newValue) in
+            isExpanded = group.scenes.contains(newValue)
+        }
+    }
+}
+
 struct RootView: View {
-    @StateObject var viewModel: ViewModel
+    @State var viewModel: ViewModel
     @State var isOptionsOpen = false
+    @State var isSideBarOPen = false
 
     let metalView: MetalSwiftView
 
@@ -26,28 +59,10 @@ struct RootView: View {
     private var sidebar: some View {
         List {
             ForEach(PlaygroundGroup.allCases) { sceneGroup in
-                DisclosureGroup {
-                    ForEach(sceneGroup.scenes) { sceneKind in
-                        HStack {
-                            Text(sceneKind.name)
-                                .tag(sceneKind)
-                                .foregroundColor(viewModel.sceneKind == sceneKind ? .primary : .secondary)
-                                .bold(viewModel.sceneKind == sceneKind)
-                        }
-                        .onTapGesture {
-                            viewModel.sceneKind = sceneKind
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                } label: {
-                    Text(sceneGroup.rawValue)
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                }
-
+                PlaygroundListItemView(group: sceneGroup, viewModel: viewModel)
             }
         }
-        .listStyle(.sidebar)
+        .listStyle(.inset)
         .frame(minWidth: 180)
     }
 
@@ -69,7 +84,7 @@ struct RootView: View {
         } else {
             VStack(spacing: 28) {
                 ConfigView()
-                    .environmentObject(viewModel)
+                    .environment(viewModel)
             }
             .frame(maxWidth: 210)
             .padding()

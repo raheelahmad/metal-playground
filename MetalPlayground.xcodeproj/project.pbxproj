@@ -16,6 +16,7 @@
 		591226B924B3CDD600AF7663 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591226B824B3CDD600AF7663 /* MetalView.swift */; };
 		591226BC24B40BF800AF7663 /* 05Algorithmic.metal in Sources */ = {isa = PBXBuildFile; fileRef = 591226BB24B40BF800AF7663 /* 05Algorithmic.metal */; };
 		5920719925106CBC006E579F /* Girih.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5920719825106CBC006E579F /* Girih.swift */; };
+		5927B0DC2C2312DC005CC745 /* RayMarchingScratch.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5927B0DB2C2312DC005CC745 /* RayMarchingScratch.metal */; };
 		592B960B251AD71000549407 /* ConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B960A251AD71000549407 /* ConfigView.swift */; };
 		592B960D251AD74C00549407 /* MetalSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 592B960C251AD74C00549407 /* MetalSwiftUIView.swift */; };
 		592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */ = {isa = PBXBuildFile; fileRef = 592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */; };
@@ -43,6 +44,8 @@
 		59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */; };
 		59A312632517F48900F6ACA2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A312622517F48900F6ACA2 /* RootView.swift */; };
 		59A312652517F72E00F6ACA2 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A312642517F72E00F6ACA2 /* ViewModel.swift */; };
+		59AB61052C88E50F00024300 /* wallpaper.png in Resources */ = {isa = PBXBuildFile; fileRef = 59AB61042C88E50F00024300 /* wallpaper.png */; };
+		59AB61092C890C4A00024300 /* R.png in Resources */ = {isa = PBXBuildFile; fileRef = 59AB61082C890C4A00024300 /* R.png */; };
 		59AB6DD62A7218CC00A76D73 /* AudioViz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AB6DD52A7218CC00A76D73 /* AudioViz.swift */; };
 		59AB6DD82A7219BD00A76D73 /* AudioViz.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59AB6DD72A7219BD00A76D73 /* AudioViz.metal */; };
 		59B25E4E2A1D581400F1AF4A /* raga.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 59B25E4D2A1D581400F1AF4A /* raga.mp3 */; };
@@ -91,6 +94,7 @@
 		591226B824B3CDD600AF7663 /* MetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		591226BB24B40BF800AF7663 /* 05Algorithmic.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 05Algorithmic.metal; sourceTree = "<group>"; };
 		5920719825106CBC006E579F /* Girih.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Girih.swift; sourceTree = "<group>"; };
+		5927B0DB2C2312DC005CC745 /* RayMarchingScratch.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = RayMarchingScratch.metal; sourceTree = "<group>"; };
 		592B960A251AD71000549407 /* ConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigView.swift; sourceTree = "<group>"; };
 		592B960C251AD74C00549407 /* MetalSwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalSwiftUIView.swift; sourceTree = "<group>"; };
 		592D5F6E24C1004A00EE9C7D /* ShaderToyStarField.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToyStarField.metal; sourceTree = "<group>"; };
@@ -119,6 +123,8 @@
 		59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSlider.swift; sourceTree = "<group>"; };
 		59A312622517F48900F6ACA2 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		59A312642517F72E00F6ACA2 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		59AB61042C88E50F00024300 /* wallpaper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wallpaper.png; sourceTree = "<group>"; };
+		59AB61082C890C4A00024300 /* R.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = R.png; sourceTree = "<group>"; };
 		59AB6DD52A7218CC00A76D73 /* AudioViz.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioViz.swift; sourceTree = "<group>"; };
 		59AB6DD72A7219BD00A76D73 /* AudioViz.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = AudioViz.metal; sourceTree = "<group>"; };
 		59B25E4D2A1D581400F1AF4A /* raga.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = raga.mp3; sourceTree = "<group>"; };
@@ -231,6 +237,7 @@
 				590D1E692513E5F900B0C04A /* Simplest3D.metal */,
 				59438CA3252A5B8600713DB9 /* Passthrough.metal */,
 				59DFEBAE2511A09600050718 /* Kishimisu.metal */,
+				5927B0DB2C2312DC005CC745 /* RayMarchingScratch.metal */,
 				5933FB11256F5B6D002D854A /* HappyJumping.metal */,
 				595FBBE124708BEE00222613 /* CellularNoise.metal */,
 				5981BA96246B22EB00E39E86 /* Shaders.metal */,
@@ -299,7 +306,9 @@
 				590BE6152500C4C200E9B573 /* Scenes */,
 				59C2BD24246A709D00335E59 /* MetalPlaygroundApp.swift */,
 				59B25E4D2A1D581400F1AF4A /* raga.mp3 */,
+				59AB61042C88E50F00024300 /* wallpaper.png */,
 				59C2BD28246A709F00335E59 /* Assets.xcassets */,
+				59AB61082C890C4A00024300 /* R.png */,
 				59C2BD2A246A709F00335E59 /* Main.storyboard */,
 				59C2BD2D246A709F00335E59 /* Info.plist */,
 				59C2BD2E246A709F00335E59 /* MetalPlayground.entitlements */,
@@ -387,7 +396,9 @@
 				59C2BD29246A709F00335E59 /* Assets.xcassets in Resources */,
 				59B25E4E2A1D581400F1AF4A /* raga.mp3 in Resources */,
 				59CF2B1F24DB826A00606BB2 /* mushroom.obj in Resources */,
+				59AB61052C88E50F00024300 /* wallpaper.png in Resources */,
 				59C2BD2C246A709F00335E59 /* Main.storyboard in Resources */,
+				59AB61092C890C4A00024300 /* R.png in Resources */,
 				59CF2B1D24DB5E8500606BB2 /* train.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +454,7 @@
 				590BE61C2500C6A500E9B573 /* MathUtils.swift in Sources */,
 				5933FB12256F5B6D002D854A /* HappyJumping.metal in Sources */,
 				592B960B251AD71000549407 /* ConfigView.swift in Sources */,
+				5927B0DC2C2312DC005CC745 /* RayMarchingScratch.metal in Sources */,
 				59C2BD37246A7C2600335E59 /* Renderer.swift in Sources */,
 				59E5BC6625AAA2A30061154A /* JumpingBalls.metal in Sources */,
 				59438CA4252A5B8600713DB9 /* Passthrough.metal in Sources */,
@@ -587,18 +599,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MetalPlayground/MetalPlayground.entitlements;
 				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 2W72Q4758S;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MetalPlayground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sakunlabs.MetalPlayground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -609,18 +622,19 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MetalPlayground/MetalPlayground.entitlements;
 				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 2W72Q4758S;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MetalPlayground/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.sakunlabs.MetalPlayground;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

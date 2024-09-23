@@ -9,8 +9,9 @@
 import SwiftUI
 import Combine
 
-final class ViewModel: ObservableObject {
-    @Published var sceneKind: SceneKind {
+@Observable
+final class ViewModel {
+    var sceneKind: SceneKind {
         didSet {
             updateSceneSelection(kind: sceneKind)
         }
@@ -18,8 +19,9 @@ final class ViewModel: ObservableObject {
 
     private let renderer: Renderer
 
-    @Published var scene: Playground
-    @Published var hasConfig: Bool
+    var scene: Playground
+    var hasConfig: Bool
+    @ObservationIgnored
     private var cancellables: [AnyCancellable] = []
     private let view: MetalView
 
@@ -27,7 +29,7 @@ final class ViewModel: ObservableObject {
         self.renderer = renderer
         self.view = view
         view.delegate = renderer
-        let sceneKind = SceneKind.kishimisu
+        let sceneKind = SceneKind.raymarchingFromScratch
         self.sceneKind = sceneKind
         self.scene = sceneKind.scene
         self.hasConfig = sceneKind.scene.view != nil

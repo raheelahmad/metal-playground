@@ -18,7 +18,7 @@ struct VertexOut {
     float4 color;
 };
 
-float3 palette(float t) {
+float3 palette01(float t) {
     float3 a = float3(0.738, 0.870, 0.870);
     float3 b = float3(0.228, 0.500, 0.500);
     float3 c = float3(1.0, 1.0, 1.0);

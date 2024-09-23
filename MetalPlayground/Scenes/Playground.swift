@@ -101,7 +101,8 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 ]
             case .rayMarching:
                 return [
-                    .rayMarch
+                    .rayMarch,
+                    .raymarchingFromScratch
                 ]
             case .artOfCode:
                 return [
@@ -128,6 +129,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case bookOfShaders07Shapes
     case truchet
     case kishimisu
+    case raymarchingFromScratch
 
     case happyJumping
     case smiley
@@ -157,6 +159,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
                 return "Book Of Shaders - 05 - Shaping"
             case .bookOfShaders07Shapes:
                 return "Book Of Shaders - 07 - Shapes"
+            case .raymarchingFromScratch:
+                return "Ray Marching from Scratch"
             case .leftRightTiler:
                 return "Book of Shaders - Left/Right Tiler"
             case .happyJumping:
@@ -202,6 +206,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .simplest3D: return Simplest3D()
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
+            case .raymarchingFromScratch: return RayMarchingScratch()
         }
     }
 }
@@ -253,6 +258,55 @@ class Kishimisu: Playground {
     var fragmentFuncName: String { "kishimisu_fragment" }
     var liveReloads: Bool { true }
     required init() {}
+}
+
+class RayMarchingScratch: Playground {
+    var fileName: String {
+        "Explorations/RayMarchingScratch"
+    }
+    var vertexFuncName: String { "raymarching_scratch_vertex" }
+    var fragmentFuncName: String { "raymarching_scratch_fragment" }
+    var liveReloads: Bool { true }
+    required init() {}
+    var texture: MTLTexture?
+    var overlayTexture: MTLTexture?
+
+    func setUniforms(device: any MTLDevice, encoder: any MTLRenderCommandEncoder) {
+        if texture == nil {
+            let imageURL = Bundle.main.url(forResource: "wallpaper.png", withExtension: nil)!
+            let loader = MTKTextureLoader(device: device)
+            self.texture = try! loader.newTexture(URL: imageURL)
+
+            let overlayImageURL = Bundle.main.url(forResource: "R.png", withExtension: nil)!
+            self.overlayTexture = try! loader.newTexture(URL: overlayImageURL)
+        }
+        if let texture {
+            encoder.setFragmentTexture(texture, index: 10)
+            encoder.setFragmentTexture(overlayTexture!, index: 11)
+        }
+    }
+    static func makeTexture(
+        size: CGSize,
+        pixelFormat: MTLPixelFormat,
+        label: String,
+        device: any MTLDevice,
+        storageMode: MTLStorageMode = .private,
+        usage: MTLTextureUsage = [.shaderRead, .renderTarget]
+    ) -> MTLTexture? {
+        let width = Int(size.width)
+        let height = Int(size.height)
+
+        let textureDesc = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: pixelFormat,
+            width: width,
+            height: height,
+            mipmapped: false
+        )
+        textureDesc.usage = usage
+        let texture = device.makeTexture(descriptor: textureDesc)
+        texture?.label = label
+        return texture
+    }
 }
 class Simplest3D: Playground {
     var fileName: String {

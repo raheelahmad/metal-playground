@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ConfigView: NSViewRepresentable {
-    @EnvironmentObject var viewModel: ViewModel
+    @Environment(ViewModel.self) var viewModel
 
     func makeNSView(context: Context) -> NSView {
         NSView()
