@@ -12,10 +12,9 @@ import SwiftUI
 
 @main
 struct MetalPlaygroundApp: App {
-    private let renderer = Renderer()
     var body: some Scene {
         WindowGroup {
-            RootView(renderer: renderer)
+            RootView()
                 .frame(minWidth: 420)
         }
     }

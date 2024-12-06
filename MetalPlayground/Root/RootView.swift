@@ -19,13 +19,14 @@ struct PlaygroundListItemView: View {
             ForEach(group.scenes) { sceneKind in
                 HStack {
                     Text(sceneKind.name)
-                        .tag(sceneKind)
                         .foregroundColor(viewModel.sceneKind == sceneKind ? .primary : .secondary)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .tag(sceneKind)
+                .contentShape(.rect)
                 .onTapGesture {
                     viewModel.sceneKind = sceneKind
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
         } label: {
             Text(group.rawValue)
@@ -35,25 +36,19 @@ struct PlaygroundListItemView: View {
         }.onAppear {
             isExpanded = group.scenes.contains(viewModel.sceneKind)
         }.onChange(of: viewModel.sceneKind) { (_, newValue) in
-            isExpanded = group.scenes.contains(newValue)
+            withAnimation {
+                isExpanded = group.scenes.contains(newValue)
+            }
         }
     }
 }
 
 struct RootView: View {
-    @State var viewModel: ViewModel
+    @State var viewModel = ViewModel()
     @State var isOptionsOpen = false
     @State var isSideBarOPen = false
 
-    let metalView: MetalSwiftView
-
-    init(renderer: Renderer) {
-        let hostedView = MetalView()
-        hostedView.delegate = renderer
-        hostedView.renderer = renderer
-        renderer.setup(hostedView)
-        _viewModel = .init(wrappedValue: ViewModel(view: hostedView, renderer: renderer))
-        metalView = MetalSwiftView(metalView: hostedView)
+    init() {
     }
 
     private var sidebar: some View {
@@ -104,7 +99,8 @@ struct RootView: View {
             sidebar
         } detail: {
             ZStack(alignment: .topTrailing) {
-                metalView
+                MetalSwiftView()
+                    .environment(viewModel)
                     .onTapGesture {
                         withAnimation {
                             if self.isOptionsOpen {

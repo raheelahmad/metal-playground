@@ -67,15 +67,19 @@ final class Renderer: NSObject, MTKViewDelegate {
     }
 
     var vertexBuffer: MTLBuffer?
+    var isPaused = false
 
     private func setupPipeline() {
+        isPaused = true
         scene.buildPipeline(device: device, pixelFormat: pixelFormat) { [weak self] pipelineState,vertexBuffer in
+            self?.isPaused = false
             self?.pipelineState = pipelineState
             self?.vertexBuffer = vertexBuffer
         }
     }
 
     func draw(in view: MTKView) {
+        guard !isPaused else { return }
         guard let commandBuffer = queue.makeCommandBuffer() else { return }
         guard let passDescriptor = view.currentRenderPassDescriptor else { return }
         guard let pipelineState = self.pipelineState else { return }

@@ -9,15 +9,22 @@
 import SwiftUI
 
 struct MetalSwiftView: NSViewRepresentable {
-    let metalView: MetalView
+    @Environment(ViewModel.self) var viewModel
 
-    init(metalView: MetalView) {
-        self.metalView = metalView
+    init() {
     }
 
     func makeNSView(context: Context) -> MetalView {
-        metalView
+        MetalView()
     }
 
-    func updateNSView(_ nsView: MetalView, context: Context) { }
+    func makeCoordinator() -> ViewModel {
+        viewModel
+    }
+
+    func updateNSView(_ nsView: MetalView, context: Context) {
+        nsView.delegate = context.coordinator.renderer
+        nsView.renderer = context.coordinator.renderer
+        context.coordinator.update(view: nsView)
+    }
 }

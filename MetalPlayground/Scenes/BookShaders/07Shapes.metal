@@ -41,9 +41,9 @@ float3 hash32(float2 p) {
     return fract((p3.xxy+p3.yzz)*p3.zyx);
 }
 
-float rectangle(float2 st) {
-    float bl = step(0.1, st.x) * step(0.1, st.y);
-    float tr = (1 - step(0.9, st.x)) * (1 - step(0.9, st.y));
+float rectangle(float2 st, float width) {
+    float bl = step(width, st.x) * step(width, st.y);
+    float tr = (1 - step((1 - width), st.x)) * (1 - step((1 - width), st.y));
     return bl * tr;
 }
 
@@ -56,15 +56,20 @@ float3 circle(float2 st, float time) {
 }
 
 fragment float4 bos_shapes_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+    float3 red = float3(0.8, 0.2, 0.1);
+    float3 green = float3(0.4, 0.7, 0.1);
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
-    st = float2(0.5) - st;
+//    st = float2(0.5) - st;
 
     st.x *= uniforms.screen_width/uniforms.screen_height;
 
-//    float  = step(0.1, st.x);
+    st = 2 * st - 1;
 
-    float3 col = rectangle(st);
-    col = circle(st, uniforms.time);
+    float l = length(float2(0.3) - abs(st));
+    float pct = step(0.5, l);
+    pct = fract(l * 10);
+
+    float3 col = green * pct;
 
     float4 color = float4(col, 1);
     return color;
