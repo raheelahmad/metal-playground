@@ -10,7 +10,7 @@ import MetalKit
 import SwiftUI
 
 protocol Playground {
-    typealias Built = (MTLRenderPipelineState, MTLBuffer) -> ()
+    typealias Built = (MTLRenderPipelineState, MTLBuffer) -> Void
 
     /// Filename for the Shader
     var fileName: String { get }
@@ -54,12 +54,15 @@ extension Playground {
         let descriptor = buildBasicPipelineDescriptor(device: device, pixelFormat: pixelFormat)
         let pipeline = (try? device.makeRenderPipelineState(descriptor: descriptor))!
 
-
-        let vertexBuffer = device.makeBuffer(bytes: basicVertices, length: MemoryLayout<Vertex>.stride * basicVertices.count, options: [])
+        let vertexBuffer = device.makeBuffer(
+            bytes: basicVertices, length: MemoryLayout<Vertex>.stride * basicVertices.count,
+            options: [])
         built(pipeline, vertexBuffer!)
     }
 
-    func buildBasicPipelineDescriptor(device: MTLDevice, pixelFormat: MTLPixelFormat) -> MTLRenderPipelineDescriptor {
+    func buildBasicPipelineDescriptor(device: MTLDevice, pixelFormat: MTLPixelFormat)
+        -> MTLRenderPipelineDescriptor
+    {
         let pipelineDesc = MTLRenderPipelineDescriptor()
         let library = device.makeDefaultLibrary()
         pipelineDesc.vertexFunction = library?.makeFunction(name: vertexFuncName)
@@ -74,7 +77,7 @@ extension Playground {
         encoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: basicVertices.count)
     }
 
-    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) { }
+    func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {}
 
     var view: NSView? {
         nil
@@ -89,23 +92,24 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var scenes: [SceneKind] {
         switch self {
-            case .bookOfShaders:
-                return [
-                    .bookOfShaders07Shapes,
-                    .bookOfShaders05Shaping,
-                    .leftRightTiler,
-                    .futuristicUI,
-                    .domainDisortion,
-                    .bookOfShaders06Colors,
-                ]
-            case .artOfCode:
-                return [
-                    .smiley, .starfield, .simplest3D, .polarScene
-                ]
-            case .explorations:
-                return [
-                    .audioVisualizer, .happyJumping, .girihPattern, .jumpingBalls
-                ]
+        case .bookOfShaders:
+            return [
+                .bookOfShaders07Shapes,
+                .bookOfShaders05Shaping,
+                .leftRightTiler,
+                .futuristicUI,
+                .domainDisortion,
+                .bookOfShaders06Colors,
+            ]
+        case .artOfCode:
+            return [
+                .smiley, .starfield, .simplest3D, .polarScene,
+            ]
+        case .explorations:
+            return [
+                .audioVisualizer, .happyJumping, .girihPattern, .jumpingBalls,
+                .cellularNoise
+            ]
         }
     }
 }
@@ -126,6 +130,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case simplest3D
     case polarScene
     case audioVisualizer
+    case cellularNoise
 
     var id: Int {
         rawValue
@@ -133,40 +138,42 @@ enum SceneKind: Int, CaseIterable, Identifiable {
 
     var name: String {
         switch self {
-            case .jumpingBalls:
-                return "Jumping Balls"
-            case .audioVisualizer:
-                return "Audio Visualizer"
-            case .bookOfShaders05Shaping:
-                return "Book Of Shaders - 05 - Shaping"
-            case .bookOfShaders07Shapes:
-                return "Book Of Shaders - 07 - Shapes"
-            case .leftRightTiler:
-                return "Book of Shaders - Left/Right Tiler"
-            case .smiley:
-                return "Smiley"
-            case .girihPattern:
-                return "Girih"
-            case .happyJumping:
-                return "Happy Jumping"
-            case .starfield:
-                return "Starfield"
-            case .simplest3D:
-                return "Simplest 3D"
-            case .domainDisortion:
-                return "Domain Distortion"
-            case .polarScene:
-                return "Polar"
-            case .futuristicUI:
-                return "Futuristic UI"
-            case .bookOfShaders06Colors:
-                return "Colors Mixing"
+        case .jumpingBalls:
+            return "Jumping Balls"
+        case .audioVisualizer:
+            return "Audio Visualizer"
+        case .bookOfShaders05Shaping:
+            return "Book Of Shaders - 05 - Shaping"
+        case .bookOfShaders07Shapes:
+            return "Book Of Shaders - 07 - Shapes"
+        case .leftRightTiler:
+            return "Book of Shaders - Left/Right Tiler"
+        case .smiley:
+            return "Smiley"
+        case .girihPattern:
+            return "Girih"
+        case .happyJumping:
+            return "Happy Jumping"
+        case .starfield:
+            return "Starfield"
+        case .simplest3D:
+            return "Simplest 3D"
+        case .domainDisortion:
+            return "Domain Distortion"
+        case .polarScene:
+            return "Polar"
+        case .futuristicUI:
+            return "Futuristic UI"
+        case .cellularNoise:
+            return "Cellular Noise"
+        case .bookOfShaders06Colors:
+            return "Colors Mixing"
         }
     }
 
     var scene: Playground {
         switch self {
-            case .audioVisualizer: return AudioVizScene()
+        case .audioVisualizer: return AudioVizScene()
         case .jumpingBalls: return JumpingBalls()
         case .leftRightTiler: return BoSLeftRightTiler()
         case .bookOfShaders05Shaping: return BoSShaping()
@@ -180,6 +187,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .simplest3D: return Simplest3D()
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
+        case .cellularNoise: return CellularNoise()
         }
     }
 }
@@ -203,11 +211,11 @@ extension MDLVertexDescriptor {
         var nextOffset = MemoryLayout<float3>.size
 
         // normal
-//        vd.vertexAttributes[1].name = MDLVertexAttributeNormal
-//        vd.vertexAttributes[1].format = .float3
-//        vd.vertexAttributes[1].offset = nextOffset
-//        vd.vertexAttributes[1].bufferIndex = 0
-//        nextOffset += MemoryLayout<Float>.size * 3
+        //        vd.vertexAttributes[1].name = MDLVertexAttributeNormal
+        //        vd.vertexAttributes[1].format = .float3
+        //        vd.vertexAttributes[1].offset = nextOffset
+        //        vd.vertexAttributes[1].bufferIndex = 0
+        //        nextOffset += MemoryLayout<Float>.size * 3
         vd.bufferLayouts[0].stride = nextOffset
 
         return vd
@@ -239,6 +247,16 @@ class Smiley: Playground {
     }
     var vertexFuncName: String { "shaderToySmileyVertex" }
     var fragmentFuncName: String { "shaderToySmiley" }
+    required init() {}
+}
+
+class CellularNoise: Playground {
+    var fileName: String {
+        "Explorations/CellularNoise"
+    }
+
+    var vertexFuncName: String { "cellularVertexShader" }
+    var fragmentFuncName: String { "tileFragmentShader2" }
     required init() {}
 }
 
@@ -277,10 +295,10 @@ class BoSColors06: Playground {
 
         var name: String {
             switch self {
-                case .bezierCurve:
-                    return "Bezier Curve"
-                case .flowingCurves:
-                    return "Flowing Curves"
+            case .bezierCurve:
+                return "Bezier Curve"
+            case .flowingCurves:
+                return "Flowing Curves"
             }
         }
     }
@@ -342,10 +360,10 @@ class BoSShaping: Playground {
 
         var name: String {
             switch self {
-                case .bezierCurve:
-                    return "Bezier Curve"
-                case .flowingCurves:
-                    return "Flowing Curves"
+            case .bezierCurve:
+                return "Bezier Curve"
+            case .flowingCurves:
+                return "Flowing Curves"
             }
         }
     }
@@ -408,15 +426,6 @@ class DomainDistortion: Playground {
 
     var vertexFuncName: String { "domain_distortion_vertex" }
     var fragmentFuncName: String { "domain_distortion_fragment" }
-    required init() {}
-}
-
-class BasicShaderToy: Playground {
-    var fileName: String {
-        "Explorations/ShaderToy01"
-    }
-    var vertexFuncName: String { "shape_vertex" }
-    var fragmentFuncName: String { "shadertoy01" }
     required init() {}
 }
 
