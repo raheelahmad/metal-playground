@@ -25,4 +25,10 @@ float unionSDFs(float a, float b);
 float blendSDFs(float a, float b, float t);
 float smoothUnionSDFs( float a, float b, float k);
 
+float3 red();
+float3 green();
+float3 yellow();
+float3 black();
+float3 gray();
+
 #endif

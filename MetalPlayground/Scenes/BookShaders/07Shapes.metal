@@ -56,7 +56,6 @@ float3 circle(float2 st, float time) {
 }
 
 fragment float4 bos_shapes_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
-    float3 red = float3(0.8, 0.2, 0.1);
     float3 green = float3(0.4, 0.7, 0.1);
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_height};
 //    st = float2(0.5) - st;

@@ -112,7 +112,6 @@ fragment float4 jumpingFragmentShader(
     uv.x *= uniforms.screen_width / uniforms.screen_height;
 
     float time = uniforms.time;
-    float2 mouseXY = uniforms.mousePos / float2(5);
 
     // -- Main image generation
 

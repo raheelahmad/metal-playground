@@ -56,7 +56,6 @@ fragment float4 audioVizFragmentShader(
                                     const constant float *frequenciesBuffer [[buffer(2)]]
                                        ) {
 
-    float loudness = loudnessBuffer[0];
     float2 uv = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y/uniforms.screen_height};
     uv = 2 * (uv - 0.5);
     if (uniforms.screen_width > uniforms.screen_height) {

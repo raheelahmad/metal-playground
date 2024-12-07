@@ -88,6 +88,7 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
     case bookOfShaders = "Book of Shaders"
     case artOfCode = "The Art of Code"
     case explorations = "Explorations"
+    case simonDev = "Simon's Shaders Course"
 
     var id: String { rawValue }
     var scenes: [SceneKind] {
@@ -110,6 +111,8 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 .audioVisualizer, .happyJumping, .girihPattern, .jumpingBalls,
                 .cellularNoise
             ]
+            case .simonDev:
+                return [.simonDevFractAndFriends]
         }
     }
 }
@@ -131,6 +134,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case polarScene
     case audioVisualizer
     case cellularNoise
+
+    case simonDevFractAndFriends
 
     var id: Int {
         rawValue
@@ -168,6 +173,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             return "Cellular Noise"
         case .bookOfShaders06Colors:
             return "Colors Mixing"
+            case .simonDevFractAndFriends:
+                return "Simon Dev - Fract and Friends"
         }
     }
 
@@ -188,6 +195,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
         case .cellularNoise: return CellularNoise()
+            case .simonDevFractAndFriends: return SimonFractAndFriends()
         }
     }
 }
@@ -221,6 +229,19 @@ extension MDLVertexDescriptor {
         return vd
     }()
 }
+
+// MARK: Simon's Shaders Course
+
+class SimonFractAndFriends: Playground {
+    var fileName: String {
+        "SimonShaders/FractAndFriends"
+    }
+    var vertexFuncName: String { "fract_and_friends_vertex" }
+    var fragmentFuncName: String { "fract_and_friends_fragment" }
+    required init() {}
+}
+
+// MARK: Others
 
 class HappyJumping: Playground {
     var fileName: String {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,6 +24,7 @@
 		595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595FBBE124708BEE00222613 /* CellularNoise.metal */; };
 		5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */; };
 		597743E624B82CC500AAB07C /* 06Colors.metal in Sources */ = {isa = PBXBuildFile; fileRef = 597743E524B82CC500AAB07C /* 06Colors.metal */; };
+		59999F382D03DAFC004E3E04 /* FractAndFriends.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59999F372D03DAFC004E3E04 /* FractAndFriends.metal */; };
 		599B22A12504778C007EB419 /* RaysConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B22A02504778C007EB419 /* RaysConfig.swift */; };
 		599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */ = {isa = PBXBuildFile; fileRef = 599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */; };
 		59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */; };
@@ -80,6 +81,7 @@
 		5973D19E24BA9A55006AFC50 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07ShapePrimitives.metal; sourceTree = "<group>"; };
 		597743E524B82CC500AAB07C /* 06Colors.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 06Colors.metal; sourceTree = "<group>"; };
+		59999F372D03DAFC004E3E04 /* FractAndFriends.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FractAndFriends.metal; sourceTree = "<group>"; };
 		599B22A02504778C007EB419 /* RaysConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaysConfig.swift; sourceTree = "<group>"; };
 		599B8E4724BE71E100769E7A /* ShaderToySmiley.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = ShaderToySmiley.metal; sourceTree = "<group>"; };
 		59A3125D2517EFFF00F6ACA2 /* TitledSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitledSlider.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 		590BE6152500C4C200E9B573 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				59999F362D03DAE4004E3E04 /* SimonShaders */,
 				59E5BC6925AAC6B50061154A /* Helpers.metal */,
 				59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */,
 				5973D19E24BA9A55006AFC50 /* MetalHeaders.h */,
@@ -176,6 +179,14 @@
 				595FBBE124708BEE00222613 /* CellularNoise.metal */,
 			);
 			path = Explorations;
+			sourceTree = "<group>";
+		};
+		59999F362D03DAE4004E3E04 /* SimonShaders */ = {
+			isa = PBXGroup;
+			children = (
+				59999F372D03DAFC004E3E04 /* FractAndFriends.metal */,
+			);
+			path = SimonShaders;
 			sourceTree = "<group>";
 		};
 		59A3125C2517EFF300F6ACA2 /* UI */ = {
@@ -268,8 +279,9 @@
 		59C2BD19246A709D00335E59 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 1610;
 				ORGANIZATIONNAME = "Raheel Ahmad";
 				TargetAttributes = {
 					59C2BD20246A709D00335E59 = {
@@ -329,6 +341,7 @@
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
 				59AB6DD82A7219BD00A76D73 /* AudioViz.metal in Sources */,
 				59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */,
+				59999F382D03DAFC004E3E04 /* FractAndFriends.metal in Sources */,
 				599B22A12504778C007EB419 /* RaysConfig.swift in Sources */,
 				591226B924B3CDD600AF7663 /* MetalView.swift in Sources */,
 				59A312652517F72E00F6ACA2 /* ViewModel.swift in Sources */,
@@ -392,6 +405,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -399,9 +413,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -451,6 +467,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -458,9 +475,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -485,6 +504,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MetalPlayground/Info.plist;
@@ -508,6 +528,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MetalPlayground/Info.plist;

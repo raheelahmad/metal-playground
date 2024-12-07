@@ -11,7 +11,7 @@ import Combine
 
 @Observable
 final class ViewModel {
-    var sceneKind: SceneKind = .polarScene {
+    var sceneKind: SceneKind = .simonDevFractAndFriends {
         didSet {
             updateSceneSelection(kind: sceneKind)
         }
