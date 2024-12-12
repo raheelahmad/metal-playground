@@ -238,7 +238,41 @@ class SimonFractAndFriends: Playground {
     }
     var vertexFuncName: String { "fract_and_friends_vertex" }
     var fragmentFuncName: String { "fract_and_friends_fragment" }
+    var texture: MTLTexture?
+
     required init() {}
+    func setUniforms(device: any MTLDevice, encoder: any MTLRenderCommandEncoder) {
+        if texture == nil {
+            let imageURL = Bundle.main.url(forResource: "wallpaper.png", withExtension: nil)!
+            let loader = MTKTextureLoader(device: device)
+            self.texture = try! loader.newTexture(URL: imageURL)
+        }
+        if let texture {
+            encoder.setFragmentTexture(texture, index: 10)
+        }
+    }
+    static func makeTexture(
+        size: CGSize,
+        pixelFormat: MTLPixelFormat,
+        label: String,
+        device: any MTLDevice,
+        storageMode: MTLStorageMode = .private,
+        usage: MTLTextureUsage = [.shaderRead, .renderTarget]
+    ) -> MTLTexture? {
+        let width = Int(size.width)
+        let height = Int(size.height)
+
+        let textureDesc = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: pixelFormat,
+            width: width,
+            height: height,
+            mipmapped: false
+        )
+        textureDesc.usage = usage
+        let texture = device.makeTexture(descriptor: textureDesc)
+        texture?.label = label
+        return texture
+    }
 }
 
 // MARK: Others

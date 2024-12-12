@@ -34,27 +34,19 @@ vertex VertexOut fract_and_friends_vertex(const device VertexIn *vertexArray [[b
     return out;
 }
 
-fragment float4 fract_and_friends_fragment(VertexOut interpolated [[stage_in]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
+fragment float4 fract_and_friends_fragment(VertexOut interpolated [[stage_in]], texture2d<float> baseColorTexture [[texture(10)]], constant FragmentUniforms &uniforms [[buffer(0)]]) {
     float2 st  = {interpolated.pos.x / uniforms.screen_width, 1 - interpolated.pos.y / uniforms.screen_width};
 
+    constexpr sampler textureSampler(filter::nearest, mip_filter::linear, max_anisotropy(8), address::repeat);
+    float2 uv = 1 - st;
+    float3 baseColor = baseColorTexture.sample(textureSampler, uv).rgb;
+
     // Background
-    float3 color = gray();
+    float3 color = baseColor;
 
-    // Grid
-    float3 cell = fract(float3(st, 0) * 10);
-    cell = abs(cell - 0.5);
-    float distToCellCenter = 1 - 2.0 * max(cell.x, cell.y);
-    float cellLine = smoothstep(0, 0.04, distToCellCenter);
-    color = mix(black()+0.5, color, cellLine);
-
-    // Axes
-    float xAxis = step(0.002, abs(st.x - 0.5));
-    float yAxis = step(0.002, abs(st.y - 0.5));
-    color = mix(yellow(), color, xAxis);
-    color = mix(yellow(), color, yAxis);
-
-    // Lines
-#warning("Follow from 12:20 in the video")
+    float2 pst = (st + uniforms.time * .012) * 400;
+    float val = lerp(sin(pst.y), -1,1, 0.2, 1);
+    color = mix(blue(), green(), val) * color;
 
     return vector_float4(color, 1.0);
 }

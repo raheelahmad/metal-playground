@@ -30,5 +30,6 @@ float3 green();
 float3 yellow();
 float3 black();
 float3 gray();
+float3 blue();
 
 #endif

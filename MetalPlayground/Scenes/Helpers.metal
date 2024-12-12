@@ -119,6 +119,7 @@ float smoothUnionSDFs( float a, float b, float k) {
 // MARK: Colors
 float3 red() { return float3(1.0, 0.0, 0.0); }
 float3 green() { return float3(0.0, 1.0, 0.0); }
+float3 blue() { return float3(0.4, 0.4, 1.0); }
 float3 yellow() { return float3(1.0, 1.0, 0.0); }
 float3 black() { return float3(0.0, 0.0, 0.0); }
 float3 gray() { return float3(0.8, 0.8, 0.8); }
