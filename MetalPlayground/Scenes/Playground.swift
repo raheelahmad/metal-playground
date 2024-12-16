@@ -112,7 +112,7 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 .cellularNoise
             ]
             case .simonDev:
-                return [.simonDevFractAndFriends]
+                return [.simonDevFractAndFriends, .simonDevSDFs]
         }
     }
 }
@@ -136,6 +136,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case cellularNoise
 
     case simonDevFractAndFriends
+    case simonDevSDFs
 
     var id: Int {
         rawValue
@@ -175,6 +176,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             return "Colors Mixing"
             case .simonDevFractAndFriends:
                 return "Simon Dev - Fract and Friends"
+            case .simonDevSDFs:
+                return "Simon Dev - SDFs"
         }
     }
 
@@ -196,6 +199,7 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .domainDisortion: return DomainDistortion()
         case .cellularNoise: return CellularNoise()
             case .simonDevFractAndFriends: return SimonFractAndFriends()
+            case .simonDevSDFs: return SimonSDFs()
         }
     }
 }
@@ -273,6 +277,17 @@ class SimonFractAndFriends: Playground {
         texture?.label = label
         return texture
     }
+}
+
+class SimonSDFs: Playground {
+    var fileName: String {
+        "SimonShaders/SimonSDFs"
+    }
+    var vertexFuncName: String { "simon_sdfs_vertex" }
+    var fragmentFuncName: String { "simon_sdfs_fragment" }
+    var texture: MTLTexture?
+
+    required init() {}
 }
 
 // MARK: Others

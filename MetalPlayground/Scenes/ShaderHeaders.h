@@ -24,6 +24,8 @@ float intersectSDFs(float a, float b);
 float unionSDFs(float a, float b);
 float blendSDFs(float a, float b, float t);
 float smoothUnionSDFs( float a, float b, float k);
+float softMax(float a, float b, float k);
+float softMin(float a, float b, float k);
 
 float3 red();
 float3 green();

@@ -11,7 +11,7 @@ import Combine
 
 @Observable
 final class ViewModel {
-    var sceneKind: SceneKind = .simonDevFractAndFriends {
+    var sceneKind: SceneKind = .simonDevSDFs {
         didSet {
             updateSceneSelection(kind: sceneKind)
         }

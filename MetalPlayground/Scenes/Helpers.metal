@@ -116,6 +116,16 @@ float smoothUnionSDFs( float a, float b, float k) {
     return mix( b, a, h) - k*h* (1.0-h);
 }
 
+float softMax(float a, float b, float k) {
+    return log(exp(k * a) + exp(k * b)) / k;
+}
+
+float softMin(float a, float b, float k) {
+    k *= 1.0; // why?
+    float r = exp2(-a/k) + exp2(-b/k);
+    return -k * log2(r);
+}
+
 // MARK: Colors
 float3 red() { return float3(1.0, 0.0, 0.0); }
 float3 green() { return float3(0.0, 1.0, 0.0); }

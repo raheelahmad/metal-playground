@@ -98,20 +98,17 @@ struct RootView: View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             sidebar
         } detail: {
-            ZStack(alignment: .topTrailing) {
-                MetalSwiftView()
-                    .environment(viewModel)
-                    .onTapGesture {
-                        withAnimation {
-                            if self.isOptionsOpen {
-                                self.isOptionsOpen = false
-                            }
+            MetalSwiftView()
+                .aspectRatio(1.0, contentMode: .fill)
+                .environment(viewModel)
+                .onTapGesture {
+                    withAnimation {
+                        if self.isOptionsOpen {
+                            self.isOptionsOpen = false
                         }
                     }
-                    .zIndex(0)
-
-                options
-            }
+                }
+                .zIndex(0)
         }
     }
 }
