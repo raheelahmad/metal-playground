@@ -94,6 +94,20 @@ float getDistanceToPlane(float3 point) {
     return p;
 }
 
+float sdfCircle(float2 p, float r) {
+    return length(p) - r;
+}
+
+float sdfLine(float2 p, float2 a, float2 b) {
+    float2 pa = p - a;
+    float2 ba = b - a;
+
+    float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+    return length(pa - ba *  h);
+
+}
+
+
 // MARK: SDF Operations
 
 float subtractSDFs(float a, float b) {

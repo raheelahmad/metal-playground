@@ -20,6 +20,8 @@ float getDistanceToTorus(float3 point);
 float getDistanceToBox(float3 point);
 float getDistanceToPlane(float3 point);
 float subtractSDFs(float a, float b);
+float sdfCircle(float2 p, float r);
+float sdfLine(float2 p, float2 a, float2 b);
 float intersectSDFs(float a, float b);
 float unionSDFs(float a, float b);
 float blendSDFs(float a, float b, float t);

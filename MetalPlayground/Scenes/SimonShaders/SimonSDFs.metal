@@ -36,7 +36,7 @@ vertex VertexOut simon_sdfs_vertex(const device VertexIn *vertexArray [[buffer(0
 
 // ---
 
-float3 backgroundColor(float2 st) {
+float3 skyBackgroundColor(float2 st) {
     float distanceFromCenter = length(st);
     float vignette = 1.0 - distanceFromCenter;
     vignette = smoothstep(0, 0.7, vignette);
@@ -56,19 +56,6 @@ float3 grid(float2 st, float aspect, float3 color, float3 backgroundColor, float
     return color;
 }
 
-float sdfCircle(float2 p, float r) {
-    return length(p) - r;
-}
-
-float sdfLine(float2 p, float2 a, float2 b) {
-    float2 pa = p - a;
-    float2 ba = b - a;
-
-    float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
-    return length(pa - ba *  h);
-
-}
-
 float sdBox(float2 p, float2 b )
 {
     float2 d = abs(p)-b;
@@ -80,7 +67,7 @@ fragment float4 simon_sdfs_fragment(VertexOut interpolated [[stage_in]], constan
     st = st - 0.5;
 
     // Background
-    float3 color = backgroundColor(st);
+    float3 color = skyBackgroundColor(st);
 
     // Grid
     float aspect = uniforms.screen_width / uniforms.screen_height;
