@@ -49,6 +49,7 @@
 		59E5BC6625AAA2A30061154A /* JumpingBalls.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6525AAA2A30061154A /* JumpingBalls.metal */; };
 		59E5BC6825AAA9220061154A /* JumpingBalls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6725AAA9220061154A /* JumpingBalls.swift */; };
 		59E5BC6C25AAC92E0061154A /* Helpers.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59E5BC6925AAC6B50061154A /* Helpers.metal */; };
+		59F61D202D13657200A0D002 /* SimonNoiseIntro.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59F61D1F2D13657200A0D002 /* SimonNoiseIntro.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -112,6 +113,7 @@
 		59E5BC6725AAA9220061154A /* JumpingBalls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JumpingBalls.swift; sourceTree = "<group>"; };
 		59E5BC6925AAC6B50061154A /* Helpers.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Helpers.metal; sourceTree = "<group>"; };
 		59E5BC6B25AAC8E00061154A /* ShaderHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderHeaders.h; sourceTree = "<group>"; };
+		59F61D1F2D13657200A0D002 /* SimonNoiseIntro.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = SimonNoiseIntro.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				59999F392D0CB4FB004E3E04 /* SimonSDFs.metal */,
+				59F61D1F2D13657200A0D002 /* SimonNoiseIntro.metal */,
 				59C09C112D10DCC1004A9C5C /* SimonCloudyDay.metal */,
 				59999F372D03DAFC004E3E04 /* FractAndFriends.metal */,
 			);
@@ -370,6 +373,7 @@
 				599B8E4824BE71E100769E7A /* ShaderToySmiley.metal in Sources */,
 				59A312632517F48900F6ACA2 /* RootView.swift in Sources */,
 				59C2BD25246A709D00335E59 /* MetalPlaygroundApp.swift in Sources */,
+				59F61D202D13657200A0D002 /* SimonNoiseIntro.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

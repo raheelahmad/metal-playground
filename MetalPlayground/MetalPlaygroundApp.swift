@@ -17,5 +17,6 @@ struct MetalPlaygroundApp: App {
             RootView()
                 .frame(minWidth: 420)
         }
+        .windowStyle(.hiddenTitleBar)
     }
 }
