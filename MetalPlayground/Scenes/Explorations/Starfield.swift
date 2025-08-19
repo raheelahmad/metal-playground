@@ -62,10 +62,10 @@ class StarField: Playground {
         encoder.setFragmentBytes(&uniform, length: length, index: 1)
     }
 
-    var view: NSView? {
-        NSHostingView(
-            rootView: ConfigView().environmentObject(starfieldConfig)
-        )
+
+    var view: AnyView? {
+        AnyView(ConfigView().environmentObject(starfieldConfig))
     }
+
     required init() {}
 }

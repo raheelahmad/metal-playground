@@ -10,32 +10,38 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class BoSShapes07: Playground {
+class BoSRandom: Playground {
     var fileName: String {
-        "BookShaders/07Shapes"
+        "BookShaders/BosRandom"
     }
-    var vertexFuncName: String { "bos_shapes_vertex" }
-    var fragmentFuncName: String { "bos_shapes_fragment" }
-    required init() {}
+    var vertexFuncName: String { "bos_random_vertex" }
+    var fragmentFuncName: String { "bos_random_fragment" }
+    required init() {
+        
+    }
 
     enum SketchKind: Int, CaseIterable, Identifiable {
-        case bezierCurve
-        case flowingCurves
+        case randomSquares
+        case maze
+        case rowVairants
 
         var id: Int { rawValue }
 
         var name: String {
             switch self {
-                case .bezierCurve:
-                    return "Bezier Curve"
-                case .flowingCurves:
-                    return "Flowing Curves"
+            case .randomSquares:
+                    return "Random Squares"
+                case .maze:
+                    return "Maze"
+            case .rowVairants:
+                return "Row Variants"
             }
         }
     }
 
-    class Config: ObservableObject {
-        @Published var kind: SketchKind = .bezierCurve
+    @Observable
+    class Config {
+        var kind: SketchKind = .randomSquares
     }
 
     struct Uniforms {
@@ -54,12 +60,15 @@ class BoSShapes07: Playground {
     }
 
     struct ConfigView: View {
-        @EnvironmentObject private var config: Config
-        @State fileprivate var kind = SketchKind.bezierCurve
+        @Environment(Config.self) private var config: Config
 
         var body: some View {
             VStack(alignment: .leading, spacing: 19) {
-                Picker(selection: $config.kind, label: Text("Kind")) {
+                Picker(selection: Binding(get: {
+                    config.kind
+                }, set: {
+                    config.kind = $0
+                }), label: Text("Kind")) {
                     ForEach(SketchKind.allCases) {
                         Text($0.name).tag($0)
                     }
@@ -69,7 +78,7 @@ class BoSShapes07: Playground {
     }
 
     var view: AnyView? {
-        AnyView(ConfigView().environmentObject(config))
+        AnyView(ConfigView().environment(config))
     }
 }
 

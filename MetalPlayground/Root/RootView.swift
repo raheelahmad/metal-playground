@@ -78,7 +78,7 @@ struct RootView: View {
                 }.zIndex(1)
         } else {
             VStack(spacing: 28) {
-                ConfigView()
+                viewModel.scene.view
                     .environment(viewModel)
             }
             .frame(maxWidth: 210)
@@ -101,6 +101,9 @@ struct RootView: View {
             MetalSwiftView()
                 .aspectRatio(1.0, contentMode: .fill)
                 .environment(viewModel)
+                .overlay(alignment: .topTrailing) {
+                    options
+                }
                 .onTapGesture {
                     withAnimation {
                         if self.isOptionsOpen {

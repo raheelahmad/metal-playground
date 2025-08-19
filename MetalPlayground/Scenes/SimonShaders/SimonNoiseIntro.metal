@@ -186,7 +186,7 @@ fragment float4 simon_noise_intro_fragment(VertexOut interpolated [[stage_in]], 
 
 //    noiseSample = lerp(noise(noiseCoords), -1, 1, 0, 1);
 //    noiseSample = lerp(ridgedFbm(noiseCoords, 10, 0.5, 2.0), -1, 1, 0, 1);
-//    noiseSample = lerp(turbulenceFbm(noiseCoords, 10, 0.5, 2.0), -0.5, 1, 0, 1);
+//    noiseSample = lerp(turbulenceFbm(noiseCoords, 10, 0.5, 2.0), -3.0, 0, 0, 1);
 //    noiseSample = cellularNoise(noiseCoords);
 
     noiseSample = lerp(domainWarping(noiseCoords), -1,1, 0,1);

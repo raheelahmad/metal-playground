@@ -21,9 +21,14 @@
 		593725832A65CA2200E4BBD6 /* BoSShapes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593725822A65CA2200E4BBD6 /* BoSShapes.swift */; };
 		5941236C24D79E2A0027B0DC /* Girih.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5941236B24D79E2A0027B0DC /* Girih.metal */; };
 		594651E0251B198E009947C2 /* Starfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594651DF251B198E009947C2 /* Starfield.swift */; };
+		5947A95A2E45C0E60036A5A5 /* BoSRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5947A9592E45C0E60036A5A5 /* BoSRandom.swift */; };
+		5947A95C2E45C11B0036A5A5 /* BosNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5947A95B2E45C11B0036A5A5 /* BosNoise.metal */; };
+		5947A95E2E45C1DA0036A5A5 /* BosRandom.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5947A95D2E45C1DA0036A5A5 /* BosRandom.metal */; };
+		5947A9602E45C1F20036A5A5 /* BoSNoise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5947A95F2E45C1F20036A5A5 /* BoSNoise.swift */; };
 		595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */ = {isa = PBXBuildFile; fileRef = 595FBBE124708BEE00222613 /* CellularNoise.metal */; };
 		5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */ = {isa = PBXBuildFile; fileRef = 5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */; };
 		597743E624B82CC500AAB07C /* 06Colors.metal in Sources */ = {isa = PBXBuildFile; fileRef = 597743E524B82CC500AAB07C /* 06Colors.metal */; };
+		598C99E32E4EE92D00B2C7D9 /* AudioAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598C99E22E4EE92D00B2C7D9 /* AudioAnalysis.swift */; };
 		59999F382D03DAFC004E3E04 /* FractAndFriends.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59999F372D03DAFC004E3E04 /* FractAndFriends.metal */; };
 		59999F3A2D0CB4FB004E3E04 /* SimonSDFs.metal in Sources */ = {isa = PBXBuildFile; fileRef = 59999F392D0CB4FB004E3E04 /* SimonSDFs.metal */; };
 		599B22A12504778C007EB419 /* RaysConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599B22A02504778C007EB419 /* RaysConfig.swift */; };
@@ -80,10 +85,15 @@
 		593725822A65CA2200E4BBD6 /* BoSShapes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoSShapes.swift; sourceTree = "<group>"; };
 		5941236B24D79E2A0027B0DC /* Girih.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Girih.metal; sourceTree = "<group>"; };
 		594651DF251B198E009947C2 /* Starfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Starfield.swift; sourceTree = "<group>"; };
+		5947A9592E45C0E60036A5A5 /* BoSRandom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoSRandom.swift; sourceTree = "<group>"; };
+		5947A95B2E45C11B0036A5A5 /* BosNoise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BosNoise.metal; sourceTree = "<group>"; };
+		5947A95D2E45C1DA0036A5A5 /* BosRandom.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BosRandom.metal; sourceTree = "<group>"; };
+		5947A95F2E45C1F20036A5A5 /* BoSNoise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoSNoise.swift; sourceTree = "<group>"; };
 		595FBBE124708BEE00222613 /* CellularNoise.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = CellularNoise.metal; sourceTree = "<group>"; };
 		5973D19E24BA9A55006AFC50 /* MetalHeaders.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalHeaders.h; sourceTree = "<group>"; };
 		5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 07ShapePrimitives.metal; sourceTree = "<group>"; };
 		597743E524B82CC500AAB07C /* 06Colors.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = 06Colors.metal; sourceTree = "<group>"; };
+		598C99E22E4EE92D00B2C7D9 /* AudioAnalysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalysis.swift; sourceTree = "<group>"; };
 		59999F372D03DAFC004E3E04 /* FractAndFriends.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = FractAndFriends.metal; sourceTree = "<group>"; };
 		59999F392D0CB4FB004E3E04 /* SimonSDFs.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = SimonSDFs.metal; sourceTree = "<group>"; };
 		599B22A02504778C007EB419 /* RaysConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaysConfig.swift; sourceTree = "<group>"; };
@@ -146,8 +156,12 @@
 			isa = PBXGroup;
 			children = (
 				593725822A65CA2200E4BBD6 /* BoSShapes.swift */,
+				5947A9592E45C0E60036A5A5 /* BoSRandom.swift */,
+				5947A95F2E45C1F20036A5A5 /* BoSNoise.swift */,
 				5973D19F24BA9CE5006AFC50 /* 07ShapePrimitives.metal */,
 				597743E524B82CC500AAB07C /* 06Colors.metal */,
+				5947A95B2E45C11B0036A5A5 /* BosNoise.metal */,
+				5947A95D2E45C1DA0036A5A5 /* BosRandom.metal */,
 				593725802A65C9B100E4BBD6 /* 07Shapes.metal */,
 				592E5AB525A17E0B00660D83 /* 08LeftRightTiler.metal */,
 				59E2A6042A5CB96500216350 /* Shaping.metal */,
@@ -172,6 +186,7 @@
 				591226BB24B40BF800AF7663 /* 05Algorithmic.metal */,
 				59D4E0A4259E46D100B9BF52 /* 07FuturisticUI.metal */,
 				59AB6DD52A7218CC00A76D73 /* AudioViz.swift */,
+				598C99E22E4EE92D00B2C7D9 /* AudioAnalysis.swift */,
 				59AB6DD72A7219BD00A76D73 /* AudioViz.metal */,
 				599B22A02504778C007EB419 /* RaysConfig.swift */,
 				5920719825106CBC006E579F /* Girih.swift */,
@@ -337,15 +352,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				592D5F6F24C1004A00EE9C7D /* ShaderToyStarField.metal in Sources */,
+				598C99E32E4EE92D00B2C7D9 /* AudioAnalysis.swift in Sources */,
 				59A3125E2517EFFF00F6ACA2 /* TitledSlider.swift in Sources */,
 				59AB6DD62A7218CC00A76D73 /* AudioViz.swift in Sources */,
 				59D4E0A5259E46D100B9BF52 /* 07FuturisticUI.metal in Sources */,
 				595FBBE224708BEE00222613 /* CellularNoise.metal in Sources */,
 				59E11CAB24CEAF2700DC1FA7 /* Playground.swift in Sources */,
+				5947A95A2E45C0E60036A5A5 /* BoSRandom.swift in Sources */,
 				5973D1A024BA9CE5006AFC50 /* 07ShapePrimitives.metal in Sources */,
 				5941236C24D79E2A0027B0DC /* Girih.metal in Sources */,
 				590D1E6A2513E5F900B0C04A /* Simplest3D.metal in Sources */,
 				593725812A65C9B100E4BBD6 /* 07Shapes.metal in Sources */,
+				5947A95E2E45C1DA0036A5A5 /* BosRandom.metal in Sources */,
+				5947A95C2E45C11B0036A5A5 /* BosNoise.metal in Sources */,
 				592E5AB625A17E0B00660D83 /* 08LeftRightTiler.metal in Sources */,
 				597743E624B82CC500AAB07C /* 06Colors.metal in Sources */,
 				59AB6DD82A7219BD00A76D73 /* AudioViz.metal in Sources */,
@@ -374,6 +393,7 @@
 				59A312632517F48900F6ACA2 /* RootView.swift in Sources */,
 				59C2BD25246A709D00335E59 /* MetalPlaygroundApp.swift in Sources */,
 				59F61D202D13657200A0D002 /* SimonNoiseIntro.metal in Sources */,
+				5947A9602E45C1F20036A5A5 /* BoSNoise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

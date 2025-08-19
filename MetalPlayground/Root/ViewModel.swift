@@ -11,7 +11,7 @@ import Combine
 
 @Observable
 final class ViewModel {
-    var sceneKind: SceneKind = .simonNoiseIntro {
+    var sceneKind: SceneKind = .bookOfShadersRandom {
         didSet {
             updateSceneSelection(kind: sceneKind)
         }
@@ -19,9 +19,7 @@ final class ViewModel {
 
     let renderer: Renderer
 
-    var scene: Playground {
-        sceneKind.scene
-    }
+    var scene: Playground = EmptyPlayground()
     var hasConfig: Bool {
         sceneKind.scene.view != nil
     }
@@ -31,6 +29,7 @@ final class ViewModel {
 
     init() {
         self.renderer = Renderer()
+        self.sceneKind = .bookOfShadersRandom
     }
 
     func update(view: MetalView) {
@@ -41,12 +40,11 @@ final class ViewModel {
 
         self.view = view
         view.delegate = renderer
-
-        updateSceneSelection(kind: sceneKind)
     }
 
 
     private func updateSceneSelection(kind: SceneKind) {
+        self.scene = kind.scene
         renderer.scene = scene
         view?.enableSetNeedsDisplay = !scene.isPaused
         view?.isPaused = scene.isPaused

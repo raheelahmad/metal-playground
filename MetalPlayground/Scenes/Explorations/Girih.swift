@@ -101,10 +101,8 @@ class Girih: Playground {
     }
 
 
-    var view: NSView? {
-        NSHostingView(
-            rootView: ConfigView().environmentObject(config)
-        )
+    var view: AnyView? {
+        AnyView(ConfigView().environmentObject(config))
     }
 
     var vertexFuncName: String { "girih_vertex" }

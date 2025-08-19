@@ -23,7 +23,7 @@ protocol Playground {
 
     init()
 
-    var view: NSView? { get }
+    var view: AnyView? { get }
     func tick(time: Float)
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder)
     func buildPipeline(device: MTLDevice, pixelFormat: MTLPixelFormat, built: @escaping Built)
@@ -61,7 +61,7 @@ extension Playground {
     }
 
     func buildBasicPipelineDescriptor(device: MTLDevice, pixelFormat: MTLPixelFormat)
-        -> MTLRenderPipelineDescriptor
+    -> MTLRenderPipelineDescriptor
     {
         let pipelineDesc = MTLRenderPipelineDescriptor()
         let library = device.makeDefaultLibrary()
@@ -79,9 +79,17 @@ extension Playground {
 
     func setUniforms(device: MTLDevice, encoder: MTLRenderCommandEncoder) {}
 
-    var view: NSView? {
+    var view: AnyView? {
         nil
     }
+}
+
+final class EmptyPlayground: Playground {
+    var fileName = ""
+
+    var vertexFuncName = ""
+
+    var fragmentFuncName = ""
 }
 
 enum PlaygroundGroup: String, CaseIterable, Identifiable {
@@ -101,6 +109,8 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 .futuristicUI,
                 .domainDisortion,
                 .bookOfShaders06Colors,
+                .bookOfShadersRandom,
+                .bookOfShadersNoise,
             ]
         case .artOfCode:
             return [
@@ -111,8 +121,8 @@ enum PlaygroundGroup: String, CaseIterable, Identifiable {
                 .audioVisualizer, .happyJumping, .girihPattern, .jumpingBalls,
                 .cellularNoise
             ]
-            case .simonDev:
-                return [.simonNoiseIntro, .simonDevFractAndFriends, .simonDevSDFs, .simonDevCloudyDays]
+        case .simonDev:
+            return [.simonNoiseIntro, .simonDevFractAndFriends, .simonDevSDFs, .simonDevCloudyDays]
         }
     }
 }
@@ -125,6 +135,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
     case bookOfShaders05Shaping
     case bookOfShaders06Colors
     case bookOfShaders07Shapes
+    case bookOfShadersRandom
+    case bookOfShadersNoise
 
     case happyJumping
     case smiley
@@ -176,14 +188,18 @@ enum SceneKind: Int, CaseIterable, Identifiable {
             return "Cellular Noise"
         case .bookOfShaders06Colors:
             return "Colors Mixing"
-            case .simonDevFractAndFriends:
-                return "Simon Dev - Fract and Friends"
-            case .simonDevSDFs:
-                return "Simon Dev - SDFs"
-            case .simonDevCloudyDays:
-                return "Simon Dev - Cloudy Days"
-            case .simonNoiseIntro:
-                return "Simon Dev - Noise Intro"
+        case .bookOfShadersRandom:
+            return "Book of Shaders - Random"
+        case .bookOfShadersNoise:
+            return "Book of Shaders - Noise"
+        case .simonDevFractAndFriends:
+            return "Simon Dev - Fract and Friends"
+        case .simonDevSDFs:
+            return "Simon Dev - SDFs"
+        case .simonDevCloudyDays:
+            return "Simon Dev - Cloudy Days"
+        case .simonNoiseIntro:
+            return "Simon Dev - Noise Intro"
         }
     }
 
@@ -195,6 +211,8 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .bookOfShaders05Shaping: return BoSShaping()
         case .bookOfShaders06Colors: return BoSColors06()
         case .bookOfShaders07Shapes: return BoSShapes07()
+        case .bookOfShadersRandom: return BoSRandom()
+        case .bookOfShadersNoise: return BoSNoise()
         case .futuristicUI: return FuturisticUI()
         case .happyJumping: return HappyJumping()
         case .girihPattern: return Girih()
@@ -204,10 +222,10 @@ enum SceneKind: Int, CaseIterable, Identifiable {
         case .polarScene: return PolarScene()
         case .domainDisortion: return DomainDistortion()
         case .cellularNoise: return CellularNoise()
-            case .simonDevFractAndFriends: return SimonFractAndFriends()
-            case .simonDevSDFs: return SimonSDFs()
-            case .simonDevCloudyDays: return SimonCloudyDay()
-            case .simonNoiseIntro: return SimonNoiseIntro()
+        case .simonDevFractAndFriends: return SimonFractAndFriends()
+        case .simonDevSDFs: return SimonSDFs()
+        case .simonDevCloudyDays: return SimonCloudyDay()
+        case .simonNoiseIntro: return SimonNoiseIntro()
         }
     }
 }
@@ -436,10 +454,8 @@ class BoSColors06: Playground {
         }
     }
 
-    var view: NSView? {
-        NSHostingView(
-            rootView: ConfigView().environmentObject(config)
-        )
+    var view: AnyView? {
+        AnyView(ConfigView().environmentObject(config))
     }
 }
 
@@ -501,10 +517,8 @@ class BoSShaping: Playground {
         }
     }
 
-    var view: NSView? {
-        NSHostingView(
-            rootView: ConfigView().environmentObject(config)
-        )
+    var view: AnyView? {
+        AnyView(ConfigView().environmentObject(config))
     }
 }
 

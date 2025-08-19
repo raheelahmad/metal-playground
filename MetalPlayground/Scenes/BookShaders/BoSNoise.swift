@@ -10,14 +10,16 @@ import Foundation
 import MetalKit
 import SwiftUI
 
-class BoSShapes07: Playground {
+class BoSNoise: Playground {
     var fileName: String {
-        "BookShaders/07Shapes"
+        "BookShaders/BosNoise"
     }
-    var vertexFuncName: String { "bos_shapes_vertex" }
-    var fragmentFuncName: String { "bos_shapes_fragment" }
+    var vertexFuncName: String { "bos_noise_vertex" }
+    var fragmentFuncName: String { "bos_noise_fragment" }
     required init() {}
 
+    /*
+     * Don't need this config yet.
     enum SketchKind: Int, CaseIterable, Identifiable {
         case bezierCurve
         case flowingCurves
@@ -68,8 +70,11 @@ class BoSShapes07: Playground {
         }
     }
 
-    var view: AnyView? {
-        AnyView(ConfigView().environmentObject(config))
+    var view: NSView? {
+        NSHostingView(
+            rootView: ConfigView().environmentObject(config)
+        )
     }
+     */
 }
 
